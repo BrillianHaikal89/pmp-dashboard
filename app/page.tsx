@@ -1,65 +1,97 @@
-import Image from "next/image";
+// app/page.tsx
+"use client";
 
-export default function Home() {
+import Image from "next/image";
+import { Search } from "lucide-react";
+import Link from "next/link";
+
+export default function BerandaPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <div className="min-h-screen bg-white flex flex-col relative">
+      {/* Background image */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src="/BG_ALAM_JABAR.png"
+          alt="Background Alam Jawa Barat"
+          fill
+          className="object-cover opacity-25"
           priority
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+      </div>
+
+      {/* Header */}
+      <div className="relative z-10 border-b border-slate-200/60 bg-white/20 backdrop-blur-[2px] px-8 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Image src="/LOGO_PROVINSI_JABAR.png" alt="Logo Provinsi Jawa Barat" width={100} height={100} className="object-contain flex-shrink-0" />
+          <div>
+            <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Balai Besar Penjaminan Mutu Pendidikan</p>
+            <p className="text-xs text-slate-400">Jawa Barat</p>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <Link
+          href="/pilih-wilayah"
+          className="px-5 py-2 bg-slate-900 text-white text-sm font-semibold rounded-lg hover:bg-slate-700 transition"
+        >
+          Masuk ke Dashboard →
+        </Link>
+      </div>
+
+      {/* Main */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12">
+        <div className="w-full max-w-4xl">
+
+          <div className="flex items-start justify-between gap-8 mb-10">
+            <div className="flex-1">
+              <div className="flex items-center gap-4 mb-6">
+                <Image src="/LOGO_BBPMP_KEMENDIKDASMEN.png" alt="Logo BBPMP" width={600} height={600} className="object-contain" />
+              </div>
+              <div className="bg-slate-900 rounded-2xl px-7 py-5 inline-block mb-6">
+                <p className="text-white text-lg font-bold leading-snug">Selamat Datang di Dashboard</p>
+                <p className="text-white text-lg font-bold leading-snug">
+                  PMP <span className="text-amber-400">Jawa Barat</span>
+                </p>
+              </div>
+              <h1 className="text-2xl font-black text-slate-900 leading-tight">
+                Balai Besar Penjaminan Mutu<br />Pendidikan Jawa Barat
+              </h1>
+              <p className="text-slate-500 text-sm mt-2">Rapor Pendidikan · Tahun 2024-2025</p>
+            </div>
+
+            <div className="hidden md:flex w-85 h-85 items-center justify-center">
+              <Image
+                src="/PETA_JAWA_BARAT.png"
+                alt="Peta Jawa Barat"
+                width={400}
+                height={300}
+                className="object-contain w-full h-full"
+              />
+            </div>
+          </div>
+
+          {/* Stats cards */}
+          <div className="grid grid-cols-3 gap-4 mt-6">
+            {[
+              { label: "Kabupaten",      value: "18", color: "bg-blue-50 border-blue-100 text-blue-700" },
+              { label: "Kota",           value: "9",  color: "bg-amber-50 border-amber-100 text-amber-700" },
+              { label: "Total Kab/Kota", value: "27", color: "bg-emerald-50 border-emerald-100 text-emerald-700" },
+            ].map((s, i) => (
+              <Link
+                key={i}
+                href="/pilih-wilayah"
+                className={"border rounded-xl p-4 text-center transition hover:scale-105 hover:shadow-md block " + s.color}
+              >
+                <p className="text-2xl font-black">{s.value}</p>
+                <p className="text-xs font-semibold mt-1 opacity-80">{s.label}</p>
+              </Link>
+            ))}
+          </div>
         </div>
-      </main>
+      </div>
+
+      {/* Footer */}
+      <div className="relative z-10 border-t border-slate-100/60 bg-white/20 backdrop-blur-[2px] px-8 py-3 flex items-center justify-between">
+        <p className="text-xs text-slate-400">© 2026 BBPMP Jawa Barat</p>
+      </div>
     </div>
   );
 }
