@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dashboard Rapor Pendidikan — Kab. Bandung 2024",
-  description: "Dashboard analitik Rapor Pendidikan Kabupaten Bandung 2024",
+  title: "Dashboard Rapor Pendidikan — PMP Jawa Barat",
+  description: "Dashboard analitik Rapor Pendidikan PMP",
 };
 
 export default function RootLayout({
