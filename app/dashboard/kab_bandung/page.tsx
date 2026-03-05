@@ -23,6 +23,7 @@ interface KabkotRow {
   indikator_short: string; label_2024: string;
   nilai_2024_num: number | null; nilai_2023_num: number | null;
   perubahan: string; peringkat_provinsi: string;
+  capaian_status?: string;
 }
 interface SatdikRow {
   npsn: string; nama: string; jenis: string; status: string;
@@ -44,6 +45,8 @@ interface AkarRow {
 }
 interface DashData {
   spm_value: string; tahun?: string; ringkasan: any[];
+  spm_nilai_num?: number | null;
+  capaian_status?: string;
   kabkot: KabkotRow[]; satdik: SatdikRow[];
   paud: PaudRow[]; akar_masalah: AkarRow[];
 }
@@ -125,6 +128,7 @@ const MENU = [
   { id: "satdik", label: "Capaian Satdik", icon: School },
   { id: "paud", label: "PAUD", icon: Baby },
   { id: "akar", label: "Akar Masalah", icon: AlertTriangle },
+  { id: "pemda", label: "Capaian Mutu SPM", icon: CheckCircle },
 ];
 
 function Sidebar({ active, setActive, open, setOpen, tahun }: {
@@ -1110,6 +1114,346 @@ function AkarPage({ data, tahun }: { data: AkarRow[]; tahun: string }) {
   );
 }
 
+// ─── Pemda Capaian Mutu SPM ───────────────────────────────────────────────────
+function capaianStatusFn(nilai: number | null | undefined): string {
+  if (nilai == null) return "Data Tidak Tersedia";
+  return nilai > 80 ? "Meningkat Sesuai Standar" : "Belum Meningkat Sesuai Standar";
+}
+
+function CapaianBadge({ status }: { status?: string }) {
+  if (!status || status === "Data Tidak Tersedia") {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-400 border border-slate-200">
+        <Minus size={11} />Data Tidak Tersedia
+      </span>
+    );
+  }
+  if (status === "Meningkat Sesuai Standar") {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold bg-emerald-500 text-white shadow-sm">
+        <CheckCircle size={11} />Meningkat Sesuai Standar
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold bg-amber-400 text-white shadow-sm">
+      <XCircle size={11} />Belum Meningkat Sesuai Standar
+    </span>
+  );
+}
+
+function PemdaTable({ data, tahun }: { data: DashData; tahun: string }) {
+  const [search, setSearch] = useState("");
+  const [filterStatus, setFilterStatus] = useState("Semua");
+  const [filterJenis, setFilterJenis] = useState("Semua");
+  const [pageSize, setPageSize] = useState(25);
+  const [page, setPage] = useState(1);
+  const [sortCol, setSortCol] = useState<"no" | "nilai">("nilai");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+
+  const spmNilai = data.spm_nilai_num ?? null;
+  const spmStatus = data.capaian_status ?? capaianStatusFn(spmNilai);
+  const rows = useMemo(() => data.kabkot ?? [], [data]);
+  const jenisOptions = useMemo(() => ["Semua", ...Array.from(new Set(rows.map(r => r.jenis_satdik))).filter(Boolean).sort()], [rows]);
+
+  const filtered = useMemo(() => {
+    let r = rows;
+    if (filterJenis !== "Semua") r = r.filter(d => d.jenis_satdik === filterJenis);
+    if (filterStatus === "Meningkat") r = r.filter(d => (d.capaian_status ?? capaianStatusFn(d.nilai_2024_num)) === "Meningkat Sesuai Standar");
+    if (filterStatus === "Belum") r = r.filter(d => (d.capaian_status ?? capaianStatusFn(d.nilai_2024_num)) === "Belum Meningkat Sesuai Standar");
+    if (search) r = r.filter(d => d.indikator_short.toLowerCase().includes(search.toLowerCase()) || d.no.toLowerCase().includes(search.toLowerCase()));
+    return [...r].sort((a, b) => {
+      if (sortCol === "nilai") {
+        const va = a.nilai_2024_num ?? -Infinity, vb = b.nilai_2024_num ?? -Infinity;
+        return sortDir === "desc" ? vb - va : va - vb;
+      }
+      return sortDir === "desc" ? b.no.localeCompare(a.no) : a.no.localeCompare(b.no);
+    });
+  }, [rows, filterJenis, filterStatus, search, sortCol, sortDir]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+
+  const meningkatCount = rows.filter(r => (r.capaian_status ?? capaianStatusFn(r.nilai_2024_num)) === "Meningkat Sesuai Standar").length;
+  const belumCount     = rows.filter(r => (r.capaian_status ?? capaianStatusFn(r.nilai_2024_num)) === "Belum Meningkat Sesuai Standar").length;
+  const pctMeningkat   = rows.length ? Math.round((meningkatCount / rows.length) * 100) : 0;
+
+  const toggleSort = (col: "no" | "nilai") => {
+    if (sortCol === col) setSortDir(d => d === "asc" ? "desc" : "asc");
+    else { setSortCol(col); setSortDir("desc"); }
+    setPage(1);
+  };
+
+  const accentGrad = tahun === "2025" ? "from-violet-600 to-violet-700" : "from-blue-600 to-blue-700";
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <CheckCircle size={22} className="text-emerald-500" />
+          Data Pemda Meningkat Capaian Mutu Sesuai SPM
+        </h1>
+        <p className="text-slate-500 text-sm mt-1">Kab. Bandung — Tahun {tahun} · Nilai SPM &gt; 80 = Meningkat Sesuai Standar</p>
+      </div>
+
+      <div className={`bg-gradient-to-r ${accentGrad} rounded-2xl p-6 text-white shadow-lg`}>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p className="text-white/70 text-xs font-semibold uppercase tracking-widest mb-1">Indeks SPM {tahun}</p>
+            <p className="text-5xl font-black">{data.spm_value ?? "—"}</p>
+          </div>
+          <div className="flex flex-col items-start sm:items-end gap-2">
+            <CapaianBadge status={spmStatus} />
+            <p className="text-white/60 text-xs">Threshold: Nilai &gt; 80</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <KpiCard title="Total Indikator" value={rows.length} sub={`${filtered.length} setelah filter`} icon={Target} color={tahun === "2025" ? "bg-violet-500" : "bg-blue-500"} />
+        <KpiCard title="Meningkat Sesuai Standar" value={meningkatCount} sub={`${pctMeningkat}% dari total`} icon={CheckCircle} color="bg-emerald-500" accent="border-emerald-100" />
+        <KpiCard title="Belum Meningkat" value={belumCount} sub={`${100 - pctMeningkat}% dari total`} icon={XCircle} color="bg-amber-500" accent="border-amber-100" />
+      </div>
+
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-sm font-semibold text-slate-700">Proporsi Capaian Indikator</p>
+          <p className="text-sm font-bold text-slate-900">{pctMeningkat}% Meningkat</p>
+        </div>
+        <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden">
+          <div className="h-full bg-emerald-500 rounded-full transition-all duration-700" style={{ width: `${pctMeningkat}%` }} />
+        </div>
+        <div className="flex justify-between mt-2 text-xs text-slate-400">
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />Meningkat Sesuai Standar ({meningkatCount})</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400 inline-block" />Belum Meningkat ({belumCount})</span>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+        <div className="flex flex-wrap gap-2 mb-4">
+          <div className="relative flex-1 min-w-[200px]">
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Cari indikator atau kode..." value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-500">Show</span>
+            <select className="px-3 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white focus:outline-none"
+              value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1); }}>
+              {[10, 25, 50, 100].map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
+            <span className="text-xs text-slate-500">entries</span>
+          </div>
+          <select className="px-3 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white focus:outline-none"
+            value={filterJenis} onChange={e => { setFilterJenis(e.target.value); setPage(1); }}>
+            {jenisOptions.slice(0, 15).map(j => <option key={j}>{j}</option>)}
+          </select>
+          <select className="px-3 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white focus:outline-none"
+            value={filterStatus} onChange={e => { setFilterStatus(e.target.value); setPage(1); }}>
+            <option value="Semua">Semua Status</option>
+            <option value="Meningkat">Meningkat Sesuai Standar</option>
+            <option value="Belum">Belum Meningkat</option>
+          </select>
+        </div>
+
+        <p className="text-xs text-slate-400 mb-3">{filtered.length} indikator ditemukan</p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wide w-12">#</th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wide cursor-pointer hover:text-slate-800" onClick={() => toggleSort("no")}>
+                  <span className="flex items-center gap-1">Kode <ArrowUpDown size={11} className={sortCol === "no" ? "text-blue-500" : "text-slate-300"} /></span>
+                </th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wide">Tahun</th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wide min-w-[240px]">Indikator / Prov. Kab. Kota</th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wide cursor-pointer hover:text-slate-800 whitespace-nowrap" onClick={() => toggleSort("nilai")}>
+                  <span className="flex items-center gap-1">SPM <ArrowUpDown size={11} className={sortCol === "nilai" ? "text-blue-500" : "text-slate-300"} /></span>
+                </th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wide">Capaian</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {paged.map((row, i) => {
+                const rowNum = (page - 1) * pageSize + i + 1;
+                const st = row.capaian_status ?? capaianStatusFn(row.nilai_2024_num);
+                const isMeningkat = st === "Meningkat Sesuai Standar";
+                return (
+                  <tr key={i} className={`hover:bg-slate-50 transition-colors ${isMeningkat ? "" : "bg-amber-50/30"}`}>
+                    <td className="py-3 px-4 text-xs text-slate-400 font-medium">{rowNum}</td>
+                    <td className="py-3 px-4"><span className="font-mono text-xs font-bold text-slate-500">{row.no}</span></td>
+                    <td className="py-3 px-4 text-xs text-slate-600 font-medium">{tahun}</td>
+                    <td className="py-3 px-4">
+                      <p className="text-sm font-semibold text-blue-600 truncate max-w-xs">{row.indikator_short || row.jenis_satdik}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{row.jenis_satdik} · {row.status}</p>
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className={`text-sm font-bold ${isMeningkat ? "text-emerald-700" : "text-amber-700"}`}>
+                        {row.nilai_2024_num != null ? row.nilai_2024_num.toFixed(2) : "—"}
+                      </span>
+                      {row.nilai_2024_num != null && (
+                        <div className="w-16 h-1.5 bg-slate-100 rounded-full mt-1 overflow-hidden">
+                          <div className={`h-full rounded-full ${isMeningkat ? "bg-emerald-500" : "bg-amber-400"}`}
+                            style={{ width: `${Math.min(100, row.nilai_2024_num)}%` }} />
+                        </div>
+                      )}
+                    </td>
+                    <td className="py-3 px-4"><CapaianBadge status={st} /></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
+          <p className="text-xs text-slate-400">Hal. {page}/{totalPages} · Menampilkan {paged.length} dari {filtered.length} data</p>
+          <div className="flex gap-1.5">
+            <button onClick={() => setPage(1)} disabled={page === 1}
+              className="px-3 py-2 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 hover:bg-slate-100 transition text-xs font-bold">«</button>
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+              className="p-2 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 hover:bg-slate-100 transition"><ChevronLeft size={15} /></button>
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              const pg = Math.max(1, Math.min(page - 2, totalPages - 4)) + i;
+              return pg <= totalPages ? (
+                <button key={pg} onClick={() => setPage(pg)}
+                  className={`w-8 h-8 rounded-lg text-xs font-bold transition ${pg === page ? "bg-blue-600 text-white" : "border border-slate-200 text-slate-600 hover:bg-slate-100"}`}>{pg}</button>
+              ) : null;
+            })}
+            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+              className="p-2 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 hover:bg-slate-100 transition"><ChevronRight size={15} /></button>
+            <button onClick={() => setPage(totalPages)} disabled={page === totalPages}
+              className="px-3 py-2 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 hover:bg-slate-100 transition text-xs font-bold">»</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PemdaBanding({ d24, d25 }: { d24: DashData; d25: DashData }) {
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 25;
+
+  const spm24 = d24.spm_nilai_num ?? null;
+  const spm25 = d25.spm_nilai_num ?? null;
+  const delta = spm24 != null && spm25 != null ? spm25 - spm24 : null;
+
+  const rows24 = d24.kabkot ?? [];
+  const rows25 = d25.kabkot ?? [];
+
+  const map25 = useMemo(() => {
+    const m: Record<string, KabkotRow> = {};
+    rows25.forEach(r => { m[r.no] = r; });
+    return m;
+  }, [rows25]);
+
+  const combined = useMemo(() => {
+    let r = rows24.map(row => ({ ...row, r25: map25[row.no] ?? null }));
+    if (search) r = r.filter(d => d.indikator_short.toLowerCase().includes(search.toLowerCase()) || d.no.toLowerCase().includes(search.toLowerCase()));
+    return r;
+  }, [rows24, map25, search]);
+
+  const totalPages = Math.max(1, Math.ceil(combined.length / PAGE_SIZE));
+  const paged = combined.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <CheckCircle size={22} className="text-emerald-500" />
+          Perbandingan Capaian Mutu SPM 2024 vs 2025
+        </h1>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-5 text-white shadow-lg">
+          <p className="text-blue-200 text-xs font-semibold uppercase tracking-wide mb-2">SPM 2024</p>
+          <p className="text-4xl font-black mb-3">{d24.spm_value ?? "—"}</p>
+          <CapaianBadge status={d24.capaian_status ?? capaianStatusFn(spm24)} />
+        </div>
+        <div className="bg-gradient-to-br from-violet-600 to-violet-700 rounded-2xl p-5 text-white shadow-lg">
+          <p className="text-violet-200 text-xs font-semibold uppercase tracking-wide mb-2">SPM 2025</p>
+          <p className="text-4xl font-black mb-3">{d25.spm_value ?? "—"}</p>
+          <CapaianBadge status={d25.capaian_status ?? capaianStatusFn(spm25)} />
+        </div>
+        <div className={`rounded-2xl p-5 text-white shadow-lg ${(delta ?? 0) >= 0 ? "bg-gradient-to-br from-emerald-600 to-emerald-700" : "bg-gradient-to-br from-red-600 to-red-700"}`}>
+          <p className="text-white/70 text-xs font-semibold uppercase tracking-wide mb-1">Perubahan</p>
+          <p className="text-4xl font-black flex items-center gap-2">
+            {(delta ?? 0) >= 0 ? <TrendingUp size={28} /> : <TrendingDown size={28} />}
+            {delta != null ? `${delta >= 0 ? "+" : ""}${delta.toFixed(2)}` : "—"}
+          </p>
+          <p className="text-white/70 text-xs mt-2">{(delta ?? 0) >= 0 ? "Meningkat" : "Menurun"} dari 2024 ke 2025</p>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+        <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+          <GitCompare size={15} className="text-rose-500" />Perbandingan Status per Indikator
+        </h3>
+        <div className="relative mb-4">
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-400"
+            placeholder="Cari indikator atau kode..." value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} />
+        </div>
+        <p className="text-xs text-slate-400 mb-3">{combined.length} indikator</p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wide">#</th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wide">Kode</th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wide">Indikator</th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-blue-500 uppercase tracking-wide whitespace-nowrap">Nilai 2024</th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-blue-500 uppercase tracking-wide whitespace-nowrap">Status 2024</th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-violet-500 uppercase tracking-wide whitespace-nowrap">Nilai 2025</th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-violet-500 uppercase tracking-wide whitespace-nowrap">Status 2025</th>
+                <th className="text-left py-3 px-4 text-xs font-bold text-rose-500 uppercase tracking-wide">Δ</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {paged.map((row, i) => {
+                const v24  = row.nilai_2024_num;
+                const v25  = row.r25?.nilai_2024_num ?? null;
+                const diff = v24 != null && v25 != null ? v25 - v24 : null;
+                const st24 = row.capaian_status ?? capaianStatusFn(v24);
+                const st25 = row.r25 ? (row.r25.capaian_status ?? capaianStatusFn(v25)) : undefined;
+                return (
+                  <tr key={i} className="hover:bg-slate-50 transition-colors">
+                    <td className="py-2.5 px-4 text-xs text-slate-400">{(page - 1) * PAGE_SIZE + i + 1}</td>
+                    <td className="py-2.5 px-4 font-mono text-xs font-bold text-slate-500">{row.no}</td>
+                    <td className="py-2.5 px-4 text-xs text-slate-700 max-w-[200px] truncate font-medium">{row.indikator_short}</td>
+                    <td className="py-2.5 px-4 font-bold text-blue-700 text-xs">{v24 != null ? v24.toFixed(2) : "—"}</td>
+                    <td className="py-2.5 px-4"><CapaianBadge status={st24} /></td>
+                    <td className="py-2.5 px-4 font-bold text-violet-700 text-xs">{v25 != null ? v25.toFixed(2) : "—"}</td>
+                    <td className="py-2.5 px-4">{st25 ? <CapaianBadge status={st25} /> : <span className="text-xs text-slate-300">—</span>}</td>
+                    <td className="py-2.5 px-4">
+                      {diff != null ? (
+                        <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full ${diff > 0 ? "bg-emerald-50 text-emerald-700" : diff < 0 ? "bg-red-50 text-red-600" : "bg-slate-50 text-slate-500"}`}>
+                          {diff > 0 ? <TrendingUp size={10} /> : diff < 0 ? <TrendingDown size={10} /> : <Minus size={10} />}
+                          {diff > 0 ? "+" : ""}{diff.toFixed(2)}
+                        </span>
+                      ) : <span className="text-xs text-slate-300">—</span>}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
+          <p className="text-xs text-slate-400">Hal. {page}/{totalPages} · {combined.length} data</p>
+          <div className="flex gap-1.5">
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-2 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 hover:bg-slate-100"><ChevronLeft size={15} /></button>
+            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="p-2 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 hover:bg-slate-100"><ChevronRight size={15} /></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Loading & Error screens ──────────────────────────────────────────────────
 function LoadingScreen({ msg }: { msg?: string }) {
   return (
@@ -1218,6 +1562,12 @@ function KabBandungDashboard() {
                     </div>
                   ) : <LoadingScreen />)
                   : (activeData ? <AkarPage data={activeData.akar_masalah ?? []} tahun={tahun} /> : <LoadingScreen />)
+              )}
+              {/* ── Pemda ── */}
+              {active === "pemda" && (
+                tahun === "banding"
+                  ? (data24 && data25 ? <PemdaBanding d24={data24} d25={data25} /> : <LoadingScreen />)
+                  : (activeData ? <PemdaTable data={activeData} tahun={tahun} /> : <LoadingScreen />)
               )}
             </>
           )}
