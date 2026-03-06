@@ -1117,7 +1117,7 @@ function AkarPage({ data, tahun }: { data: AkarRow[]; tahun: string }) {
 // ─── Pemda Capaian Mutu SPM ───────────────────────────────────────────────────
 function capaianStatusFn(nilai: number | null | undefined): string {
   if (nilai == null) return "Data Tidak Tersedia";
-  return nilai > 80 ? "Meningkat Sesuai Standar" : "Belum Meningkat Sesuai Standar";
+  return nilai >= 80 ? "Meningkat Sesuai Standar" : "Belum Meningkat Sesuai Standar";
 }
 
 function CapaianBadge({ status }: { status?: string }) {
