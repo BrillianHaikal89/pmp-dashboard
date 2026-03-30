@@ -22,7 +22,7 @@ export default function BerandaPage() {
       {/* Header */}
       <div className="relative z-10 border-b border-slate-200/60 bg-white/20 backdrop-blur-[2px] px-8 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Image src="/LOGO_PROVINSI_JABAR.png" alt="Logo Provinsi Jawa Barat" width={100} height={100} className="object-contain flex-shrink-0" />
+          <Image src="/LOGO_TUTWURI.png" alt="Logo Provinsi Jawa Barat" width={50} height={50} className="object-contain flex-shrink-0" />
           <div>
             <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Balai Besar Penjaminan Mutu Pendidikan</p>
             <p className="text-xs text-slate-400">Jawa Barat</p>
