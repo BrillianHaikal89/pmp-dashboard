@@ -62,7 +62,7 @@ export default function PilihWilayahPage() {
         <div className="w-px h-5 bg-slate-200" />
         <p className="text-sm font-bold text-slate-900">
           JAWA <span className="text-amber-500">BARAT</span>
-          <span className="font-normal text-slate-400 ml-2 text-xs">Rapor Pendidikan 2024</span>
+          <span className="font-normal text-slate-400 ml-2 text-xs">Rapor Pendidikan 2024 dan 2025</span>
         </p>
       </div>
 
@@ -71,7 +71,7 @@ export default function PilihWilayahPage() {
         <h1 className="text-2xl font-black text-slate-900 mb-1">
           Provinsi / Kabupaten / Kota <span className="text-amber-500">Jawa Barat</span>
         </h1>
-        <p className="text-sm text-slate-500 mb-6">Pilih wilayah untuk melihat Rapor Pendidikan 2024</p>
+        <p className="text-sm text-slate-500 mb-6">Pilih wilayah untuk melihat Rapor Pendidikan 2024 dan 2025</p>
 
         {/* Filter */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
