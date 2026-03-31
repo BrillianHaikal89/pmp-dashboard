@@ -54,7 +54,7 @@ export default function BerandaPage() {
               <h1 className="text-2xl font-black text-slate-900 leading-tight">
                 Balai Besar Penjaminan Mutu<br />Pendidikan Jawa Barat
               </h1>
-              <p className="text-slate-500 text-sm mt-2">Rapor Pendidikan · Tahun 2024-2025</p>
+              <p className="text-slate-500 text-sm mt-2">Rapor Pendidikan · Tahun 2024 dan 2025</p>
             </div>
 
             <div className="hidden md:flex w-85 h-85 items-center justify-center">
