@@ -1,0 +1,6563 @@
+[
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BANDUNG BARAT",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIAMIS",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIANJUR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB GARUT",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB INDRAMAYU",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KARAWANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB KUNINGAN",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB MAJALENGKA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PANGANDARAN",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB PURWAKARTA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUBANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB SUMEDANG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KAB TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANDUNG",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BANJAR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BEKASI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA BOGOR",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIMAHI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA CIREBON",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA DEPOK",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA SUKABUMI",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "PAUD",
+    "indikator": "D.1",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "PAUD",
+    "indikator": "D.3",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "PAUD",
+    "indikator": "D.4",
+    "capaian": "Sedang",
+    "skor": 2,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SD Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMA Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.2",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "A.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.1",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.10",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.3",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.4",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  },
+  {
+    "wilayah": "KOTA TASIKMALAYA",
+    "jenjang": "SMP Umum",
+    "indikator": "D.8",
+    "capaian": "Baik",
+    "skor": 3,
+    "kelompok": "prioritas",
+    "jumlah": 1
+  }
+]

@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Search, ChevronRight, MapPin, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-// Update href untuk menggunakan dynamic route
 const KABKOT_JABAR = [
   { tipe: "Kabupaten", nama: "Kab. Bandung",       kode: "kab-bandung",       href: "/dashboard/kab-bandung" },
   { tipe: "Kabupaten", nama: "Kab. Bandung Barat", kode: "kab-bandung-barat", href: "/dashboard/kab-bandung-barat" },
@@ -51,7 +50,7 @@ export default function PilihWilayahPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      {/* Top bar */}
+      {/* ── Top bar dengan 2 menu ── */}
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center gap-4 shadow-sm sticky top-0 z-10">
         <Link
           href="/"
@@ -60,18 +59,39 @@ export default function PilihWilayahPage() {
           <ArrowLeft size={16} /> Beranda
         </Link>
         <div className="w-px h-5 bg-slate-200" />
-        <p className="text-sm font-bold text-slate-900">
-          JAWA <span className="text-amber-500">BARAT</span>
-          <span className="font-normal text-slate-400 ml-2 text-xs">Rapor Pendidikan 2024 dan 2025</span>
-        </p>
+
+        {/* ── 2 Menu utama ── */}
+        <nav className="flex gap-1">
+          <Link
+            href="/pilih-wilayah"
+            className="px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-600 text-white transition"
+          >
+            Pilih Wilayah
+          </Link>
+          <Link
+            href="/dashboard-provinsi"
+            className="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition"
+          >
+            Dashboard Provinsi
+          </Link>
+        </nav>
+
+        <div className="ml-auto">
+          <p className="text-sm font-bold text-slate-900">
+            JAWA <span className="text-amber-500">BARAT</span>
+            <span className="font-normal text-slate-400 ml-2 text-xs">Rapor Pendidikan 2024 &amp; 2025</span>
+          </p>
+        </div>
       </div>
 
-      {/* Content */}
+      {/* ── Content ── */}
       <div className="flex-1 px-6 py-8 max-w-6xl mx-auto w-full">
         <h1 className="text-2xl font-black text-slate-900 mb-1">
-          Provinsi / Kabupaten / Kota <span className="text-amber-500">Jawa Barat</span>
+          Pilih <span className="text-amber-500">Kabupaten / Kota</span>
         </h1>
-        <p className="text-sm text-slate-500 mb-6">Pilih wilayah untuk melihat Rapor Pendidikan 2024 dan 2025</p>
+        <p className="text-sm text-slate-500 mb-6">
+          Pilih wilayah untuk melihat Rapor Pendidikan 2024 dan 2025
+        </p>
 
         {/* Filter */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
@@ -98,7 +118,7 @@ export default function PilihWilayahPage() {
           </div>
         </div>
 
-        {/* Grid 3 kolom */}
+        {/* Grid */}
         {filtered.length === 0 ? (
           <div className="text-center py-20 text-slate-400">
             <MapPin size={40} className="mx-auto mb-3 opacity-30" />
@@ -107,7 +127,6 @@ export default function PilihWilayahPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-8">
-            {/* Kolom Kabupaten — span 2 */}
             {(filterTipe === "Semua" || filterTipe === "Kabupaten") && kabList.length > 0 && (
               <div className={filterTipe === "Semua" ? "md:col-span-2" : "md:col-span-3"}>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
@@ -131,7 +150,6 @@ export default function PilihWilayahPage() {
               </div>
             )}
 
-            {/* Kolom Kota — span 1 */}
             {(filterTipe === "Semua" || filterTipe === "Kota") && kotaList.length > 0 && (
               <div className={filterTipe === "Kota" ? "md:col-span-3" : ""}>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">

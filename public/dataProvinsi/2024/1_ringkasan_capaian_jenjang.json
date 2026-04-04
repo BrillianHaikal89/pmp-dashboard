@@ -1,0 +1,92 @@
+[
+  {
+    "No": 1,
+    "Jenjang": "SDLB",
+    "Capaian": "Peningkatan Tertinggi",
+    "Indikator Prioritas": "A.2 Kemampuan numerasi"
+  },
+  {
+    "No": 1,
+    "Jenjang": "SDLB",
+    "Capaian": "Capaian Terbaik",
+    "Indikator Prioritas": "A.2 Kemampuan numerasi"
+  },
+  {
+    "No": 1,
+    "Jenjang": "SDLB",
+    "Capaian": "Capaian Terendah",
+    "Indikator Prioritas": "A.1 Kemampuan literasi"
+  },
+  {
+    "No": 2,
+    "Jenjang": "SMPLB",
+    "Capaian": "Peningkatan Tertinggi",
+    "Indikator Prioritas": "A.1 Kemampuan literasi"
+  },
+  {
+    "No": 2,
+    "Jenjang": "SMPLB",
+    "Capaian": "Capaian Terbaik",
+    "Indikator Prioritas": "A.1 Kemampuan literasi"
+  },
+  {
+    "No": 2,
+    "Jenjang": "SMPLB",
+    "Capaian": "Capaian Terendah",
+    "Indikator Prioritas": "A.2 Kemampuan numerasi"
+  },
+  {
+    "No": 3,
+    "Jenjang": "SMA Umum",
+    "Capaian": "Peningkatan Tertinggi",
+    "Indikator Prioritas": "A.2 Kemampuan numerasi"
+  },
+  {
+    "No": 3,
+    "Jenjang": "SMA Umum",
+    "Capaian": "Capaian Terbaik",
+    "Indikator Prioritas": "A.1 Kemampuan literasi"
+  },
+  {
+    "No": 3,
+    "Jenjang": "SMA Umum",
+    "Capaian": "Capaian Terendah",
+    "Indikator Prioritas": "A.2 Kemampuan numerasi"
+  },
+  {
+    "No": 4,
+    "Jenjang": "SMALB",
+    "Capaian": "Peningkatan Tertinggi",
+    "Indikator Prioritas": "A.1 Kemampuan literasi"
+  },
+  {
+    "No": 4,
+    "Jenjang": "SMALB",
+    "Capaian": "Capaian Terbaik",
+    "Indikator Prioritas": "A.2 Kemampuan numerasi"
+  },
+  {
+    "No": 4,
+    "Jenjang": "SMALB",
+    "Capaian": "Capaian Terendah",
+    "Indikator Prioritas": "A.1 Kemampuan literasi"
+  },
+  {
+    "No": 5,
+    "Jenjang": "SMK Umum",
+    "Capaian": "Peningkatan Tertinggi",
+    "Indikator Prioritas": "A.2 Kemampuan numerasi"
+  },
+  {
+    "No": 5,
+    "Jenjang": "SMK Umum",
+    "Capaian": "Capaian Terbaik",
+    "Indikator Prioritas": "A.4 Penyerapan lulusan SMK"
+  },
+  {
+    "No": 5,
+    "Jenjang": "SMK Umum",
+    "Capaian": "Capaian Terendah",
+    "Indikator Prioritas": "A.2 Kemampuan numerasi"
+  }
+]
