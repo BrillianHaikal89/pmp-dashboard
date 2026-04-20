@@ -428,11 +428,14 @@ function PaginationBar({ page, total, onChange }: { page: number; total: number;
 
 function TabLoadingState() {
   return (
-    <div className="flex flex-col items-center justify-center py-32 text-slate-500 gap-3">
-      <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center animate-pulse">
-        <Loader2 size={24} className="text-blue-600 animate-spin" />
+    <div className="flex flex-col items-center justify-center py-40 gap-4">
+      <div className="relative w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center">
+        <Loader2 size={22} className="text-blue-500 animate-spin" />
       </div>
-      <p className="text-sm font-medium text-slate-600">Memuat data...</p>
+      <div className="text-center">
+        <p className="text-sm font-semibold text-slate-700">Memuat data...</p>
+        <p className="text-xs text-slate-400 mt-0.5">Harap tunggu</p>
+      </div>
     </div>
   );
 }
@@ -659,14 +662,41 @@ export default function DashboardProvinsiPage() {
     return stats;
   }, [filteredProvData, tahun]);
 
-  const baikTinggiPercent = totalDashboardStats.total > 0 
-    ? Math.round((totalDashboardStats.baikTinggi / totalDashboardStats.total) * 100) 
+  const indikatorStats = useMemo(() => {
+    const stats: Record<string, { baikTinggi: number; sedang: number; kurangRendah: number; tidakTersedia: number; total: number; label: string }> = {};
+
+    // Inisialisasi semua kode prioritas
+    for (const p of PRIORITY_INDICATORS) {
+      stats[p.code] = { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0, label: p.fullName };
+    }
+
+    for (const row of filteredProvData) {
+      const kode = (row.No || "").trim();
+      const matchedCode = PRIORITY_CODES.find(c => {
+        const cu = c.toUpperCase();
+        const ku = kode.toUpperCase();
+        return ku === cu || ku.startsWith(cu + " ") || ku.startsWith(cu + ".");
+      });
+      if (!matchedCode) continue;
+      const labelVal = ((tahun === "2025" ? row["Label Capaian 2025"] : row["Label Capaian 2024"]) ?? "").trim();
+      if (!stats[matchedCode]) continue;
+      if (labelVal === "Tinggi" || labelVal === "Baik") stats[matchedCode].baikTinggi++;
+      else if (labelVal === "Sedang") stats[matchedCode].sedang++;
+      else if (labelVal === "Kurang" || labelVal === "Rendah") stats[matchedCode].kurangRendah++;
+      else stats[matchedCode].tidakTersedia++;
+      stats[matchedCode].total++;
+    }
+    return stats;
+  }, [filteredProvData, tahun]);
+
+  const baikTinggiPercent = totalDashboardStats.total > 0
+    ? Math.round((totalDashboardStats.baikTinggi / totalDashboardStats.total) * 100)
     : 0;
-  const sedangPercent = totalDashboardStats.total > 0 
-    ? Math.round((totalDashboardStats.sedang / totalDashboardStats.total) * 100) 
+  const sedangPercent = totalDashboardStats.total > 0
+    ? Math.round((totalDashboardStats.sedang / totalDashboardStats.total) * 100)
     : 0;
-  const kurangRendahPercent = totalDashboardStats.total > 0 
-    ? Math.round((totalDashboardStats.kurangRendah / totalDashboardStats.total) * 100) 
+  const kurangRendahPercent = totalDashboardStats.total > 0
+    ? Math.round((totalDashboardStats.kurangRendah / totalDashboardStats.total) * 100)
     : 0;
 
   const oKDJ = useMemo(() => ["Semua", ...new Set(kabkotDasmen.map(c => c["Jenis Satuan Pendidikan"]))], [kabkotDasmen]);
@@ -774,32 +804,33 @@ export default function DashboardProvinsiPage() {
     
     return (
       <div className="space-y-4">
-        <div className="flex flex-wrap gap-2 items-center">
+        <div className="flex flex-wrap gap-2 items-center p-4 bg-white border border-slate-200/80 rounded-2xl shadow-sm">
           <SearchInput value={search} onChange={onSearch} placeholder="Cari kab/kota…" />
           {jenisList && onJenis && jenisSel !== undefined && (
             <SelectFilter value={jenisSel} onChange={onJenis} options={jenisList} className="w-44" />
           )}
           <SelectFilter value={statusSel} onChange={onStatus} options={statusList} className="w-36" />
-          <div className="flex items-center px-3 py-2 bg-white border border-slate-200 rounded-xl shadow-sm">
-            <span className="text-xs font-semibold text-slate-500">{rows.length} <span className="font-normal">wilayah</span></span>
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl ml-auto">
+            <span className="text-xs font-black text-slate-700">{rows.length}</span>
+            <span className="text-xs text-slate-500">wilayah</span>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-          <p className="text-xs font-bold text-slate-700 uppercase tracking-widest mb-3">Distribusi Capaian</p>
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Distribusi Capaian</p>
           <DistribusiBar data={rows as unknown as Record<string, string>[]} />
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="text-xs w-full">
               <thead>
-                <tr className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
-                  <th className="px-4 py-3 text-left font-bold text-slate-600 uppercase tracking-wide sticky left-0 bg-slate-50 min-w-36">Kab/Kota</th>
-                  <th className="px-4 py-3 text-left font-bold text-slate-600 uppercase tracking-wide min-w-28">Jenis</th>
-                  <th className="px-4 py-3 text-left font-bold text-slate-600 uppercase tracking-wide min-w-20">Status</th>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] sticky left-0 bg-slate-50 min-w-36">Kab/Kota</th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-28">Jenis</th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Status</th>
                   {codes.map(c => (
-                    <th key={c} className="px-3 py-3 text-center font-bold text-slate-600 uppercase tracking-wide min-w-16">{c}</th>
+                    <th key={c} className="px-3 py-3 text-center font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-16">{c}</th>
                   ))}
                 </tr>
               </thead>
@@ -807,15 +838,15 @@ export default function DashboardProvinsiPage() {
                 {pagedRows.length === 0 ? (
                   <tr>
                     <td colSpan={codes.length + 3} className="text-center py-16 text-slate-400">
-                      <Search size={24} className="mx-auto mb-2 opacity-40" />
-                      <p>Tidak ada data ditemukan</p>
+                      <Search size={20} className="mx-auto mb-2 opacity-40" />
+                      <p className="text-xs">Tidak ada data ditemukan</p>
                     </td>
                   </tr>
                 ) : pagedRows.map((row, i) => (
-                  <tr key={i} className="hover:bg-blue-50/40 transition-colors group">
-                    <td className="px-4 py-3 font-semibold text-slate-800 sticky left-0 bg-white group-hover:bg-blue-50/40 z-[5]">{row["Kab/Kota"]}</td>
-                    <td className="px-4 py-3 text-slate-600">{row["Jenis Satuan Pendidikan"]}</td>
-                    <td className="px-4 py-3 text-slate-600">{row["Status Satuan Pendidikan"]}</td>
+                  <tr key={i} className="hover:bg-blue-50/30 transition-colors group">
+                    <td className="px-4 py-3 font-semibold text-slate-800 sticky left-0 bg-white group-hover:bg-blue-50/30 z-[5]">{row["Kab/Kota"]}</td>
+                    <td className="px-4 py-3 text-slate-500">{row["Jenis Satuan Pendidikan"]}</td>
+                    <td className="px-4 py-3 text-slate-500">{row["Status Satuan Pendidikan"]}</td>
                     {indKeys.map(k => (
                       <td key={k} className="px-3 py-3 text-center"><LabelBadge label={row[k]} /></td>
                     ))}
@@ -843,33 +874,34 @@ export default function DashboardProvinsiPage() {
     const codes = indKeys.map(k => k.replace("_Label Capaian", ""));
     return (
       <div className="space-y-4">
-        <div className="flex flex-wrap gap-2 items-center">
+        <div className="flex flex-wrap gap-2 items-center p-4 bg-white border border-slate-200/80 rounded-2xl shadow-sm">
           <SearchInput value={search} onChange={onSearch} placeholder="Cari nama satdik atau NPSN…" />
-          <SelectFilter value={jenisSel} onChange={onJenis} options={jenisList} className="w-40" />
+          <SelectFilter value={jenisSel} onChange={onJenis} options={jenisList} className="w-36" />
           <SelectFilter value={statusSel} onChange={onStatus} options={statusList} className="w-32" />
           <SelectFilter value={kabSel} onChange={onKab} options={kabList} className="w-44" />
-          <div className="flex items-center px-3 py-2 bg-white border border-slate-200 rounded-xl shadow-sm">
-            <span className="text-xs font-semibold text-slate-500">{allRows.length.toLocaleString("id")} <span className="font-normal">satdik</span></span>
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl ml-auto flex-shrink-0">
+            <span className="text-xs font-black text-slate-700">{allRows.length.toLocaleString("id")}</span>
+            <span className="text-xs text-slate-500">satdik</span>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-          <p className="text-xs font-bold text-slate-700 uppercase tracking-widest mb-3">Distribusi Capaian (hasil filter)</p>
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Distribusi Capaian</p>
           <DistribusiBar data={allRows as unknown as Record<string, string>[]} />
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="text-xs w-full">
               <thead>
-                <tr className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
-                  <th className="px-4 py-3 text-left font-bold text-slate-600 uppercase tracking-wide sticky left-0 bg-slate-50 min-w-52">Nama Satdik</th>
-                  <th className="px-4 py-3 text-left font-bold text-slate-600 uppercase tracking-wide min-w-24">NPSN</th>
-                  <th className="px-4 py-3 text-left font-bold text-slate-600 uppercase tracking-wide min-w-32">Kab/Kota</th>
-                  <th className="px-4 py-3 text-left font-bold text-slate-600 uppercase tracking-wide min-w-28">Jenis</th>
-                  <th className="px-4 py-3 text-left font-bold text-slate-600 uppercase tracking-wide min-w-20">Status</th>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] sticky left-0 bg-slate-50 min-w-52">Nama Satdik</th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-24">NPSN</th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-32">Kab/Kota</th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-28">Jenis</th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Status</th>
                   {codes.map(c => (
-                    <th key={c} className="px-3 py-3 text-center font-bold text-slate-600 uppercase tracking-wide min-w-16">{c}</th>
+                    <th key={c} className="px-3 py-3 text-center font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-16">{c}</th>
                   ))}
                 </tr>
               </thead>
@@ -877,17 +909,17 @@ export default function DashboardProvinsiPage() {
                 {paged.length === 0 ? (
                   <tr>
                     <td colSpan={codes.length + 5} className="text-center py-16 text-slate-400">
-                      <Search size={24} className="mx-auto mb-2 opacity-40" />
-                      <p>Tidak ada data ditemukan</p>
+                      <Search size={20} className="mx-auto mb-2 opacity-40" />
+                      <p className="text-xs">Tidak ada data ditemukan</p>
                     </td>
                   </tr>
                 ) : paged.map((row, i) => (
-                  <tr key={row.NPSN || i} className="hover:bg-blue-50/40 transition-colors group">
-                    <td className="px-4 py-3 font-semibold text-slate-800 sticky left-0 bg-white group-hover:bg-blue-50/40 z-[5] leading-snug">{row["Nama Satuan Pendidikan"]}</td>
-                    <td className="px-4 py-3 font-mono text-slate-600 text-[11px]">{row.NPSN}</td>
-                    <td className="px-4 py-3 text-slate-600">{row["Kabupaten/Kota"]}</td>
-                    <td className="px-4 py-3 text-slate-600">{row["Jenis Satuan Pendidikan"]}</td>
-                    <td className="px-4 py-3 text-slate-600">{row["Status Satuan Pendidikan"]}</td>
+                  <tr key={row.NPSN || i} className="hover:bg-blue-50/30 transition-colors group">
+                    <td className="px-4 py-3 font-semibold text-slate-800 sticky left-0 bg-white group-hover:bg-blue-50/30 z-[5] leading-snug">{row["Nama Satuan Pendidikan"]}</td>
+                    <td className="px-4 py-3 font-mono text-slate-500 text-[11px]">{row.NPSN}</td>
+                    <td className="px-4 py-3 text-slate-500">{row["Kabupaten/Kota"]}</td>
+                    <td className="px-4 py-3 text-slate-500">{row["Jenis Satuan Pendidikan"]}</td>
+                    <td className="px-4 py-3 text-slate-500">{row["Status Satuan Pendidikan"]}</td>
                     {indKeys.map(k => (
                       <td key={k} className="px-3 py-3 text-center"><LabelBadge label={row[k]} /></td>
                     ))}
@@ -1123,31 +1155,37 @@ export default function DashboardProvinsiPage() {
                       title="Ringkasan Capaian Jenjang"
                       badge={`${jenjangList.length} jenjang · Tahun ${tahun}`}
                     />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {jenjangList.map(jenjang => {
                         const items = ringkasan.filter(r => r.Jenjang === jenjang);
                         const gradient = getJenjangGradient(jenjang);
                         
                         return (
-                          <div key={jenjang} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-lg transition-all duration-200">
-                            <div className={`bg-gradient-to-r ${gradient} px-5 py-3 flex items-center gap-2`}>
-                              <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center">
-                                {jenjang.includes("SD") && <School size={12} className="text-white" />}
-                                {jenjang.includes("SMP") && <BookOpen size={12} className="text-white" />}
-                                {jenjang.includes("SMA") && <GraduationCap size={12} className="text-white" />}
-                                {jenjang.includes("PAUD") && <Building2 size={12} className="text-white" />}
+                          <div key={jenjang} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-md transition-all duration-200">
+                            <div className={`bg-gradient-to-r ${gradient} px-5 py-4 flex items-center gap-3`}>
+                              <div className="w-8 h-8 rounded-xl bg-white/20 border border-white/20 flex items-center justify-center flex-shrink-0">
+                                {jenjang.includes("SD") && <School size={14} className="text-white" />}
+                                {jenjang.includes("SMP") && <BookOpen size={14} className="text-white" />}
+                                {jenjang.includes("SMA") && <GraduationCap size={14} className="text-white" />}
+                                {jenjang.includes("PAUD") && <Building2 size={14} className="text-white" />}
                               </div>
-                              <span className="font-bold text-white text-sm">{jenjang}</span>
+                              <div>
+                                <span className="font-black text-white text-base">{jenjang}</span>
+                                <p className="text-white/60 text-[10px] mt-0.5">{items.length} indikator prioritas</p>
+                              </div>
                             </div>
-                            <div className="divide-y divide-slate-100">
+                            <div className="divide-y divide-slate-100/70">
                               {items.map((item, i) => (
-                                <div key={i} className="px-5 py-3 hover:bg-slate-50 transition">
-                                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
-                                    {item.Capaian}
-                                  </p>
-                                  <p className="text-xs text-slate-700 font-medium">
-                                    {item["Indikator Prioritas"]}
-                                  </p>
+                                <div key={i} className="px-5 py-3.5 hover:bg-slate-50/80 transition flex items-start gap-3">
+                                  <div className="w-1 h-1 rounded-full bg-slate-300 mt-1.5 flex-shrink-0" />
+                                  <div>
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
+                                      {item.Capaian}
+                                    </p>
+                                    <p className="text-xs text-slate-700 font-semibold leading-tight">
+                                      {item["Indikator Prioritas"]}
+                                    </p>
+                                  </div>
                                 </div>
                               ))}
                             </div>
@@ -1202,68 +1240,170 @@ export default function DashboardProvinsiPage() {
                       />
                     </div>
 
+                    {/* Rekap per Indikator */}
+                    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden mb-6">
+                      <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-sm">
+                          <ListChecks size={14} className="text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-bold text-slate-900">Capaian per Indikator Prioritas</h3>
+                          <p className="text-[10px] text-slate-400 mt-0.5">Jumlah satuan pendidikan per kategori capaian</p>
+                        </div>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="bg-slate-50 border-b border-slate-200">
+                              <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px] w-16">Kode</th>
+                              <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px]">Indikator</th>
+                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-emerald-600">Baik/Tinggi</th>
+                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-amber-600">Sedang</th>
+                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-red-600">Kurang/Rendah</th>
+                              <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px] min-w-40">Distribusi</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {PRIORITY_INDICATORS.map(p => {
+                              const s = indikatorStats[p.code];
+                              if (!s) return null;
+                              const total = s.baikTinggi + s.sedang + s.kurangRendah + s.tidakTersedia;
+                              const baikPct = total > 0 ? Math.round((s.baikTinggi / total) * 100) : 0;
+                              const sedangPct = total > 0 ? Math.round((s.sedang / total) * 100) : 0;
+                              const kurangPct = total > 0 ? Math.round((s.kurangRendah / total) * 100) : 0;
+                              return (
+                                <tr key={p.code} className="hover:bg-slate-50/70 transition-colors">
+                                  <td className="px-5 py-3.5">
+                                    <span className="font-mono text-xs font-black text-blue-700 bg-blue-50 px-2 py-1 rounded-lg border border-blue-100">
+                                      {p.code}
+                                    </span>
+                                  </td>
+                                  <td className="px-5 py-3.5">
+                                    <p className="text-sm font-semibold text-slate-800">{p.fullName}</p>
+                                    <p className="text-[10px] text-slate-400 mt-0.5">{p.description}</p>
+                                  </td>
+                                  <td className="px-5 py-3.5 text-center">
+                                    {total > 0 ? (
+                                      <div className="inline-flex flex-col items-center gap-0.5">
+                                        <span className="text-base font-black text-emerald-700">{s.baikTinggi}</span>
+                                        <span className="text-[10px] text-emerald-500 font-medium">{baikPct}%</span>
+                                      </div>
+                                    ) : <span className="text-slate-300">–</span>}
+                                  </td>
+                                  <td className="px-5 py-3.5 text-center">
+                                    {total > 0 ? (
+                                      <div className="inline-flex flex-col items-center gap-0.5">
+                                        <span className="text-base font-black text-amber-600">{s.sedang}</span>
+                                        <span className="text-[10px] text-amber-500 font-medium">{sedangPct}%</span>
+                                      </div>
+                                    ) : <span className="text-slate-300">–</span>}
+                                  </td>
+                                  <td className="px-5 py-3.5 text-center">
+                                    {total > 0 ? (
+                                      <div className="inline-flex flex-col items-center gap-0.5">
+                                        <span className="text-base font-black text-red-600">{s.kurangRendah}</span>
+                                        <span className="text-[10px] text-red-400 font-medium">{kurangPct}%</span>
+                                      </div>
+                                    ) : <span className="text-slate-300">–</span>}
+                                  </td>
+                                  <td className="px-5 py-3.5">
+                                    {total > 0 ? (
+                                      <div>
+                                        <div className="flex rounded-full overflow-hidden h-2 gap-px w-full">
+                                          {baikPct > 0 && (
+                                            <div className="h-full rounded-l-full" style={{ width: `${baikPct}%`, background: "#22c55e" }} title={`Baik/Tinggi: ${baikPct}%`} />
+                                          )}
+                                          {sedangPct > 0 && (
+                                            <div className="h-full" style={{ width: `${sedangPct}%`, background: "#f59e0b" }} title={`Sedang: ${sedangPct}%`} />
+                                          )}
+                                          {kurangPct > 0 && (
+                                            <div className="h-full rounded-r-full" style={{ width: `${kurangPct}%`, background: "#ef4444" }} title={`Kurang/Rendah: ${kurangPct}%`} />
+                                          )}
+                                        </div>
+                                        <p className="text-[9px] text-slate-400 mt-1">{total} data</p>
+                                      </div>
+                                    ) : (
+                                      <span className="text-[10px] text-slate-300">Tidak ada data</span>
+                                    )}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
                     {/* Progress Ringkasan */}
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 mb-6">
+                      <div className="flex items-center justify-between mb-5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md shadow-blue-100">
                             <PieChart size={14} className="text-white" />
                           </div>
-                          <h3 className="text-sm font-bold text-slate-800">Ringkasan Capaian</h3>
+                          <div>
+                            <h3 className="text-sm font-bold text-slate-900">Distribusi Capaian</h3>
+                            <p className="text-[10px] text-slate-400">{totalDashboardStats.total} indikator tercatat</p>
+                          </div>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
                           <button
                             onClick={() => setViewMode("grid")}
-                            className={`p-1.5 rounded-lg transition ${viewMode === "grid" ? "bg-blue-100 text-blue-600" : "text-slate-400 hover:text-slate-600"}`}
+                            className={`p-1.5 rounded-lg transition-all ${viewMode === "grid" ? "bg-white text-blue-600 shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
+                            title="Tampilan Grid"
                           >
-                            <Grid3x3 size={16} />
+                            <Grid3x3 size={15} />
                           </button>
                           <button
                             onClick={() => setViewMode("list")}
-                            className={`p-1.5 rounded-lg transition ${viewMode === "list" ? "bg-blue-100 text-blue-600" : "text-slate-400 hover:text-slate-600"}`}
+                            className={`p-1.5 rounded-lg transition-all ${viewMode === "list" ? "bg-white text-blue-600 shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
+                            title="Tampilan List"
                           >
-                            <LayoutGrid size={16} />
+                            <LayoutGrid size={15} />
                           </button>
                         </div>
                       </div>
                       
-                      <div className="flex rounded-full overflow-hidden h-3 gap-px mb-4">
-                        <div
-                          className="flex items-center justify-center text-xs font-bold text-white transition-all"
-                          style={{ width: `${baikTinggiPercent}%`, background: "#22c55e" }}
-                        >
-                          {baikTinggiPercent > 12 && `${baikTinggiPercent}%`}
-                        </div>
-                        <div
-                          className="flex items-center justify-center text-xs font-bold text-white transition-all"
-                          style={{ width: `${sedangPercent}%`, background: "#eab308" }}
-                        >
-                          {sedangPercent > 12 && `${sedangPercent}%`}
-                        </div>
-                        <div
-                          className="flex items-center justify-center text-xs font-bold text-white transition-all"
-                          style={{ width: `${kurangRendahPercent}%`, background: "#ef4444" }}
-                        >
-                          {kurangRendahPercent > 12 && `${kurangRendahPercent}%`}
-                        </div>
+                      <div className="flex rounded-full overflow-hidden h-4 gap-0.5 mb-4">
+                        {baikTinggiPercent > 0 && (
+                          <div
+                            className="flex items-center justify-center text-[10px] font-bold text-white transition-all duration-500 rounded-l-full"
+                            style={{ width: `${baikTinggiPercent}%`, background: "#22c55e" }}
+                          >
+                            {baikTinggiPercent > 15 && `${baikTinggiPercent}%`}
+                          </div>
+                        )}
+                        {sedangPercent > 0 && (
+                          <div
+                            className="flex items-center justify-center text-[10px] font-bold text-white transition-all duration-500"
+                            style={{ width: `${sedangPercent}%`, background: "#f59e0b" }}
+                          >
+                            {sedangPercent > 15 && `${sedangPercent}%`}
+                          </div>
+                        )}
+                        {kurangRendahPercent > 0 && (
+                          <div
+                            className="flex items-center justify-center text-[10px] font-bold text-white transition-all duration-500 rounded-r-full"
+                            style={{ width: `${kurangRendahPercent}%`, background: "#ef4444" }}
+                          >
+                            {kurangRendahPercent > 15 && `${kurangRendahPercent}%`}
+                          </div>
+                        )}
                       </div>
                       
-                      <div className="flex flex-wrap justify-center gap-4 text-xs">
-                        <span className="flex items-center gap-1.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                          <span className="text-slate-600">Baik/Tinggi</span>
-                          <span className="font-bold text-slate-800">{totalDashboardStats.baikTinggi}</span>
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                          <span className="text-slate-600">Sedang</span>
-                          <span className="font-bold text-slate-800">{totalDashboardStats.sedang}</span>
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                          <span className="text-slate-600">Kurang/Rendah</span>
-                          <span className="font-bold text-slate-800">{totalDashboardStats.kurangRendah}</span>
-                        </span>
+                      <div className="flex flex-wrap gap-4">
+                        {[
+                          { color: "#22c55e", label: "Baik / Tinggi", count: totalDashboardStats.baikTinggi, pct: baikTinggiPercent },
+                          { color: "#f59e0b", label: "Sedang", count: totalDashboardStats.sedang, pct: sedangPercent },
+                          { color: "#ef4444", label: "Kurang / Rendah", count: totalDashboardStats.kurangRendah, pct: kurangRendahPercent },
+                        ].map(item => (
+                          <div key={item.label} className="flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: item.color }} />
+                            <span className="text-xs text-slate-500">{item.label}</span>
+                            <span className="text-xs font-black text-slate-800">{item.count}</span>
+                            <span className="text-[10px] text-slate-400">({item.pct}%)</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
@@ -1353,36 +1493,34 @@ export default function DashboardProvinsiPage() {
                     )}
 
                     {/* Info Indikator */}
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-5 mb-6 border border-blue-100">
-                      <h3 className="text-sm font-bold text-blue-800 mb-3 flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-lg bg-blue-200 flex items-center justify-center">
-                          <Info size={12} className="text-blue-700" />
-                        </div>
-                        Indikator Prioritas yang Ditampilkan
+                    <div className="bg-blue-50/60 border border-blue-100 rounded-2xl p-5 mb-6">
+                      <h3 className="text-xs font-bold text-blue-700 mb-3 flex items-center gap-2 uppercase tracking-wider">
+                        <Info size={12} className="text-blue-500" />
+                        8 Indikator Prioritas
                       </h3>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         {PRIORITY_INDICATORS.map(p => (
-                          <div key={p.code} className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded">
+                          <div key={p.code} className="flex items-center gap-2 bg-white rounded-xl px-3 py-2 border border-blue-100/60">
+                            <span className="font-mono text-xs font-black text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded-lg flex-shrink-0">
                               {p.code}
                             </span>
-                            <span className="text-xs text-slate-600">{p.fullName}</span>
+                            <span className="text-xs text-slate-600 font-medium truncate">{p.fullName}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
                     {/* Filter Bar */}
-                    <div className="flex flex-wrap gap-3 mb-6 items-center">
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                        <Filter size={12} />
-                        <span>Filter:</span>
+                    <div className="flex flex-wrap gap-2 mb-6 items-center p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
+                      <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1">
+                        <Filter size={11} />
+                        <span>Filter</span>
                       </div>
                       <SelectFilter
                         value={filterJenjang}
                         onChange={setFilterJenjang}
                         options={jenjangOptionsProvinsi}
-                        className="w-48"
+                        className="w-44"
                         icon={<School size={12} />}
                       />
                       <SelectFilter
@@ -1392,35 +1530,37 @@ export default function DashboardProvinsiPage() {
                         className="w-36"
                         icon={<Building2 size={12} />}
                       />
-                      <div className="flex gap-1.5">
+                      <div className="flex gap-1.5 flex-wrap">
                         {(["Semua", "Baik / Tinggi", "Sedang", "Kurang / Rendah"] as const).map(opt => {
                           const isActive = filterCapaian === opt;
-                          let activeClass = "bg-slate-800 text-white border-slate-800";
-                          let bgClass = "";
-                          if (opt === "Baik / Tinggi") { activeClass = "bg-emerald-600 text-white border-emerald-600"; bgClass = "hover:bg-emerald-50"; }
-                          if (opt === "Sedang") { activeClass = "bg-yellow-500 text-white border-yellow-500"; bgClass = "hover:bg-yellow-50"; }
-                          if (opt === "Kurang / Rendah") { activeClass = "bg-red-600 text-white border-red-600"; bgClass = "hover:bg-red-50"; }
-                          if (opt === "Semua") { activeClass = "bg-slate-800 text-white border-slate-800"; bgClass = "hover:bg-slate-100"; }
-                          
+                          const colorMap: Record<string, { active: string; dot?: string }> = {
+                            "Semua": { active: "bg-slate-800 text-white border-slate-800" },
+                            "Baik / Tinggi": { active: "bg-emerald-600 text-white border-emerald-600", dot: "bg-emerald-500" },
+                            "Sedang": { active: "bg-amber-500 text-white border-amber-500", dot: "bg-amber-400" },
+                            "Kurang / Rendah": { active: "bg-red-600 text-white border-red-600", dot: "bg-red-500" },
+                          };
+                          const { active, dot } = colorMap[opt];
                           return (
                             <button
                               key={opt}
                               onClick={() => setFilterCapaian(opt)}
-                              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
-                                isActive 
-                                  ? activeClass 
-                                  : `bg-white text-slate-600 border-slate-200 ${bgClass} hover:border-slate-300`
+                              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 ${
+                                isActive
+                                  ? active
+                                  : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                               }`}
                             >
-                              {opt === "Semua" ? "Semua Capaian" : opt}
+                              {dot && !isActive && <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />}
+                              {opt === "Semua" ? "Semua" : opt}
                             </button>
                           );
                         })}
                       </div>
-                      <div className="flex items-center px-3 py-1.5 bg-slate-100 rounded-lg ml-auto">
-                        <span className="text-xs font-semibold text-slate-600">
-                          {Object.keys(groupedProvData).filter(j => filterJenjang === "Semua" || j === filterJenjang).length} Jenjang
+                      <div className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl">
+                        <span className="text-xs font-black text-slate-700">
+                          {Object.keys(groupedProvData).filter(j => filterJenjang === "Semua" || j === filterJenjang).length}
                         </span>
+                        <span className="text-xs text-slate-500">Jenjang</span>
                       </div>
                     </div>
 
@@ -1449,22 +1589,24 @@ export default function DashboardProvinsiPage() {
                           if (!hasVisible) return null;
 
                           return (
-                            <div key={jenjang} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                              <div className={`bg-gradient-to-r ${gradient} px-5 py-3 flex items-center justify-between`}>
-                                <div className="flex items-center gap-2">
-                                  <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center">
-                                    {jenjang.includes("SD") && <School size={13} className="text-white" />}
-                                    {jenjang.includes("SMP") && <BookOpen size={13} className="text-white" />}
-                                    {jenjang.includes("SMA") && <GraduationCap size={13} className="text-white" />}
-                                    {jenjang.includes("PAUD") && <Building2 size={13} className="text-white" />}
+                            <div key={jenjang} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                              <div className={`bg-gradient-to-r ${gradient} px-5 py-4 flex items-center justify-between`}>
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center border border-white/20">
+                                    {jenjang.includes("SD") && <School size={14} className="text-white" />}
+                                    {jenjang.includes("SMP") && <BookOpen size={14} className="text-white" />}
+                                    {jenjang.includes("SMA") && <GraduationCap size={14} className="text-white" />}
+                                    {jenjang.includes("PAUD") && <Building2 size={14} className="text-white" />}
                                   </div>
-                                  <span className="font-bold text-white">{jenjang}</span>
-                                  <span className="text-white/70 text-xs ml-2">{indikatorCodes.length} indikator</span>
+                                  <div>
+                                    <span className="font-black text-white text-base">{jenjang}</span>
+                                    <span className="text-white/60 text-xs ml-2.5">{indikatorCodes.length} indikator</span>
+                                  </div>
                                 </div>
                               </div>
 
                               <div className="p-5">
-                                <div className={`grid ${viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid-cols-1"} gap-4`}>
+                                <div className={`grid ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid-cols-1"} gap-3`}>
                                   {indikatorCodes.map(kode => {
                                     const rows = indikatorMap[kode];
                                     let filteredRows = rows;
@@ -1496,119 +1638,95 @@ export default function DashboardProvinsiPage() {
                                       return (
                                         <div
                                           key={`${kode}-${status}-${idx}`}
-                                          className="group relative rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white"
+                                          className="group relative rounded-2xl border overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 bg-white"
+                                          style={{ borderColor: `${borderColor}40` }}
                                         >
+                                          {/* Card Header */}
                                           <div 
-                                            className="px-4 py-3 flex items-center justify-between"
-                                            style={{ 
-                                              background: `linear-gradient(135deg, ${borderColor}15 0%, ${borderColor}08 100%)`,
-                                              borderBottom: `2px solid ${borderColor}30`
-                                            }}
+                                            className="px-4 pt-4 pb-3"
+                                            style={{ background: `linear-gradient(145deg, ${borderColor}12 0%, ${borderColor}05 100%)` }}
                                           >
-                                            <div className="flex items-center gap-2">
-                                              <div 
-                                                className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
-                                                style={{ background: borderColor }}
-                                              >
-                                                {kode.split('.')[0]}
-                                              </div>
-                                              <div>
-                                                <div className="flex items-center gap-1.5">
-                                                  <span className="font-mono text-xs font-bold text-slate-700">
-                                                    {kode}
-                                                  </span>
-                                                  <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
-                                                    isNegeri ? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"
+                                            <div className="flex items-start justify-between gap-2 mb-2">
+                                              <div className="flex items-center gap-2">
+                                                <div 
+                                                  className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-xs shadow-sm flex-shrink-0"
+                                                  style={{ background: borderColor }}
+                                                >
+                                                  {kode}
+                                                </div>
+                                                <div>
+                                                  <p className="text-xs font-bold text-slate-800 leading-tight">{indicatorName}</p>
+                                                  <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-md inline-block mt-0.5 ${
+                                                    isNegeri ? "bg-blue-50 text-blue-600" : "bg-violet-50 text-violet-600"
                                                   }`}>
                                                     {status}
                                                   </span>
                                                 </div>
-                                                <p className="text-[10px] text-slate-500 font-medium mt-0.5">
-                                                  {indicatorName}
-                                                </p>
                                               </div>
+                                              <LabelBadge label={label} />
                                             </div>
-                                            <LabelBadge label={label} />
-                                          </div>
-
-                                          <div className="p-4">
                                             {indicatorDesc && (
-                                              <p className="text-[10px] text-slate-400 mb-3 line-clamp-2">
+                                              <p className="text-[10px] text-slate-400 line-clamp-1 mt-1">
                                                 {indicatorDesc}
                                               </p>
                                             )}
+                                          </div>
 
-                                            <div className="mb-3">
-                                              <div className="flex items-baseline justify-between mb-1">
-                                                <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
-                                                  Nilai Capaian {tahun}
+                                          {/* Card Body */}
+                                          <div className="px-4 py-3">
+                                            <div className="flex items-end justify-between mb-2">
+                                              <div>
+                                                <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mb-0.5">
+                                                  Nilai {tahun}
                                                 </p>
-                                                {tahun === "2025" && row["Nilai Capaian 2024"] && (
-                                                  <p className="text-[9px] text-slate-400">
-                                                    vs {row["Nilai Capaian 2024"]} (2024)
-                                                  </p>
-                                                )}
-                                              </div>
-                                              <div className="flex items-baseline gap-2">
-                                                <span className="text-3xl font-black text-slate-900">
-                                                  {nilaiVal ?? "–"}
-                                                </span>
-                                                {nilaiVal && (
-                                                  <span className="text-xs text-slate-500">
-                                                    / 100
+                                                <div className="flex items-baseline gap-1.5">
+                                                  <span className="text-2xl font-black text-slate-900 tracking-tight">
+                                                    {nilaiVal ?? "–"}
                                                   </span>
-                                                )}
+                                                  {nilaiVal && (
+                                                    <span className="text-xs text-slate-400 font-medium">/ 100</span>
+                                                  )}
+                                                </div>
                                               </div>
+                                              {(() => {
+                                                if (!row["Nilai Capaian 2024"] || tahun !== "2025") return null;
+                                                const oldVal = parseFloat(row["Nilai Capaian 2024"]);
+                                                const newVal = parseFloat(nilaiVal || "0");
+                                                const diff = newVal - oldVal;
+                                                if (isNaN(diff) || diff === 0) return null;
+                                                return (
+                                                  <div className={`text-right flex flex-col items-end`}>
+                                                    <span className={`text-xs font-bold ${diff > 0 ? "text-emerald-600" : "text-red-500"}`}>
+                                                      {diff > 0 ? "▲" : "▼"} {Math.abs(diff).toFixed(1)}
+                                                    </span>
+                                                    <span className="text-[9px] text-slate-400">dari 2024</span>
+                                                  </div>
+                                                );
+                                              })()}
                                             </div>
 
                                             {numericValue !== null && !isNaN(numericValue) && (
-                                              <div className="mb-3">
-                                                <div className="bg-slate-100 rounded-full h-2 overflow-hidden">
+                                              <div>
+                                                <div className="bg-slate-100 rounded-full h-1.5 overflow-hidden">
                                                   <div 
-                                                    className="h-full rounded-full transition-all duration-500"
+                                                    className="h-full rounded-full transition-all duration-700"
                                                     style={{ width: `${numericValue}%`, background: borderColor }}
                                                   />
                                                 </div>
-                                                <div className="flex justify-between mt-1 text-[9px] text-slate-400">
+                                                <div className="flex justify-between mt-1 text-[9px] text-slate-300">
                                                   <span>0</span>
-                                                  <span>50</span>
                                                   <span>100</span>
                                                 </div>
                                               </div>
                                             )}
-
-                                            {perubahan && (
-                                              <div className="mt-3 pt-3 border-t border-slate-100">
-                                                <PerubahanBadge val={perubahan} />
-                                              </div>
-                                            )}
-
-                                            {row["Nilai Capaian 2024"] && tahun === "2025" && (
-                                              <div className="mt-2 text-[10px] text-slate-400">
-                                                {(() => {
-                                                  const oldVal = parseFloat(row["Nilai Capaian 2024"]);
-                                                  const newVal = parseFloat(nilaiVal || "0");
-                                                  const diff = newVal - oldVal;
-                                                  if (!isNaN(diff) && diff !== 0) {
-                                                    return (
-                                                      <span className={diff > 0 ? "text-emerald-600" : "text-red-600"}>
-                                                        {diff > 0 ? "▲" : "▼"} {Math.abs(diff).toFixed(1)} poin dari tahun lalu
-                                                      </span>
-                                                    );
-                                                  }
-                                                  return null;
-                                                })()}
-                                              </div>
-                                            )}
                                           </div>
 
-                                          <div className="px-4 py-2 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
-                                            <span>Rapor Pendidikan {tahun}</span>
-                                            <div className="flex items-center gap-1">
-                                              <BarChart3 size={10} />
-                                              <span>Asesmen Nasional</span>
+                                          {/* Card Footer */}
+                                          {perubahan && (
+                                            <div className="px-4 pb-3">
+                                              <PerubahanBadge val={perubahan} />
                                             </div>
-                                          </div>
+                                          )}
                                         </div>
                                       );
                                     });
@@ -1621,10 +1739,10 @@ export default function DashboardProvinsiPage() {
 
                       {Object.keys(groupedProvData).filter(j => filterJenjang === "Semua" || j === filterJenjang).length === 0 && (
                         <div className="text-center py-20">
-                          <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                            <Search size={32} className="text-slate-400" />
+                          <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
+                            <Search size={24} className="text-slate-400" />
                           </div>
-                          <p className="text-sm font-medium text-slate-500">Tidak ada data yang ditemukan</p>
+                          <p className="text-sm font-semibold text-slate-600">Tidak ada data ditemukan</p>
                           <p className="text-xs text-slate-400 mt-1">Coba ubah filter yang dipilih</p>
                         </div>
                       )}
