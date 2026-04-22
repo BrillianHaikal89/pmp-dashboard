@@ -1639,9 +1639,7 @@ export default function DashboardProvinsiPage() {
             {!loading && !error && (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mt-8">
                 {[
-                  { icon: <BarChart3 size={15} />, label: "Indikator Prioritas", val: filteredProvData.length, gradient: "from-blue-400/80 to-blue-500/80" },
-                  { icon: <MapPin size={15} />, label: "Kab/Kota Dasmen", val: new Set(kabkotDasmen.map(k => k["Kab/Kota"])).size, gradient: "from-purple-400/80 to-purple-500/80" },
-                  { icon: <Layers size={15} />, label: "Kab/Kota PAUD", val: new Set(kabkotPaud.map(k => k["Kab/Kota"])).size, gradient: "from-pink-400/80 to-pink-500/80" },
+                  { icon: <Layers size={15} />, label: "Kab/Kota", val: new Set(kabkotPaud.map(k => k["Kab/Kota"])).size, gradient: "from-pink-400/80 to-pink-500/80" },
                   { icon: <Users size={15} />, label: "Total Satdik", val: satdikDasmen.length + satdikPaud.length, gradient: "from-orange-400/80 to-orange-500/80" },
                 ].map((s, i) => (
                   <div
