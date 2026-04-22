@@ -45,7 +45,7 @@ interface CapaianSatdik {
   [key: string]: string;
 }
 
-type TabId = "ringkasan" | "provinsi" | "kabkot-dasmen" | "kabkot-paud" | "satdik-dasmen" | "satdik-paud";
+type TabId = "ringkasan" | "provinsi" | "grafik-kabkot" | "kabkot-dasmen" | "kabkot-paud" | "satdik-dasmen" | "satdik-paud";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const PRIORITY_CODES = ["A.1", "A.2", "A.3", "D.1", "D.3", "D.4", "D.8", "D.10"];
@@ -54,8 +54,8 @@ const PRIORITY_INDICATORS = [
   { code: "A.1",  fullName: "Literasi", description: "Kemampuan memahami dan menggunakan informasi" },
   { code: "A.2",  fullName: "Numerasi", description: "Kemampuan bernalar menggunakan matematika" },
   { code: "A.3",  fullName: "Karakter", description: "Penguatan profil pelajar Pancasila" },
-  { code: "D.1",  fullName: "Partisipasi D.1", description: "Partisipasi dalam pembelajaran" },
-  { code: "D.3",  fullName: "Partisipasi D.3", description: "Partisipasi dalam kegiatan sekolah" },
+  { code: "D.1",  fullName: "Kualitas Pembelajaran", description: "Partisipasi dalam pembelajaran" },
+  { code: "D.3",  fullName: "Kepemimpinan Instruksional", description: "Partisipasi dalam kegiatan sekolah" },
   { code: "D.4",  fullName: "Iklim Keamanan", description: "Lingkungan belajar yang aman" },
   { code: "D.8",  fullName: "Iklim Kebinekaan", description: "Penghargaan terhadap keberagaman" },
   { code: "D.10", fullName: "Iklim Inklusifitas", description: "Keterlibatan semua pihak" },
@@ -95,6 +95,7 @@ const LABEL_COLORS_BAR: Record<string, string> = {
 const TABS: { id: TabId; short: string; icon: React.ReactNode; activeColor: string; activeBorder: string; activeBg: string }[] = [
   { id: "ringkasan",     short: "Ringkasan",           icon: <BookMarked size={14} />, activeColor: "text-emerald-700", activeBorder: "border-emerald-500", activeBg: "bg-emerald-50" },
   { id: "provinsi",      short: "Indikator Prioritas", icon: <BarChart3 size={14} />,  activeColor: "text-blue-700",    activeBorder: "border-blue-500",    activeBg: "bg-blue-50" },
+  { id: "grafik-kabkot", short: "Grafik Kab/Kota",    icon: <PieChart size={14} />,   activeColor: "text-cyan-700",    activeBorder: "border-cyan-500",    activeBg: "bg-cyan-50" },
   { id: "kabkot-dasmen", short: "Kab/Kota Dasmen",    icon: <MapPin size={14} />,     activeColor: "text-purple-700",  activeBorder: "border-purple-500",  activeBg: "bg-purple-50" },
   { id: "kabkot-paud",   short: "Kab/Kota PAUD",      icon: <Layers size={14} />,     activeColor: "text-pink-700",    activeBorder: "border-pink-500",    activeBg: "bg-pink-50" },
   { id: "satdik-dasmen", short: "Satdik Dasmen",      icon: <School size={14} />,     activeColor: "text-orange-700",  activeBorder: "border-orange-500",  activeBg: "bg-orange-50" },
@@ -326,7 +327,7 @@ function SelectFilter({ value, onChange, options, className = "", icon }: {
         style={{ paddingLeft: icon ? '2.25rem' : '0.75rem' }}
         value={value} onChange={e => onChange(e.target.value)}
       >
-        {options.map((o, idx) => <option key={`${o}-${idx}`}>{o}</option>)}
+        {options.filter(o => o !== undefined && o !== null && o !== "").map((o, idx) => <option key={`${o}-${idx}`} value={o}>{o}</option>)}
       </select>
       <ChevronDown size={12} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
     </div>
@@ -486,6 +487,285 @@ function DashboardCard({ title, value, icon, color, trend, trendValue, subtitle 
   );
 }
 
+// ─── Label → Nilai Numerik ────────────────────────────────────────────────────
+const LABEL_SCORE: Record<string, number> = {
+  "Tinggi": 4, "Baik": 3, "Sedang": 2, "Kurang": 1, "Rendah": 1,
+  "Capaian Tidak Tersedia": 0, "": 0,
+};
+const LABEL_COLOR_MAP: Record<string, string> = {
+  "Tinggi": "#22c55e", "Baik": "#3b82f6", "Sedang": "#f59e0b",
+  "Kurang": "#f97316", "Rendah": "#ef4444", "Capaian Tidak Tersedia": "#cbd5e1",
+};
+
+// ─── APK/APM/APS field patterns ──────────────────────────────────────────────
+const APX_PATTERNS = ["APK", "APM", "APS"];
+
+function getApxKeys(row: Record<string, string>): string[] {
+  return Object.keys(row).filter(k =>
+    APX_PATTERNS.some(p => k.toUpperCase().includes(p)) && k.includes("_Nilai")
+  );
+}
+
+// ─── Stacked Bar Chart (horizontal) per kab/kota ─────────────────────────────
+function StackedBarChart({
+  title, subtitle, data, jenjangList, selectedJenjang, onJenjangChange, indikatorKeys, colorFn,
+}: {
+  title: string; subtitle?: string;
+  data: CapaianKabkot[];
+  jenjangList: string[]; selectedJenjang: string; onJenjangChange: (v: string) => void;
+  indikatorKeys: string[];
+  colorFn?: (key: string) => string;
+}) {
+  const filtered = selectedJenjang === "Semua"
+    ? data : data.filter(r => r["Jenis Satuan Pendidikan"] === selectedJenjang);
+
+  // Ambil semua kab/kota unik
+  const kabList = [...new Set(filtered.map(r => r["Kab/Kota"]))].sort();
+
+  // Untuk setiap kab/kota, hitung score rata-rata per indikator
+  const chartData = kabList.map(kab => {
+    const rows = filtered.filter(r => r["Kab/Kota"] === kab);
+    const scores: Record<string, number> = {};
+    for (const key of indikatorKeys) {
+      const vals = rows.map(r => LABEL_SCORE[((r[key] ?? "")).trim()] ?? 0);
+      scores[key] = vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+    }
+    return { kab, scores };
+  });
+
+  if (chartData.length === 0) {
+    return (
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-8 text-center">
+        <p className="text-sm text-slate-400">Tidak ada data tersedia untuk filter ini</p>
+      </div>
+    );
+  }
+
+  const barH = 28;
+  const gap = 8;
+  const labelW = 110;
+  const chartW = 560;
+  const totalH = chartData.length * (barH + gap) + 40;
+  const maxScore = 4;
+
+  const shortKey = (k: string) => k.replace("_Label Capaian", "").replace("_Nilai Capaian", "");
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div className="px-5 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 className="text-sm font-bold text-slate-900">{title}</h3>
+          {subtitle && <p className="text-[10px] text-slate-400 mt-0.5">{subtitle}</p>}
+        </div>
+        <div className="flex gap-1.5 flex-wrap">
+          {jenjangList.map(j => (
+            <button key={j} onClick={() => onJenjangChange(j)}
+              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all border ${
+                selectedJenjang === j
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
+              }`}>{j}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="px-5 pt-4 pb-2 flex flex-wrap gap-3">
+        {indikatorKeys.map(k => (
+          <span key={k} className="flex items-center gap-1.5 text-[11px] text-slate-600">
+            <span className="w-3 h-3 rounded-sm inline-block flex-shrink-0"
+              style={{ background: colorFn ? colorFn(k) : "#3b82f6" }} />
+            {shortKey(k)}
+          </span>
+        ))}
+        <span className="text-[10px] text-slate-400 ml-2">Skala: 1=Kurang · 2=Sedang · 3=Baik · 4=Tinggi</span>
+      </div>
+
+      <div className="overflow-x-auto px-5 pb-5">
+        <svg width={labelW + chartW + 40} height={totalH} className="overflow-visible">
+          {/* Gridlines */}
+          {[0, 1, 2, 3, 4].map(v => {
+            const x = labelW + (v / maxScore) * chartW;
+            return (
+              <g key={v}>
+                <line x1={x} y1={20} x2={x} y2={totalH - 20} stroke="#e2e8f0" strokeWidth={1} strokeDasharray={v === 0 ? "0" : "4,3"} />
+                <text x={x} y={14} textAnchor="middle" fontSize={9} fill="#94a3b8">{v}</text>
+              </g>
+            );
+          })}
+
+          {chartData.map(({ kab, scores }, i) => {
+            const y = 20 + i * (barH + gap);
+            const segW = barH / indikatorKeys.length;
+            return (
+              <g key={kab}>
+                {/* Label kab */}
+                <text x={labelW - 6} y={y + barH / 2 + 4} textAnchor="end" fontSize={9.5} fill="#475569" fontWeight="500">
+                  {kab.length > 14 ? kab.substring(0, 13) + "…" : kab}
+                </text>
+                {/* Bars per indikator (stacked vertically dalam row) */}
+                {indikatorKeys.map((k, ki) => {
+                  const score = scores[k] ?? 0;
+                  const barWidth = (score / maxScore) * chartW;
+                  const ky = y + ki * segW;
+                  const col = colorFn ? colorFn(k) : "#3b82f6";
+                  return (
+                    <g key={k}>
+                      <rect x={labelW} y={ky} width={chartW} height={segW - 1} fill="#f1f5f9" rx={2} />
+                      <rect x={labelW} y={ky} width={barWidth} height={segW - 1} fill={col} rx={2} opacity={0.85} />
+                      {barWidth > 30 && (
+                        <text x={labelW + barWidth - 4} y={ky + segW / 2 + 3} textAnchor="end" fontSize={8} fill="white" fontWeight="700">
+                          {score.toFixed(1)}
+                        </text>
+                      )}
+                    </g>
+                  );
+                })}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+// ─── Trend Chart (naik/turun) ──────────────────────────────────────────────────
+function TrendChart({
+  title, subtitle, data, jenjangList, selectedJenjang, onJenjangChange,
+  tahun, indikatorKeys, colorFn, labelPrefix,
+}: {
+  title: string; subtitle?: string;
+  data: CapaianKabkot[];
+  jenjangList: string[]; selectedJenjang: string; onJenjangChange: (v: string) => void;
+  tahun: string;
+  indikatorKeys: string[];
+  colorFn?: (key: string) => string;
+  labelPrefix?: string;
+}) {
+  const filtered = selectedJenjang === "Semua"
+    ? data : data.filter(r => r["Jenis Satuan Pendidikan"] === selectedJenjang);
+
+  const kabList = [...new Set(filtered.map(r => r["Kab/Kota"]))].sort();
+
+  // Cari pasangan nilai 2024/2025 — asumsi kolom: X_Nilai Capaian 2025 & X_Nilai Capaian 2024
+  // atau X_Label Capaian (satu label tanpa tahun pada data kabkot)
+  // Untuk trend: hitung selisih score label 2025 vs 2024 jika ada, otherwise gunakan perubahan sign
+  const trendData = kabList.map(kab => {
+    const rows = filtered.filter(r => r["Kab/Kota"] === kab);
+    let naik = 0, turun = 0, tetap = 0;
+    for (const key of indikatorKeys) {
+      // Cari pasangan key 2025 dan 2024
+      const key25 = key.replace(/_Label Capaian$/, "_Label Capaian 2025").replace(/_Nilai Capaian$/, "_Nilai Capaian 2025");
+      const key24 = key.replace(/_Label Capaian$/, "_Label Capaian 2024").replace(/_Nilai Capaian$/, "_Nilai Capaian 2024");
+      for (const row of rows) {
+        const v25 = row[key25] ?? row[key] ?? "";
+        const v24 = row[key24] ?? "";
+        if (!v25 || !v24) { tetap++; continue; }
+        const s25 = LABEL_SCORE[(v25 as string).trim()] ?? parseFloat(v25 as string) ?? 0;
+        const s24 = LABEL_SCORE[(v24 as string).trim()] ?? parseFloat(v24 as string) ?? 0;
+        if (s25 > s24) naik++;
+        else if (s25 < s24) turun++;
+        else tetap++;
+      }
+    }
+    return { kab, naik, turun, tetap, total: naik + turun + tetap };
+  }).filter(d => d.total > 0);
+
+  if (trendData.length === 0) {
+    return (
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-8 text-center">
+        <p className="text-sm text-slate-400">Data perubahan tidak tersedia (perlu data 2 tahun)</p>
+      </div>
+    );
+  }
+
+  const barH = 24;
+  const gap = 10;
+  const labelW = 110;
+  const chartW = 560;
+  const totalH = trendData.length * (barH + gap) + 40;
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div className="px-5 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 className="text-sm font-bold text-slate-900">{title}</h3>
+          {subtitle && <p className="text-[10px] text-slate-400 mt-0.5">{subtitle}</p>}
+        </div>
+        <div className="flex gap-1.5 flex-wrap">
+          {jenjangList.map(j => (
+            <button key={j} onClick={() => onJenjangChange(j)}
+              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all border ${
+                selectedJenjang === j
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
+              }`}>{j}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="px-5 pt-4 pb-2 flex gap-4">
+        {[
+          { color: "#22c55e", label: "Meningkat" },
+          { color: "#ef4444", label: "Menurun" },
+          { color: "#94a3b8", label: "Tetap / Tidak ada data" },
+        ].map(l => (
+          <span key={l.label} className="flex items-center gap-1.5 text-[11px] text-slate-600">
+            <span className="w-3 h-3 rounded-sm" style={{ background: l.color }} />
+            {l.label}
+          </span>
+        ))}
+      </div>
+
+      <div className="overflow-x-auto px-5 pb-5">
+        <svg width={labelW + chartW + 40} height={totalH} className="overflow-visible">
+          {/* Gridlines at 25%, 50%, 75%, 100% */}
+          {[0, 25, 50, 75, 100].map(pct => {
+            const x = labelW + (pct / 100) * chartW;
+            return (
+              <g key={pct}>
+                <line x1={x} y1={20} x2={x} y2={totalH - 20} stroke="#e2e8f0" strokeWidth={1} strokeDasharray={pct === 0 ? "0" : "4,3"} />
+                <text x={x} y={14} textAnchor="middle" fontSize={9} fill="#94a3b8">{pct}%</text>
+              </g>
+            );
+          })}
+
+          {trendData.map(({ kab, naik, turun, tetap, total }, i) => {
+            const y = 20 + i * (barH + gap);
+            const naikW = (naik / total) * chartW;
+            const turunW = (turun / total) * chartW;
+            const tetapW = (tetap / total) * chartW;
+            return (
+              <g key={kab}>
+                <text x={labelW - 6} y={y + barH / 2 + 4} textAnchor="end" fontSize={9.5} fill="#475569" fontWeight="500">
+                  {kab.length > 14 ? kab.substring(0, 13) + "…" : kab}
+                </text>
+                {/* Background */}
+                <rect x={labelW} y={y} width={chartW} height={barH} fill="#f1f5f9" rx={4} />
+                {/* Naik */}
+                {naikW > 0 && <rect x={labelW} y={y} width={naikW} height={barH} fill="#22c55e" rx={4} opacity={0.85} />}
+                {/* Turun */}
+                {turunW > 0 && <rect x={labelW + naikW} y={y} width={turunW} height={barH} fill="#ef4444" rx={0} opacity={0.85} />}
+                {/* Tetap */}
+                {tetapW > 0 && <rect x={labelW + naikW + turunW} y={y} width={tetapW} height={barH} fill="#cbd5e1" rx={0} opacity={0.6} style={{ borderRadius: "0 4px 4px 0" }} />}
+                {/* Labels */}
+                {naikW > 28 && (
+                  <text x={labelW + naikW / 2} y={y + barH / 2 + 4} textAnchor="middle" fontSize={9} fill="white" fontWeight="700">{naik}</text>
+                )}
+                {turunW > 28 && (
+                  <text x={labelW + naikW + turunW / 2} y={y + barH / 2 + 4} textAnchor="middle" fontSize={9} fill="white" fontWeight="700">{turun}</text>
+                )}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardProvinsiPage() {
   const [tahun, setTahun]         = useState<"2024" | "2025">("2024");
   const [activeTab, setActiveTab] = useState<TabId>("provinsi");
@@ -512,6 +792,22 @@ export default function DashboardProvinsiPage() {
   const [sSP, setSSP] = useState(""); const [fSPJ, setFSPJ] = useState("Semua"); const [fSPS, setFSPS] = useState("Semua"); const [fSPK, setFSPK] = useState("Semua");
   const [pageSD, setPageSD] = useState(1);
   const [pageSP, setPageSP] = useState(1);
+
+  // Chart filter states
+  const [chartIndJenjang,  setChartIndJenjang]  = useState("Semua");
+  const [chartApxJenjang,  setChartApxJenjang]  = useState("Semua");
+  const [chartTrendIndJenjang, setChartTrendIndJenjang] = useState("Semua");
+  const [chartTrendApxJenjang, setChartTrendApxJenjang] = useState("Semua");
+
+  // Modal: daftar sekolah per indikator
+  const [schoolModal, setSchoolModal] = useState<{
+    indCode: string;
+    indName: string;
+    labelGroup: "Baik / Tinggi" | "Sedang" | "Kurang / Rendah";
+  } | null>(null);
+  const [schoolModalSearch, setSchoolModalSearch] = useState("");
+  const [schoolModalPage, setSchoolModalPage] = useState(1);
+  const SCHOOL_MODAL_PAGE_SIZE = 50;
 
   const handleTabChange = async (tabId: TabId) => {
     if (tabId === activeTab) return;
@@ -628,39 +924,60 @@ export default function DashboardProvinsiPage() {
 
   const totalDashboardStats = useMemo(() => {
     let baikTinggi = 0, sedang = 0, kurangRendah = 0, tidakTersedia = 0;
-    
-    for (const row of filteredProvData) {
-      const label = ((tahun === "2025" ? row["Label Capaian 2025"] : row["Label Capaian 2024"]) ?? "").trim();
-      if (label === "Tinggi" || label === "Baik") baikTinggi++;
-      else if (label === "Sedang") sedang++;
-      else if (label === "Kurang" || label === "Rendah") kurangRendah++;
-      else tidakTersedia++;
+
+    const allSatdik = [...satdikDasmen, ...satdikPaud];
+    for (const satdik of allSatdik) {
+      if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) continue;
+
+      let counted = false;
+      for (const code of PRIORITY_CODES) {
+        const labelKey = Object.keys(satdik).find(k => {
+          const ku = k.toUpperCase();
+          const cu = code.toUpperCase();
+          return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
+        });
+        if (!labelKey) continue;
+        const labelVal = (satdik[labelKey] ?? "").trim();
+        if (!labelVal) continue;
+        counted = true;
+        if (labelVal === "Tinggi" || labelVal === "Baik") baikTinggi++;
+        else if (labelVal === "Sedang") sedang++;
+        else if (labelVal === "Kurang" || labelVal === "Rendah") kurangRendah++;
+        else tidakTersedia++;
+      }
     }
-    
-    return { baikTinggi, sedang, kurangRendah, tidakTersedia, total: filteredProvData.length };
-  }, [filteredProvData, tahun]);
+
+    const total = baikTinggi + sedang + kurangRendah + tidakTersedia;
+    return { baikTinggi, sedang, kurangRendah, tidakTersedia, total };
+  }, [satdikDasmen, satdikPaud, filterStatus]);
 
   const jenjangStats = useMemo(() => {
     const stats: Record<string, { baikTinggi: number; sedang: number; kurangRendah: number; tidakTersedia: number; total: number }> = {};
-    
-    for (const row of filteredProvData) {
-      const jenjang = row["Jenis Satuan Pendidikan"] || "Lainnya";
-      const label = ((tahun === "2025" ? row["Label Capaian 2025"] : row["Label Capaian 2024"]) ?? "").trim();
-      
-      if (!stats[jenjang]) {
-        stats[jenjang] = { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 };
+
+    const allSatdik = [...satdikDasmen, ...satdikPaud];
+    for (const satdik of allSatdik) {
+      if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) continue;
+      const jenjang = satdik["Jenis Satuan Pendidikan"] || "Lainnya";
+      if (!stats[jenjang]) stats[jenjang] = { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 };
+
+      for (const code of PRIORITY_CODES) {
+        const labelKey = Object.keys(satdik).find(k => {
+          const ku = k.toUpperCase();
+          const cu = code.toUpperCase();
+          return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
+        });
+        if (!labelKey) continue;
+        const labelVal = (satdik[labelKey] ?? "").trim();
+        if (!labelVal) continue;
+        if (labelVal === "Tinggi" || labelVal === "Baik") stats[jenjang].baikTinggi++;
+        else if (labelVal === "Sedang") stats[jenjang].sedang++;
+        else if (labelVal === "Kurang" || labelVal === "Rendah") stats[jenjang].kurangRendah++;
+        else stats[jenjang].tidakTersedia++;
+        stats[jenjang].total++;
       }
-      
-      if (label === "Tinggi" || label === "Baik") stats[jenjang].baikTinggi++;
-      else if (label === "Sedang") stats[jenjang].sedang++;
-      else if (label === "Kurang" || label === "Rendah") stats[jenjang].kurangRendah++;
-      else stats[jenjang].tidakTersedia++;
-      
-      stats[jenjang].total++;
     }
-    
     return stats;
-  }, [filteredProvData, tahun]);
+  }, [satdikDasmen, satdikPaud, filterStatus]);
 
   const indikatorStats = useMemo(() => {
     const stats: Record<string, { baikTinggi: number; sedang: number; kurangRendah: number; tidakTersedia: number; total: number; label: string }> = {};
@@ -670,24 +987,71 @@ export default function DashboardProvinsiPage() {
       stats[p.code] = { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0, label: p.fullName };
     }
 
-    for (const row of filteredProvData) {
-      const kode = (row.No || "").trim();
-      const matchedCode = PRIORITY_CODES.find(c => {
-        const cu = c.toUpperCase();
-        const ku = kode.toUpperCase();
-        return ku === cu || ku.startsWith(cu + " ") || ku.startsWith(cu + ".");
-      });
-      if (!matchedCode) continue;
-      const labelVal = ((tahun === "2025" ? row["Label Capaian 2025"] : row["Label Capaian 2024"]) ?? "").trim();
-      if (!stats[matchedCode]) continue;
-      if (labelVal === "Tinggi" || labelVal === "Baik") stats[matchedCode].baikTinggi++;
-      else if (labelVal === "Sedang") stats[matchedCode].sedang++;
-      else if (labelVal === "Kurang" || labelVal === "Rendah") stats[matchedCode].kurangRendah++;
-      else stats[matchedCode].tidakTersedia++;
-      stats[matchedCode].total++;
+    // Hitung jumlah SEKOLAH (satdik) per indikator prioritas, bukan jumlah baris capaianProv
+    const allSatdik = [...satdikDasmen, ...satdikPaud];
+    for (const satdik of allSatdik) {
+      // Filter status jika ada
+      if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) continue;
+
+      for (const code of PRIORITY_CODES) {
+        if (!stats[code]) continue;
+        // Cari kolom label capaian untuk kode ini di data satdik
+        const labelKey = Object.keys(satdik).find(k => {
+          const ku = k.toUpperCase();
+          const cu = code.toUpperCase();
+          return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
+        });
+        if (!labelKey) continue;
+
+        const labelVal = (satdik[labelKey] ?? "").trim();
+        if (!labelVal) continue;
+
+        if (labelVal === "Tinggi" || labelVal === "Baik") stats[code].baikTinggi++;
+        else if (labelVal === "Sedang") stats[code].sedang++;
+        else if (labelVal === "Kurang" || labelVal === "Rendah") stats[code].kurangRendah++;
+        else stats[code].tidakTersedia++;
+        stats[code].total++;
+      }
     }
     return stats;
-  }, [filteredProvData, tahun]);
+  }, [satdikDasmen, satdikPaud, filterStatus]);
+
+  const schoolModalRows = useMemo(() => {
+    if (!schoolModal) return [];
+    const { indCode, labelGroup } = schoolModal;
+    const allSatdik = [...satdikDasmen, ...satdikPaud];
+    return allSatdik.filter(satdik => {
+      if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) return false;
+      const labelKey = Object.keys(satdik).find(k => {
+        const ku = k.toUpperCase();
+        const cu = indCode.toUpperCase();
+        return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
+      });
+      if (!labelKey) return false;
+      const labelVal = (satdik[labelKey] ?? "").trim();
+      if (!labelVal) return false;
+      if (labelGroup === "Baik / Tinggi") return labelVal === "Tinggi" || labelVal === "Baik";
+      if (labelGroup === "Sedang") return labelVal === "Sedang";
+      if (labelGroup === "Kurang / Rendah") return labelVal === "Kurang" || labelVal === "Rendah";
+      return false;
+    });
+  }, [schoolModal, satdikDasmen, satdikPaud, filterStatus]);
+
+  const schoolModalFiltered = useMemo(() => {
+    if (!schoolModalSearch) return schoolModalRows;
+    const q = schoolModalSearch.toLowerCase();
+    return schoolModalRows.filter(r =>
+      r["Nama Satuan Pendidikan"]?.toLowerCase().includes(q) ||
+      r.NPSN?.includes(q) ||
+      r["Kabupaten/Kota"]?.toLowerCase().includes(q)
+    );
+  }, [schoolModalRows, schoolModalSearch]);
+
+  const schoolModalTotalPages = Math.ceil(schoolModalFiltered.length / SCHOOL_MODAL_PAGE_SIZE);
+  const schoolModalPaged = schoolModalFiltered.slice(
+    (schoolModalPage - 1) * SCHOOL_MODAL_PAGE_SIZE,
+    schoolModalPage * SCHOOL_MODAL_PAGE_SIZE
+  );
 
   const baikTinggiPercent = totalDashboardStats.total > 0
     ? Math.round((totalDashboardStats.baikTinggi / totalDashboardStats.total) * 100)
@@ -699,15 +1063,68 @@ export default function DashboardProvinsiPage() {
     ? Math.round((totalDashboardStats.kurangRendah / totalDashboardStats.total) * 100)
     : 0;
 
-  const oKDJ = useMemo(() => ["Semua", ...new Set(kabkotDasmen.map(c => c["Jenis Satuan Pendidikan"]))], [kabkotDasmen]);
-  const oKDS = useMemo(() => ["Semua", ...new Set(kabkotDasmen.map(c => c["Status Satuan Pendidikan"]))], [kabkotDasmen]);
-  const oKPS = useMemo(() => ["Semua", ...new Set(kabkotPaud.map(c => c["Status Satuan Pendidikan"]))], [kabkotPaud]);
-  const oSDJ = useMemo(() => ["Semua", ...new Set(satdikDasmen.map(c => c["Jenis Satuan Pendidikan"]))], [satdikDasmen]);
-  const oSDS = useMemo(() => ["Semua", ...new Set(satdikDasmen.map(c => c["Status Satuan Pendidikan"]))], [satdikDasmen]);
-  const oSDK = useMemo(() => ["Semua", ...[...new Set(satdikDasmen.map(c => c["Kabupaten/Kota"]))].sort()], [satdikDasmen]);
-  const oSPJ = useMemo(() => ["Semua", ...new Set(satdikPaud.map(c => c["Jenis Satuan Pendidikan"]))], [satdikPaud]);
-  const oSPS = useMemo(() => ["Semua", ...new Set(satdikPaud.map(c => c["Status Satuan Pendidikan"]))], [satdikPaud]);
-  const oSPK = useMemo(() => ["Semua", ...[...new Set(satdikPaud.map(c => c["Kabupaten/Kota"]))].sort()], [satdikPaud]);
+  const oKDJ = useMemo(() => ["Semua", ...[...new Set(kabkotDasmen.map(c => c["Jenis Satuan Pendidikan"]))].filter(Boolean).sort()], [kabkotDasmen]);
+  const oKDS = useMemo(() => ["Semua", ...[...new Set(kabkotDasmen.map(c => c["Status Satuan Pendidikan"]))].filter(Boolean).sort()], [kabkotDasmen]);
+  const oKPS = useMemo(() => ["Semua", ...[...new Set(kabkotPaud.map(c => c["Status Satuan Pendidikan"]))].filter(Boolean).sort()], [kabkotPaud]);
+
+  // Chart: indikator prioritas keys dari kabkotDasmen
+  const chartIndKeys = useMemo(() =>
+    kabkotDasmen[0] ? Object.keys(kabkotDasmen[0]).filter(k => k.includes("_Label Capaian") &&
+      PRIORITY_CODES.some(code => k.toUpperCase().startsWith(code.toUpperCase() + "_"))) : [],
+    [kabkotDasmen]
+  );
+
+  // Chart: APK/APM/APS keys
+  const chartApxKeysDasmen = useMemo(() =>
+    kabkotDasmen[0] ? Object.keys(kabkotDasmen[0]).filter(k =>
+      APX_PATTERNS.some(p => k.toUpperCase().includes(p)) && k.includes("_Label Capaian")) : [],
+    [kabkotDasmen]
+  );
+  const chartApxKeysPaud = useMemo(() =>
+    kabkotPaud[0] ? Object.keys(kabkotPaud[0]).filter(k =>
+      APX_PATTERNS.some(p => k.toUpperCase().includes(p)) && k.includes("_Label Capaian")) : [],
+    [kabkotPaud]
+  );
+
+  // Jenjang list for charts
+  const chartJenjangDasmen = useMemo(() =>
+    ["Semua", ...[...new Set(kabkotDasmen.map(r => r["Jenis Satuan Pendidikan"]))].filter(Boolean).sort()], [kabkotDasmen]);
+  const chartJenjangPaud = useMemo(() =>
+    ["Semua", ...[...new Set(kabkotPaud.map(r => r["Jenis Satuan Pendidikan"]))].filter(Boolean).sort()], [kabkotPaud]);
+  const chartJenjangAll = useMemo(() =>
+    ["Semua", ...[...new Set([...kabkotDasmen, ...kabkotPaud].map(r => r["Jenis Satuan Pendidikan"]))].filter(Boolean).sort()],
+    [kabkotDasmen, kabkotPaud]
+  );
+
+  // Merged data for all jenjang chart
+  const allKabkotData = useMemo(() => ([...kabkotDasmen, ...kabkotPaud] as CapaianKabkot[]), [kabkotDasmen, kabkotPaud]);
+  const allChartIndKeys = useMemo(() =>
+    allKabkotData[0] ? Object.keys(allKabkotData[0]).filter(k => k.includes("_Label Capaian") &&
+      PRIORITY_CODES.some(code => k.toUpperCase().startsWith(code.toUpperCase() + "_"))) : [],
+    [allKabkotData]
+  );
+
+  // Color palette for indikator keys
+  const IND_COLORS: Record<string, string> = {
+    "A.1": "#3b82f6", "A.2": "#8b5cf6", "A.3": "#ec4899",
+    "D.1": "#f59e0b", "D.3": "#10b981", "D.4": "#ef4444",
+    "D.8": "#06b6d4", "D.10": "#f97316",
+  };
+  const getIndColor = (key: string) => {
+    const matched = PRIORITY_CODES.find(c => key.toUpperCase().startsWith(c.toUpperCase() + "_"));
+    return matched ? (IND_COLORS[matched] ?? "#64748b") : "#64748b";
+  };
+  const APX_COLORS: Record<string, string> = { "APK": "#3b82f6", "APM": "#10b981", "APS": "#f59e0b" };
+  const getApxColor = (key: string) => {
+    const matched = APX_PATTERNS.find(p => key.toUpperCase().includes(p));
+    return matched ? (APX_COLORS[matched] ?? "#64748b") : "#64748b";
+  };
+  const oSDJ = useMemo(() => ["Semua", ...[...new Set(satdikDasmen.map(c => c["Jenis Satuan Pendidikan"]))].filter(Boolean).sort()], [satdikDasmen]);
+  const oSDS = useMemo(() => ["Semua", ...[...new Set(satdikDasmen.map(c => c["Status Satuan Pendidikan"]))].filter(Boolean).sort()], [satdikDasmen]);
+  const oSDK = useMemo(() => ["Semua", ...[...new Set(satdikDasmen.map(c => c["Kabupaten/Kota"]))].filter(Boolean).sort()], [satdikDasmen]);
+  const oSPJ = useMemo(() => ["Semua", ...[...new Set(satdikPaud.map(c => c["Jenis Satuan Pendidikan"]))].filter(Boolean).sort()], [satdikPaud]);
+  const oSPS = useMemo(() => ["Semua", ...[...new Set(satdikPaud.map(c => c["Status Satuan Pendidikan"]))].filter(Boolean).sort()], [satdikPaud]);
+  const oSPK = useMemo(() => ["Semua", ...[...new Set(satdikPaud.map(c => c["Kabupaten/Kota"]))].filter(Boolean).sort()], [satdikPaud]);
 
   const fKD = useMemo(() => kabkotDasmen.filter(c =>
     (fKDJ === "Semua" || c["Jenis Satuan Pendidikan"] === fKDJ) &&
@@ -762,13 +1179,13 @@ export default function DashboardProvinsiPage() {
   };
 
   const jenjangOptionsProvinsi = useMemo(() =>
-    ["Semua", ...new Set(filteredProvData.map(c => c["Jenis Satuan Pendidikan"]))],
+    ["Semua", ...[...new Set(filteredProvData.map(c => c["Jenis Satuan Pendidikan"]))].filter(Boolean).sort()],
     [filteredProvData]
   );
 
   const statusOptionsProvinsi = useMemo(() => {
-    const statuses = new Set(filteredProvData.map(c => c["Status Satuan Pendidikan"]));
-    return ["Semua", ...Array.from(statuses)];
+    const statuses = [...new Set(filteredProvData.map(c => c["Status Satuan Pendidikan"]))].filter(Boolean).sort();
+    return ["Semua", ...statuses];
   }, [filteredProvData]);
 
   const groupedProvData = useMemo(() => {
@@ -936,6 +1353,122 @@ export default function DashboardProvinsiPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+
+      {/* ── Modal: Daftar Sekolah per Indikator ── */}
+      {schoolModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: "rgba(15,23,42,0.55)", backdropFilter: "blur(4px)" }}
+          onClick={e => { if (e.target === e.currentTarget) { setSchoolModal(null); setSchoolModalSearch(""); setSchoolModalPage(1); } }}
+        >
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 flex-shrink-0">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-xs shadow-sm"
+                  style={{
+                    background: schoolModal.labelGroup === "Baik / Tinggi" ? "#22c55e"
+                      : schoolModal.labelGroup === "Sedang" ? "#f59e0b" : "#ef4444"
+                  }}
+                >
+                  {schoolModal.indCode}
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900 leading-tight">
+                    {schoolModal.indName}
+                    <span
+                      className="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full"
+                      style={{
+                        background: schoolModal.labelGroup === "Baik / Tinggi" ? "#dcfce7"
+                          : schoolModal.labelGroup === "Sedang" ? "#fef9c3" : "#fee2e2",
+                        color: schoolModal.labelGroup === "Baik / Tinggi" ? "#166534"
+                          : schoolModal.labelGroup === "Sedang" ? "#854d0e" : "#991b1b",
+                      }}
+                    >
+                      {schoolModal.labelGroup}
+                    </span>
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {schoolModalFiltered.length.toLocaleString("id-ID")} sekolah ditemukan
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => { setSchoolModal(null); setSchoolModalSearch(""); setSchoolModalPage(1); }}
+                className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition text-lg font-bold"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Search */}
+            <div className="px-6 py-4 border-b border-slate-100 flex-shrink-0">
+              <div className="relative">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Cari nama sekolah, NPSN, atau kab/kota…"
+                  value={schoolModalSearch}
+                  onChange={e => { setSchoolModalSearch(e.target.value); setSchoolModalPage(1); }}
+                />
+              </div>
+            </div>
+
+            {/* Table */}
+            <div className="flex-1 overflow-auto">
+              <table className="text-xs w-full">
+                <thead className="sticky top-0 z-10">
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-52">Nama Satdik</th>
+                    <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-24">NPSN</th>
+                    <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-32">Kab/Kota</th>
+                    <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Jenis</th>
+                    <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Status</th>
+                    <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Kecamatan</th>
+                    <th className="px-4 py-3 text-center font-bold text-slate-500 uppercase tracking-wide text-[10px]">Capaian</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {schoolModalPaged.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="text-center py-16 text-slate-400">
+                        <Search size={20} className="mx-auto mb-2 opacity-40" />
+                        <p className="text-xs">Tidak ada sekolah ditemukan</p>
+                      </td>
+                    </tr>
+                  ) : schoolModalPaged.map((row, i) => {
+                    const labelKey = Object.keys(row).find(k => {
+                      const ku = k.toUpperCase();
+                      const cu = schoolModal.indCode.toUpperCase();
+                      return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
+                    });
+                    const labelVal = labelKey ? (row[labelKey] ?? "").trim() : "";
+                    return (
+                      <tr key={row.NPSN || i} className="hover:bg-blue-50/30 transition-colors group">
+                        <td className="px-4 py-3 font-semibold text-slate-800 leading-snug">{row["Nama Satuan Pendidikan"]}</td>
+                        <td className="px-4 py-3 font-mono text-slate-500 text-[11px]">{row.NPSN}</td>
+                        <td className="px-4 py-3 text-slate-600">{row["Kabupaten/Kota"]}</td>
+                        <td className="px-4 py-3 text-slate-500">{row["Jenis Satuan Pendidikan"]}</td>
+                        <td className="px-4 py-3 text-slate-500">{row["Status Satuan Pendidikan"]}</td>
+                        <td className="px-4 py-3 text-slate-400 text-[11px]">{row.Kecamatan || "–"}</td>
+                        <td className="px-4 py-3 text-center"><LabelBadge label={labelVal} /></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            {schoolModalTotalPages > 1 && (
+              <div className="px-6 py-4 border-t border-slate-100 flex-shrink-0">
+                <PaginationBar page={schoolModalPage} total={schoolModalTotalPages} onChange={p => setSchoolModalPage(p)} />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="bg-white border-b border-slate-200 px-6 h-16 flex items-center gap-4 shadow-sm sticky top-0 z-20">
         <Link
@@ -1214,7 +1747,7 @@ export default function DashboardProvinsiPage() {
                         color="bg-gradient-to-br from-emerald-500 to-emerald-600"
                         trend={baikTinggiPercent > 50 ? "up" : baikTinggiPercent > 30 ? "neutral" : "down"}
                         trendValue={`${baikTinggiPercent}% dari total`}
-                        subtitle={`${totalDashboardStats.baikTinggi} dari ${totalDashboardStats.total} indikator`}
+                        subtitle={`${totalDashboardStats.baikTinggi} dari ${totalDashboardStats.total} sekolah`}
                       />
                       <DashboardCard
                         title="SEDANG"
@@ -1248,7 +1781,7 @@ export default function DashboardProvinsiPage() {
                         </div>
                         <div>
                           <h3 className="text-sm font-bold text-slate-900">Capaian per Indikator Prioritas</h3>
-                          <p className="text-[10px] text-slate-400 mt-0.5">Jumlah satuan pendidikan per kategori capaian</p>
+                          <p className="text-[10px] text-slate-400 mt-0.5">Jumlah sekolah per kategori capaian indikator</p>
                         </div>
                       </div>
                       <div className="overflow-x-auto">
@@ -1257,9 +1790,9 @@ export default function DashboardProvinsiPage() {
                             <tr className="bg-slate-50 border-b border-slate-200">
                               <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px] w-16">Kode</th>
                               <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px]">Indikator</th>
-                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-emerald-600">Baik/Tinggi</th>
-                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-amber-600">Sedang</th>
-                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-red-600">Kurang/Rendah</th>
+                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-emerald-600">Baik/Tinggi <span className="text-[9px] font-normal opacity-60 normal-case">↗ klik lihat sekolah</span></th>
+                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-amber-600">Sedang <span className="text-[9px] font-normal opacity-60 normal-case">↗ klik</span></th>
+                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-red-600">Kurang/Rendah <span className="text-[9px] font-normal opacity-60 normal-case">↗ klik</span></th>
                               <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px] min-w-40">Distribusi</th>
                             </tr>
                           </thead>
@@ -1284,26 +1817,38 @@ export default function DashboardProvinsiPage() {
                                   </td>
                                   <td className="px-5 py-3.5 text-center">
                                     {total > 0 ? (
-                                      <div className="inline-flex flex-col items-center gap-0.5">
-                                        <span className="text-base font-black text-emerald-700">{s.baikTinggi}</span>
+                                      <button
+                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Baik / Tinggi" }); setSchoolModalSearch(""); setSchoolModalPage(1); }}
+                                        className="inline-flex flex-col items-center gap-0.5 group/btn cursor-pointer hover:bg-emerald-50 rounded-xl px-3 py-1.5 transition-all border border-transparent hover:border-emerald-200"
+                                        title={`Lihat ${s.baikTinggi} sekolah dengan capaian Baik/Tinggi`}
+                                      >
+                                        <span className="text-base font-black text-emerald-700 group-hover/btn:underline">{s.baikTinggi}</span>
                                         <span className="text-[10px] text-emerald-500 font-medium">{baikPct}%</span>
-                                      </div>
+                                      </button>
                                     ) : <span className="text-slate-300">–</span>}
                                   </td>
                                   <td className="px-5 py-3.5 text-center">
                                     {total > 0 ? (
-                                      <div className="inline-flex flex-col items-center gap-0.5">
-                                        <span className="text-base font-black text-amber-600">{s.sedang}</span>
+                                      <button
+                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Sedang" }); setSchoolModalSearch(""); setSchoolModalPage(1); }}
+                                        className="inline-flex flex-col items-center gap-0.5 group/btn cursor-pointer hover:bg-amber-50 rounded-xl px-3 py-1.5 transition-all border border-transparent hover:border-amber-200"
+                                        title={`Lihat ${s.sedang} sekolah dengan capaian Sedang`}
+                                      >
+                                        <span className="text-base font-black text-amber-600 group-hover/btn:underline">{s.sedang}</span>
                                         <span className="text-[10px] text-amber-500 font-medium">{sedangPct}%</span>
-                                      </div>
+                                      </button>
                                     ) : <span className="text-slate-300">–</span>}
                                   </td>
                                   <td className="px-5 py-3.5 text-center">
                                     {total > 0 ? (
-                                      <div className="inline-flex flex-col items-center gap-0.5">
-                                        <span className="text-base font-black text-red-600">{s.kurangRendah}</span>
+                                      <button
+                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Kurang / Rendah" }); setSchoolModalSearch(""); setSchoolModalPage(1); }}
+                                        className="inline-flex flex-col items-center gap-0.5 group/btn cursor-pointer hover:bg-red-50 rounded-xl px-3 py-1.5 transition-all border border-transparent hover:border-red-200"
+                                        title={`Lihat ${s.kurangRendah} sekolah dengan capaian Kurang/Rendah`}
+                                      >
+                                        <span className="text-base font-black text-red-600 group-hover/btn:underline">{s.kurangRendah}</span>
                                         <span className="text-[10px] text-red-400 font-medium">{kurangPct}%</span>
-                                      </div>
+                                      </button>
                                     ) : <span className="text-slate-300">–</span>}
                                   </td>
                                   <td className="px-5 py-3.5">
@@ -1320,7 +1865,7 @@ export default function DashboardProvinsiPage() {
                                             <div className="h-full rounded-r-full" style={{ width: `${kurangPct}%`, background: "#ef4444" }} title={`Kurang/Rendah: ${kurangPct}%`} />
                                           )}
                                         </div>
-                                        <p className="text-[9px] text-slate-400 mt-1">{total} data</p>
+                                        <p className="text-[9px] text-slate-400 mt-1">{total} sekolah</p>
                                       </div>
                                     ) : (
                                       <span className="text-[10px] text-slate-300">Tidak ada data</span>
@@ -1343,7 +1888,7 @@ export default function DashboardProvinsiPage() {
                           </div>
                           <div>
                             <h3 className="text-sm font-bold text-slate-900">Distribusi Capaian</h3>
-                            <p className="text-[10px] text-slate-400">{totalDashboardStats.total} indikator tercatat</p>
+                            <p className="text-[10px] text-slate-400">{totalDashboardStats.total} capaian sekolah tercatat</p>
                           </div>
                         </div>
                         <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
@@ -1746,6 +2291,139 @@ export default function DashboardProvinsiPage() {
                           <p className="text-xs text-slate-400 mt-1">Coba ubah filter yang dipilih</p>
                         </div>
                       )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab: Grafik Kab/Kota */}
+                {activeTab === "grafik-kabkot" && (
+                  <div className="space-y-8">
+                    <SectionHeader
+                      icon={<PieChart size={18} />}
+                      title="Grafik Capaian 27 Kab/Kota"
+                      badge={`Tahun ${tahun} · Data per kabupaten/kota`}
+                    />
+
+                    {/* ── Grafik 1: Indikator Prioritas per Jenjang ── */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-5 rounded-full bg-blue-500" />
+                        <h3 className="text-base font-black text-slate-800">1. Capaian Indikator Prioritas per Kab/Kota</h3>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-4 ml-3">
+                        Skor rata-rata (1=Kurang · 2=Sedang · 3=Baik · 4=Tinggi) untuk setiap indikator prioritas A.1–D.10
+                      </p>
+                      {(allChartIndKeys.length > 0 || chartIndKeys.length > 0) ? (
+                        <StackedBarChart
+                          title="Indikator Prioritas (A.1, A.2, A.3, D.1, D.3, D.4, D.8, D.10)"
+                          subtitle="Pilih jenjang untuk memfilter data"
+                          data={allKabkotData}
+                          jenjangList={chartJenjangAll}
+                          selectedJenjang={chartIndJenjang}
+                          onJenjangChange={setChartIndJenjang}
+                          indikatorKeys={allChartIndKeys.length > 0 ? allChartIndKeys : chartIndKeys}
+                          colorFn={getIndColor}
+                        />
+                      ) : (
+                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 text-center">
+                          <p className="text-sm font-semibold text-amber-700">Data indikator prioritas kabkot belum tersedia</p>
+                          <p className="text-xs text-amber-600 mt-1">Pastikan kolom <code>A.1_Label Capaian</code>, <code>A.2_Label Capaian</code>, dst. ada di file JSON</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* ── Grafik 2: APK, APM, APS per Jenjang ── */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-5 rounded-full bg-emerald-500" />
+                        <h3 className="text-base font-black text-slate-800">2. Capaian APK, APM, dan APS per Kab/Kota</h3>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-4 ml-3">
+                        Angka Partisipasi Kasar (APK), Murni (APM), dan Sekolah (APS) — skor rata-rata per kab/kota
+                      </p>
+                      {chartApxKeysDasmen.length > 0 ? (
+                        <StackedBarChart
+                          title="APK / APM / APS — Dasmen & Vokasi"
+                          subtitle="Pilih jenjang SD / SMP / SMA / SMK"
+                          data={kabkotDasmen}
+                          jenjangList={chartJenjangDasmen}
+                          selectedJenjang={chartApxJenjang}
+                          onJenjangChange={setChartApxJenjang}
+                          indikatorKeys={chartApxKeysDasmen}
+                          colorFn={getApxColor}
+                        />
+                      ) : chartApxKeysPaud.length > 0 ? (
+                        <StackedBarChart
+                          title="APK / APM / APS — PAUD"
+                          subtitle="Data PAUD"
+                          data={kabkotPaud}
+                          jenjangList={chartJenjangPaud}
+                          selectedJenjang={chartApxJenjang}
+                          onJenjangChange={setChartApxJenjang}
+                          indikatorKeys={chartApxKeysPaud}
+                          colorFn={getApxColor}
+                        />
+                      ) : (
+                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 text-center">
+                          <p className="text-sm font-semibold text-amber-700">Data APK/APM/APS kabkot belum tersedia</p>
+                          <p className="text-xs text-amber-600 mt-1">Pastikan kolom seperti <code>APK_Label Capaian</code>, <code>APM_Label Capaian</code>, <code>APS_Label Capaian</code> ada di file JSON</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* ── Grafik 3: Trend Indikator Prioritas ── */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-5 rounded-full bg-purple-500" />
+                        <h3 className="text-base font-black text-slate-800">3. Tren Indikator Prioritas — Naik & Turun per Kab/Kota</h3>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-4 ml-3">
+                        Berapa banyak indikator yang meningkat atau menurun dibanding tahun sebelumnya
+                      </p>
+                      <TrendChart
+                        title="Tren Indikator Prioritas (2024 → 2025)"
+                        subtitle="Jumlah indikator yang naik (hijau), turun (merah), atau tetap (abu)"
+                        data={allKabkotData}
+                        jenjangList={chartJenjangAll}
+                        selectedJenjang={chartTrendIndJenjang}
+                        onJenjangChange={setChartTrendIndJenjang}
+                        tahun={tahun}
+                        indikatorKeys={allChartIndKeys.length > 0 ? allChartIndKeys : chartIndKeys}
+                        colorFn={getIndColor}
+                      />
+                    </div>
+
+                    {/* ── Grafik 4: Trend APK/APM/APS ── */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-5 rounded-full bg-orange-500" />
+                        <h3 className="text-base font-black text-slate-800">4. Tren APK, APM, APS — Naik & Turun per Kab/Kota</h3>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-4 ml-3">
+                        Perubahan capaian APK/APM/APS dibandingkan tahun sebelumnya per kab/kota
+                      </p>
+                      <TrendChart
+                        title="Tren APK / APM / APS (2024 → 2025)"
+                        subtitle="Jumlah indikator partisipasi yang naik (hijau), turun (merah), atau tetap (abu)"
+                        data={chartApxKeysDasmen.length > 0 ? kabkotDasmen : kabkotPaud}
+                        jenjangList={chartApxKeysDasmen.length > 0 ? chartJenjangDasmen : chartJenjangPaud}
+                        selectedJenjang={chartTrendApxJenjang}
+                        onJenjangChange={setChartTrendApxJenjang}
+                        tahun={tahun}
+                        indikatorKeys={chartApxKeysDasmen.length > 0 ? chartApxKeysDasmen : chartApxKeysPaud}
+                        colorFn={getApxColor}
+                      />
+                    </div>
+
+                    {/* Info box */}
+                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+                      <p className="text-xs font-bold text-slate-600 mb-2">ℹ️ Tentang Grafik ini</p>
+                      <ul className="text-xs text-slate-500 space-y-1">
+                        <li>• Skor dihitung dari label capaian: <strong>Tinggi=4, Baik=3, Sedang=2, Kurang/Rendah=1</strong></li>
+                        <li>• Jika satu kab/kota memiliki data Negeri dan Swasta, nilai dirata-rata</li>
+                        <li>• Data tren memerlukan kolom tahun ganda (<code>_Label Capaian 2024</code> & <code>_Label Capaian 2025</code>) di file JSON</li>
+                        <li>• APK/APM/APS akan muncul otomatis jika kolom tersedia di data JSON</li>
+                      </ul>
                     </div>
                   </div>
                 )}
