@@ -807,6 +807,8 @@ export default function DashboardProvinsiPage() {
   } | null>(null);
   const [schoolModalSearch, setSchoolModalSearch] = useState("");
   const [schoolModalPage, setSchoolModalPage] = useState(1);
+  const [schoolModalKabkot, setSchoolModalKabkot] = useState("Semua");
+  const [schoolModalKecamatan, setSchoolModalKecamatan] = useState("Semua");
   const SCHOOL_MODAL_PAGE_SIZE = 50;
 
   const handleTabChange = async (tabId: TabId) => {
@@ -1037,15 +1039,31 @@ export default function DashboardProvinsiPage() {
     });
   }, [schoolModal, satdikDasmen, satdikPaud, filterStatus]);
 
+  const schoolModalKabkotOptions = useMemo(() => {
+    const opts = [...new Set(schoolModalRows.map(r => r["Kabupaten/Kota"]).filter(Boolean))].sort();
+    return ["Semua", ...opts];
+  }, [schoolModalRows]);
+
+  const schoolModalKecamatanOptions = useMemo(() => {
+    const base = schoolModalKabkot !== "Semua"
+      ? schoolModalRows.filter(r => r["Kabupaten/Kota"] === schoolModalKabkot)
+      : schoolModalRows;
+    const opts = [...new Set(base.map(r => r.Kecamatan).filter(Boolean))].sort();
+    return ["Semua", ...opts];
+  }, [schoolModalRows, schoolModalKabkot]);
+
   const schoolModalFiltered = useMemo(() => {
-    if (!schoolModalSearch) return schoolModalRows;
+    let rows = schoolModalRows;
+    if (schoolModalKabkot !== "Semua") rows = rows.filter(r => r["Kabupaten/Kota"] === schoolModalKabkot);
+    if (schoolModalKecamatan !== "Semua") rows = rows.filter(r => r.Kecamatan === schoolModalKecamatan);
+    if (!schoolModalSearch) return rows;
     const q = schoolModalSearch.toLowerCase();
-    return schoolModalRows.filter(r =>
+    return rows.filter(r =>
       r["Nama Satuan Pendidikan"]?.toLowerCase().includes(q) ||
       r.NPSN?.includes(q) ||
       r["Kabupaten/Kota"]?.toLowerCase().includes(q)
     );
-  }, [schoolModalRows, schoolModalSearch]);
+  }, [schoolModalRows, schoolModalSearch, schoolModalKabkot, schoolModalKecamatan]);
 
   const schoolModalTotalPages = Math.ceil(schoolModalFiltered.length / SCHOOL_MODAL_PAGE_SIZE);
   const schoolModalPaged = schoolModalFiltered.slice(
@@ -1359,7 +1377,7 @@ export default function DashboardProvinsiPage() {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{ background: "rgba(15,23,42,0.55)", backdropFilter: "blur(4px)" }}
-          onClick={e => { if (e.target === e.currentTarget) { setSchoolModal(null); setSchoolModalSearch(""); setSchoolModalPage(1); } }}
+          onClick={e => { if (e.target === e.currentTarget) { setSchoolModal(null); setSchoolModalSearch(""); setSchoolModalPage(1); setSchoolModalKabkot("Semua"); setSchoolModalKecamatan("Semua"); } }}
         >
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
             {/* Modal Header */}
@@ -1395,24 +1413,86 @@ export default function DashboardProvinsiPage() {
                 </div>
               </div>
               <button
-                onClick={() => { setSchoolModal(null); setSchoolModalSearch(""); setSchoolModalPage(1); }}
+                onClick={() => { setSchoolModal(null); setSchoolModalSearch(""); setSchoolModalPage(1); setSchoolModalKabkot("Semua"); setSchoolModalKecamatan("Semua"); }}
                 className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition text-lg font-bold"
               >
                 ×
               </button>
             </div>
 
-            {/* Search */}
-            <div className="px-6 py-4 border-b border-slate-100 flex-shrink-0">
+            {/* Search & Filters */}
+            <div className="px-6 py-4 border-b border-slate-100 flex-shrink-0 space-y-3">
+              {/* Search bar */}
               <div className="relative">
                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
-                  className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Cari nama sekolah, NPSN, atau kab/kota…"
                   value={schoolModalSearch}
                   onChange={e => { setSchoolModalSearch(e.target.value); setSchoolModalPage(1); }}
                 />
               </div>
+              {/* Filter dropdowns */}
+              <div className="flex gap-3">
+                {/* Filter Kabupaten/Kota */}
+                <div className="flex-1 relative">
+                  <MapPin size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                  <select
+                    className="w-full pl-8 pr-8 py-2 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
+                    value={schoolModalKabkot}
+                    onChange={e => {
+                      setSchoolModalKabkot(e.target.value);
+                      setSchoolModalKecamatan("Semua");
+                      setSchoolModalPage(1);
+                    }}
+                  >
+                    {schoolModalKabkotOptions.map(opt => (
+                      <option key={opt} value={opt}>{opt === "Semua" ? "Semua Kab/Kota" : opt}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={12} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                </div>
+                {/* Filter Kecamatan */}
+                <div className="flex-1 relative">
+                  <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                  <select
+                    className="w-full pl-8 pr-8 py-2 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer disabled:opacity-50"
+                    value={schoolModalKecamatan}
+                    onChange={e => { setSchoolModalKecamatan(e.target.value); setSchoolModalPage(1); }}
+                    disabled={schoolModalKecamatanOptions.length <= 1}
+                  >
+                    {schoolModalKecamatanOptions.map(opt => (
+                      <option key={opt} value={opt}>{opt === "Semua" ? "Semua Kecamatan" : opt}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={12} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                </div>
+                {/* Reset filter button */}
+                {(schoolModalKabkot !== "Semua" || schoolModalKecamatan !== "Semua") && (
+                  <button
+                    onClick={() => { setSchoolModalKabkot("Semua"); setSchoolModalKecamatan("Semua"); setSchoolModalPage(1); }}
+                    className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-red-50 hover:border-red-200 text-slate-500 hover:text-red-500 text-xs font-medium transition flex items-center gap-1.5 whitespace-nowrap"
+                  >
+                    <XCircle size={12} /> Reset
+                  </button>
+                )}
+              </div>
+              {/* Active filter summary */}
+              {(schoolModalKabkot !== "Semua" || schoolModalKecamatan !== "Semua") && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  {schoolModalKabkot !== "Semua" && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 text-[11px] font-semibold">
+                      <MapPin size={10} /> {schoolModalKabkot}
+                    </span>
+                  )}
+                  {schoolModalKecamatan !== "Semua" && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 text-[11px] font-semibold">
+                      <Filter size={10} /> Kec. {schoolModalKecamatan}
+                    </span>
+                  )}
+                  <span className="text-[11px] text-slate-400">{schoolModalFiltered.length.toLocaleString("id-ID")} sekolah</span>
+                </div>
+              )}
             </div>
 
             {/* Table */}
@@ -1818,7 +1898,7 @@ export default function DashboardProvinsiPage() {
                                   <td className="px-5 py-3.5 text-center">
                                     {total > 0 ? (
                                       <button
-                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Baik / Tinggi" }); setSchoolModalSearch(""); setSchoolModalPage(1); }}
+                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Baik / Tinggi" }); setSchoolModalSearch(""); setSchoolModalPage(1); setSchoolModalKabkot("Semua"); setSchoolModalKecamatan("Semua"); }}
                                         className="inline-flex flex-col items-center gap-0.5 group/btn cursor-pointer hover:bg-emerald-50 rounded-xl px-3 py-1.5 transition-all border border-transparent hover:border-emerald-200"
                                         title={`Lihat ${s.baikTinggi} sekolah dengan capaian Baik/Tinggi`}
                                       >
@@ -1830,7 +1910,7 @@ export default function DashboardProvinsiPage() {
                                   <td className="px-5 py-3.5 text-center">
                                     {total > 0 ? (
                                       <button
-                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Sedang" }); setSchoolModalSearch(""); setSchoolModalPage(1); }}
+                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Sedang" }); setSchoolModalSearch(""); setSchoolModalPage(1); setSchoolModalKabkot("Semua"); setSchoolModalKecamatan("Semua"); }}
                                         className="inline-flex flex-col items-center gap-0.5 group/btn cursor-pointer hover:bg-amber-50 rounded-xl px-3 py-1.5 transition-all border border-transparent hover:border-amber-200"
                                         title={`Lihat ${s.sedang} sekolah dengan capaian Sedang`}
                                       >
@@ -1842,7 +1922,7 @@ export default function DashboardProvinsiPage() {
                                   <td className="px-5 py-3.5 text-center">
                                     {total > 0 ? (
                                       <button
-                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Kurang / Rendah" }); setSchoolModalSearch(""); setSchoolModalPage(1); }}
+                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Kurang / Rendah" }); setSchoolModalSearch(""); setSchoolModalPage(1); setSchoolModalKabkot("Semua"); setSchoolModalKecamatan("Semua"); }}
                                         className="inline-flex flex-col items-center gap-0.5 group/btn cursor-pointer hover:bg-red-50 rounded-xl px-3 py-1.5 transition-all border border-transparent hover:border-red-200"
                                         title={`Lihat ${s.kurangRendah} sekolah dengan capaian Kurang/Rendah`}
                                       >
