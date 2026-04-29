@@ -1,30 +1,45 @@
-// app/layout.tsx — ganti layout utama dengan ini selama maintenance
 import type { Metadata } from "next";
-import MaintenancePage from "./page"; // import komponen halaman maintenance
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import MaintenancePage from "./page";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
-  title: "Maintenance — Dashboard PMP Jawa Barat",
-  description: "Sistem sedang dalam pemeliharaan",
+  title: "Dashboard Rapor Pendidikan — PMP Jawa Barat",
+  description: "Dashboard analitik Rapor Pendidikan PMP",
 };
 
 const MAINTENANCE_MODE = true;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   if (MAINTENANCE_MODE) {
-    // Render halaman maintenance untuk SEMUA route, tanpa exception
     return (
       <html lang="id">
-        <body>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <MaintenancePage />
         </body>
       </html>
     );
   }
 
-  // Normal layout (aktifkan kembali saat maintenance selesai)
   return (
     <html lang="id">
-      <body>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }
