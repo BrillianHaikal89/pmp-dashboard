@@ -139,25 +139,7 @@ export default function MaintenancePage() {
             Kami akan segera kembali online.
           </p>
 
-          {/* Divider */}
-          <div className="fade-up-4 flex items-center gap-4 mb-6">
-            <div className="flex-1 h-px bg-slate-800" />
-            <span className="mono text-[10px] text-slate-600 uppercase tracking-widest">Info Kontak</span>
-            <div className="flex-1 h-px bg-slate-800" />
-          </div>
-
-          {/* Contact cards */}
-          <div className="fade-up-5 grid grid-cols-2 gap-3 max-w-sm mx-auto mb-6">
-            {[
-              { label: "Email", value: "bbpmp.jabar@kemdikbud.go.id", icon: "✉" },
-              { label: "Website", value: "bbpmpjabar.kemdikbud.go.id", icon: "🌐" },
-            ].map(c => (
-              <div key={c.label} className="text-left p-4 rounded-xl border border-slate-800 bg-slate-900/60">
-                <p className="mono text-[9px] text-slate-600 uppercase tracking-widest mb-1.5">{c.icon} {c.label}</p>
-                <p className="mono text-[10px] text-slate-400 break-all leading-relaxed">{c.value}</p>
-              </div>
-            ))}
-          </div>
+          
 
           {/* Terminal status */}
           <div className="fade-up-5 p-4 rounded-xl border border-slate-800 bg-slate-900/40 text-left max-w-sm mx-auto">
