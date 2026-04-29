@@ -1226,6 +1226,90 @@ export default function DashboardProvinsiPage() {
     return "from-slate-500 to-slate-600";
   };
 
+  // ─── Helpers for Skor & Tren in KabkotTable ──────────────────────────────────
+  function calcRowSkor(row: CapaianKabkot, indKeys: string[]): number | null {
+    const scores = indKeys.map(k => LABEL_SCORE[(row[k] ?? "").trim()] ?? null).filter(v => v !== null && v > 0) as number[];
+    if (scores.length === 0) return null;
+    return scores.reduce((a, b) => a + b, 0) / scores.length;
+  }
+
+  function SkorBadge({ skor }: { skor: number | null }) {
+    if (skor === null) return <span className="text-slate-400 text-xs">–</span>;
+    const color = skor >= 3.5 ? "#166534" : skor >= 2.5 ? "#1e40af" : skor >= 1.5 ? "#854d0e" : "#991b1b";
+    const bg    = skor >= 3.5 ? "#dcfce7" : skor >= 2.5 ? "#dbeafe" : skor >= 1.5 ? "#fef9c3" : "#fee2e2";
+    const border= skor >= 3.5 ? "#bbf7d0" : skor >= 2.5 ? "#bfdbfe" : skor >= 1.5 ? "#fef08a" : "#fecaca";
+    return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap"
+        style={{ background: bg, color, border: `1px solid ${border}` }}>
+        {skor.toFixed(2)}
+      </span>
+    );
+  }
+
+  function calcRowTren(row: CapaianKabkot, indKeys: string[]): "naik" | "turun" | "tetap" | null {
+    // Cek kolom tren eksplisit (e.g. "Perubahan Nilai Capaian dari Tahun Lalu" atau "_Tren")
+    const trenExplicit = Object.keys(row).find(k =>
+      k.toLowerCase().includes("perubahan") || k.toLowerCase().includes("tren")
+    );
+    if (trenExplicit) {
+      const val = (row[trenExplicit] ?? "").toLowerCase();
+      if (val.includes("naik")) return "naik";
+      if (val.includes("turun")) return "turun";
+      return "tetap";
+    }
+
+    // Cek kolom tahun ganda: "_Label Capaian 2024" vs "_Label Capaian 2025"
+    const keys2024 = Object.keys(row).filter(k => k.includes("_Label Capaian 2024"));
+    const keys2025 = Object.keys(row).filter(k => k.includes("_Label Capaian 2025"));
+    if (keys2024.length > 0 && keys2025.length > 0) {
+      const scores2024 = keys2024.map(k => LABEL_SCORE[(row[k] ?? "").trim()] ?? 0).filter(v => v > 0);
+      const scores2025 = keys2025.map(k => LABEL_SCORE[(row[k] ?? "").trim()] ?? 0).filter(v => v > 0);
+      if (scores2024.length === 0 || scores2025.length === 0) return null;
+      const avg2024 = scores2024.reduce((a, b) => a + b, 0) / scores2024.length;
+      const avg2025 = scores2025.reduce((a, b) => a + b, 0) / scores2025.length;
+      if (avg2025 > avg2024 + 0.05) return "naik";
+      if (avg2025 < avg2024 - 0.05) return "turun";
+      return "tetap";
+    }
+
+    // Cek "_Nilai Capaian" (tahun sekarang vs tahun lalu) jika ada pasangan kolom
+    const nilaiKeys = indKeys.map(k => k.replace("_Label Capaian", "_Nilai Capaian")).filter(k => row[k] !== undefined);
+    const nilaiPrevKeys = indKeys.map(k => k.replace("_Label Capaian", "_Nilai Capaian 2024")).filter(k => row[k] !== undefined);
+    if (nilaiPrevKeys.length > 0 && nilaiKeys.length > 0) {
+      const cur  = nilaiKeys.map(k => parseFloat(row[k]) || 0).filter(v => v > 0);
+      const prev = nilaiPrevKeys.map(k => parseFloat(row[k]) || 0).filter(v => v > 0);
+      if (cur.length > 0 && prev.length > 0) {
+        const avgCur  = cur.reduce((a, b) => a + b, 0) / cur.length;
+        const avgPrev = prev.reduce((a, b) => a + b, 0) / prev.length;
+        if (avgCur > avgPrev + 0.1) return "naik";
+        if (avgCur < avgPrev - 0.1) return "turun";
+        return "tetap";
+      }
+    }
+    return null;
+  }
+
+  function TrenBadge({ tren }: { tren: "naik" | "turun" | "tetap" | null }) {
+    if (tren === null) return <span className="text-slate-300 text-xs">–</span>;
+    if (tren === "naik")
+      return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
+          <TrendingUp size={10} /> Naik
+        </span>
+      );
+    if (tren === "turun")
+      return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200 whitespace-nowrap">
+          <TrendingDown size={10} /> Turun
+        </span>
+      );
+    return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200 whitespace-nowrap">
+        <Minus size={10} /> Tetap
+      </span>
+    );
+  }
+
   function KabkotTable({ rows, indKeys, search, onSearch, jenisList, jenisSel, onJenis, statusList, statusSel, onStatus }: {
     rows: CapaianKabkot[]; indKeys: string[];
     search: string; onSearch: (v: string) => void;
@@ -1235,8 +1319,26 @@ export default function DashboardProvinsiPage() {
     const codes = indKeys.map(k => k.replace("_Label Capaian", ""));
     const totalPages = Math.ceil(rows.length / PAGE_SIZE);
     const [localPage, setLocalPage] = useState(1);
-    const pagedRows = rows.slice((localPage - 1) * PAGE_SIZE, localPage * PAGE_SIZE);
-    
+    const [sortBy, setSortBy] = useState<"default" | "skor-asc" | "skor-desc">("default");
+    const pagedRows = useMemo(() => {
+      let sorted = [...rows];
+      if (sortBy === "skor-desc") {
+        sorted.sort((a, b) => (calcRowSkor(b, indKeys) ?? -1) - (calcRowSkor(a, indKeys) ?? -1));
+      } else if (sortBy === "skor-asc") {
+        sorted.sort((a, b) => (calcRowSkor(a, indKeys) ?? 5) - (calcRowSkor(b, indKeys) ?? 5));
+      }
+      return sorted.slice((localPage - 1) * PAGE_SIZE, localPage * PAGE_SIZE);
+    }, [rows, localPage, sortBy, indKeys]);
+
+    // Cek apakah ada data tren tersedia
+    const hasTren = rows.some(r => calcRowTren(r, indKeys) !== null);
+
+    // Statistik ringkas skor
+    const skorAll = rows.map(r => calcRowSkor(r, indKeys)).filter(v => v !== null) as number[];
+    const skorAvg = skorAll.length > 0 ? (skorAll.reduce((a, b) => a + b, 0) / skorAll.length) : null;
+    const skorMax = skorAll.length > 0 ? Math.max(...skorAll) : null;
+    const skorMin = skorAll.length > 0 ? Math.min(...skorAll) : null;
+
     return (
       <div className="space-y-4">
         <div className="flex flex-wrap gap-2 items-center p-4 bg-white border border-slate-200/80 rounded-2xl shadow-sm">
@@ -1245,11 +1347,43 @@ export default function DashboardProvinsiPage() {
             <SelectFilter value={jenisSel} onChange={onJenis} options={jenisList} className="w-44" />
           )}
           <SelectFilter value={statusSel} onChange={onStatus} options={statusList} className="w-36" />
-          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl ml-auto">
+          {/* Sort by Skor */}
+          <div className="flex items-center gap-1 ml-auto">
+            <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wide mr-1">Urutkan:</span>
+            {(["default", "skor-desc", "skor-asc"] as const).map(s => (
+              <button key={s} onClick={() => setSortBy(s)}
+                className={`px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border transition-all ${
+                  sortBy === s ? "bg-purple-600 text-white border-purple-600" : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"
+                }`}>
+                {s === "default" ? "Default" : s === "skor-desc" ? "Skor ↓" : "Skor ↑"}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
             <span className="text-xs font-black text-slate-700">{rows.length}</span>
             <span className="text-xs text-slate-500">wilayah</span>
           </div>
         </div>
+
+        {/* Statistik Skor Ringkas */}
+        {skorAvg !== null && (
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              { label: "Rata-rata Skor", val: skorAvg, icon: <Activity size={14} />, color: "text-blue-700 bg-blue-50 border-blue-200" },
+              { label: "Skor Tertinggi", val: skorMax!, icon: <TrendingUp size={14} />, color: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+              { label: "Skor Terendah", val: skorMin!, icon: <TrendingDown size={14} />, color: "text-red-700 bg-red-50 border-red-200" },
+            ].map(({ label, val, icon, color }) => (
+              <div key={label} className={`flex items-center gap-3 px-4 py-3 rounded-2xl border ${color}`}>
+                <div className="flex-shrink-0">{icon}</div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wide opacity-70">{label}</p>
+                  <p className="text-lg font-black leading-tight">{val.toFixed(2)}</p>
+                  <p className="text-[10px] opacity-60">skala 1–4</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Distribusi Capaian</p>
@@ -1264,6 +1398,10 @@ export default function DashboardProvinsiPage() {
                   <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] sticky left-0 bg-slate-50 min-w-36">Kab/Kota</th>
                   <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-28">Jenis</th>
                   <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Status</th>
+                  <th className="px-3 py-3 text-center font-bold text-purple-600 uppercase tracking-wide text-[10px] min-w-20 bg-purple-50/40">Skor</th>
+                  {hasTren && (
+                    <th className="px-3 py-3 text-center font-bold text-indigo-600 uppercase tracking-wide text-[10px] min-w-20 bg-indigo-50/40">Tren</th>
+                  )}
                   {codes.map(c => (
                     <th key={c} className="px-3 py-3 text-center font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-16">{c}</th>
                   ))}
@@ -1272,25 +1410,43 @@ export default function DashboardProvinsiPage() {
               <tbody className="divide-y divide-slate-100">
                 {pagedRows.length === 0 ? (
                   <tr>
-                    <td colSpan={codes.length + 3} className="text-center py-16 text-slate-400">
+                    <td colSpan={codes.length + (hasTren ? 5 : 4)} className="text-center py-16 text-slate-400">
                       <Search size={20} className="mx-auto mb-2 opacity-40" />
                       <p className="text-xs">Tidak ada data ditemukan</p>
                     </td>
                   </tr>
-                ) : pagedRows.map((row, i) => (
-                  <tr key={i} className="hover:bg-blue-50/30 transition-colors group">
-                    <td className="px-4 py-3 font-semibold text-slate-800 sticky left-0 bg-white group-hover:bg-blue-50/30 z-[5]">{row["Kab/Kota"]}</td>
-                    <td className="px-4 py-3 text-slate-500">{row["Jenis Satuan Pendidikan"]}</td>
-                    <td className="px-4 py-3 text-slate-500">{row["Status Satuan Pendidikan"]}</td>
-                    {indKeys.map(k => (
-                      <td key={k} className="px-3 py-3 text-center"><LabelBadge label={row[k]} /></td>
-                    ))}
-                  </tr>
-                ))}
+                ) : pagedRows.map((row, i) => {
+                  const skor = calcRowSkor(row, indKeys);
+                  const tren = hasTren ? calcRowTren(row, indKeys) : null;
+                  return (
+                    <tr key={i} className="hover:bg-purple-50/20 transition-colors group">
+                      <td className="px-4 py-3 font-semibold text-slate-800 sticky left-0 bg-white group-hover:bg-purple-50/20 z-[5]">{row["Kab/Kota"]}</td>
+                      <td className="px-4 py-3 text-slate-500">{row["Jenis Satuan Pendidikan"]}</td>
+                      <td className="px-4 py-3 text-slate-500">{row["Status Satuan Pendidikan"]}</td>
+                      <td className="px-3 py-3 text-center bg-purple-50/20"><SkorBadge skor={skor} /></td>
+                      {hasTren && (
+                        <td className="px-3 py-3 text-center bg-indigo-50/20"><TrenBadge tren={tren} /></td>
+                      )}
+                      {indKeys.map(k => (
+                        <td key={k} className="px-3 py-3 text-center"><LabelBadge label={row[k]} /></td>
+                      ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
           <PaginationBar page={localPage} total={totalPages} onChange={setLocalPage} />
+        </div>
+
+        {/* Legenda Skor */}
+        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2">ℹ️ Keterangan Skor &amp; Tren</p>
+          <div className="flex flex-wrap gap-4 text-xs text-slate-600">
+            <span><strong className="text-purple-700">Skor</strong> = rata-rata nilai indikator (Tinggi=4, Baik=3, Sedang=2, Kurang/Rendah=1)</span>
+            {hasTren && <span><strong className="text-indigo-700">Tren</strong> = perbandingan skor tahun ini vs tahun lalu</span>}
+            {!hasTren && <span className="text-slate-400">Tren tidak tersedia — data hanya memiliki satu tahun</span>}
+          </div>
         </div>
       </div>
     );
