@@ -10,21 +10,6 @@ import {
   ListChecks, Activity, Filter, Grid3x3, LayoutGrid,
 } from "lucide-react";
 import Link from "next/link";
-import Ringkasan2024 from "./components/ringkasan/2024";
-import Ringkasan2025 from "./components/ringkasan/2025";
-import IndikatorPrioritas2024 from "./components/indikator-prioritas/2024";
-import IndikatorPrioritas2025 from "./components/indikator-prioritas/2025";
-import GrafikKabkot2024 from "./components/grafik-kabkot/2024";
-import GrafikKabkot2025 from "./components/grafik-kabkot/2025";
-import KabkotDasmen2024 from "./components/kabkot-dasmen/2024";
-import KabkotDasmen2025 from "./components/kabkot-dasmen/2025";
-import KabkotPaud2024 from "./components/kabkot-paud/2024";
-import KabkotPaud2025 from "./components/kabkot-paud/2025";
-import SatdikDasmen2024 from "./components/satdik-dasmen/2024";
-import SatdikDasmen2025 from "./components/satdik-dasmen/2025";
-import SatdikPaud2024 from "./components/satdik-paud/2024";
-import SatdikPaud2025 from "./components/satdik-paud/2025";
-import TabBar, { TabId } from "./components/TabBar";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface RingkasanCapaian {
@@ -59,6 +44,9 @@ interface CapaianSatdik {
   Kecamatan: string;
   [key: string]: string;
 }
+
+type TabId = "ringkasan" | "provinsi" | "grafik-kabkot" | "kabkot-dasmen" | "kabkot-paud" | "satdik-dasmen" | "satdik-paud";
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 const PRIORITY_CODES = ["A.1", "A.2", "A.3", "D.1", "D.3", "D.4", "D.8", "D.10"];
 
@@ -103,6 +91,16 @@ const LABEL_COLORS_BAR: Record<string, string> = {
   Tinggi: "#22c55e", Baik: "#3b82f6", Sedang: "#eab308",
   Kurang: "#f97316", Rendah: "#ef4444", "Capaian Tidak Tersedia": "#cbd5e1",
 };
+
+const TABS: { id: TabId; short: string; icon: React.ReactNode; activeColor: string; activeBorder: string; activeBg: string }[] = [
+  { id: "ringkasan",     short: "Ringkasan",           icon: <BookMarked size={14} />, activeColor: "text-emerald-700", activeBorder: "border-emerald-500", activeBg: "bg-emerald-50" },
+  { id: "provinsi",      short: "Indikator Prioritas", icon: <BarChart3 size={14} />,  activeColor: "text-blue-700",    activeBorder: "border-blue-500",    activeBg: "bg-blue-50" },
+  { id: "grafik-kabkot", short: "Grafik Kab/Kota",    icon: <PieChart size={14} />,   activeColor: "text-cyan-700",    activeBorder: "border-cyan-500",    activeBg: "bg-cyan-50" },
+  { id: "kabkot-dasmen", short: "Kab/Kota Dasmen",    icon: <MapPin size={14} />,     activeColor: "text-purple-700",  activeBorder: "border-purple-500",  activeBg: "bg-purple-50" },
+  { id: "kabkot-paud",   short: "Kab/Kota PAUD",      icon: <Layers size={14} />,     activeColor: "text-pink-700",    activeBorder: "border-pink-500",    activeBg: "bg-pink-50" },
+  { id: "satdik-dasmen", short: "Satdik Dasmen",      icon: <School size={14} />,     activeColor: "text-orange-700",  activeBorder: "border-orange-500",  activeBg: "bg-orange-50" },
+  { id: "satdik-paud",   short: "Satdik PAUD",        icon: <GraduationCap size={14} />, activeColor: "text-teal-700", activeBorder: "border-teal-500",    activeBg: "bg-teal-50" },
+];
 
 const PAGE_SIZE = 50;
 
@@ -1228,90 +1226,6 @@ export default function DashboardProvinsiPage() {
     return "from-slate-500 to-slate-600";
   };
 
-  // ─── Helpers for Skor & Tren in KabkotTable ──────────────────────────────────
-  function calcRowSkor(row: CapaianKabkot, indKeys: string[]): number | null {
-    const scores = indKeys.map(k => LABEL_SCORE[(row[k] ?? "").trim()] ?? null).filter(v => v !== null && v > 0) as number[];
-    if (scores.length === 0) return null;
-    return scores.reduce((a, b) => a + b, 0) / scores.length;
-  }
-
-  function SkorBadge({ skor }: { skor: number | null }) {
-    if (skor === null) return <span className="text-slate-400 text-xs">–</span>;
-    const color = skor >= 3.5 ? "#166534" : skor >= 2.5 ? "#1e40af" : skor >= 1.5 ? "#854d0e" : "#991b1b";
-    const bg    = skor >= 3.5 ? "#dcfce7" : skor >= 2.5 ? "#dbeafe" : skor >= 1.5 ? "#fef9c3" : "#fee2e2";
-    const border= skor >= 3.5 ? "#bbf7d0" : skor >= 2.5 ? "#bfdbfe" : skor >= 1.5 ? "#fef08a" : "#fecaca";
-    return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap"
-        style={{ background: bg, color, border: `1px solid ${border}` }}>
-        {skor.toFixed(2)}
-      </span>
-    );
-  }
-
-  function calcRowTren(row: CapaianKabkot, indKeys: string[]): "naik" | "turun" | "tetap" | null {
-    // Cek kolom tren eksplisit (e.g. "Perubahan Nilai Capaian dari Tahun Lalu" atau "_Tren")
-    const trenExplicit = Object.keys(row).find(k =>
-      k.toLowerCase().includes("perubahan") || k.toLowerCase().includes("tren")
-    );
-    if (trenExplicit) {
-      const val = (row[trenExplicit] ?? "").toLowerCase();
-      if (val.includes("naik")) return "naik";
-      if (val.includes("turun")) return "turun";
-      return "tetap";
-    }
-
-    // Cek kolom tahun ganda: "_Label Capaian 2024" vs "_Label Capaian 2025"
-    const keys2024 = Object.keys(row).filter(k => k.includes("_Label Capaian 2024"));
-    const keys2025 = Object.keys(row).filter(k => k.includes("_Label Capaian 2025"));
-    if (keys2024.length > 0 && keys2025.length > 0) {
-      const scores2024 = keys2024.map(k => LABEL_SCORE[(row[k] ?? "").trim()] ?? 0).filter(v => v > 0);
-      const scores2025 = keys2025.map(k => LABEL_SCORE[(row[k] ?? "").trim()] ?? 0).filter(v => v > 0);
-      if (scores2024.length === 0 || scores2025.length === 0) return null;
-      const avg2024 = scores2024.reduce((a, b) => a + b, 0) / scores2024.length;
-      const avg2025 = scores2025.reduce((a, b) => a + b, 0) / scores2025.length;
-      if (avg2025 > avg2024 + 0.05) return "naik";
-      if (avg2025 < avg2024 - 0.05) return "turun";
-      return "tetap";
-    }
-
-    // Cek "_Nilai Capaian" (tahun sekarang vs tahun lalu) jika ada pasangan kolom
-    const nilaiKeys = indKeys.map(k => k.replace("_Label Capaian", "_Nilai Capaian")).filter(k => row[k] !== undefined);
-    const nilaiPrevKeys = indKeys.map(k => k.replace("_Label Capaian", "_Nilai Capaian 2024")).filter(k => row[k] !== undefined);
-    if (nilaiPrevKeys.length > 0 && nilaiKeys.length > 0) {
-      const cur  = nilaiKeys.map(k => parseFloat(row[k]) || 0).filter(v => v > 0);
-      const prev = nilaiPrevKeys.map(k => parseFloat(row[k]) || 0).filter(v => v > 0);
-      if (cur.length > 0 && prev.length > 0) {
-        const avgCur  = cur.reduce((a, b) => a + b, 0) / cur.length;
-        const avgPrev = prev.reduce((a, b) => a + b, 0) / prev.length;
-        if (avgCur > avgPrev + 0.1) return "naik";
-        if (avgCur < avgPrev - 0.1) return "turun";
-        return "tetap";
-      }
-    }
-    return null;
-  }
-
-  function TrenBadge({ tren }: { tren: "naik" | "turun" | "tetap" | null }) {
-    if (tren === null) return <span className="text-slate-300 text-xs">–</span>;
-    if (tren === "naik")
-      return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
-          <TrendingUp size={10} /> Naik
-        </span>
-      );
-    if (tren === "turun")
-      return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200 whitespace-nowrap">
-          <TrendingDown size={10} /> Turun
-        </span>
-      );
-    return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200 whitespace-nowrap">
-        <Minus size={10} /> Tetap
-      </span>
-    );
-  }
-
   function KabkotTable({ rows, indKeys, search, onSearch, jenisList, jenisSel, onJenis, statusList, statusSel, onStatus }: {
     rows: CapaianKabkot[]; indKeys: string[];
     search: string; onSearch: (v: string) => void;
@@ -1321,26 +1235,8 @@ export default function DashboardProvinsiPage() {
     const codes = indKeys.map(k => k.replace("_Label Capaian", ""));
     const totalPages = Math.ceil(rows.length / PAGE_SIZE);
     const [localPage, setLocalPage] = useState(1);
-    const [sortBy, setSortBy] = useState<"default" | "skor-asc" | "skor-desc">("default");
-    const pagedRows = useMemo(() => {
-      let sorted = [...rows];
-      if (sortBy === "skor-desc") {
-        sorted.sort((a, b) => (calcRowSkor(b, indKeys) ?? -1) - (calcRowSkor(a, indKeys) ?? -1));
-      } else if (sortBy === "skor-asc") {
-        sorted.sort((a, b) => (calcRowSkor(a, indKeys) ?? 5) - (calcRowSkor(b, indKeys) ?? 5));
-      }
-      return sorted.slice((localPage - 1) * PAGE_SIZE, localPage * PAGE_SIZE);
-    }, [rows, localPage, sortBy, indKeys]);
-
-    // Cek apakah ada data tren tersedia
-    const hasTren = rows.some(r => calcRowTren(r, indKeys) !== null);
-
-    // Statistik ringkas skor
-    const skorAll = rows.map(r => calcRowSkor(r, indKeys)).filter(v => v !== null) as number[];
-    const skorAvg = skorAll.length > 0 ? (skorAll.reduce((a, b) => a + b, 0) / skorAll.length) : null;
-    const skorMax = skorAll.length > 0 ? Math.max(...skorAll) : null;
-    const skorMin = skorAll.length > 0 ? Math.min(...skorAll) : null;
-
+    const pagedRows = rows.slice((localPage - 1) * PAGE_SIZE, localPage * PAGE_SIZE);
+    
     return (
       <div className="space-y-4">
         <div className="flex flex-wrap gap-2 items-center p-4 bg-white border border-slate-200/80 rounded-2xl shadow-sm">
@@ -1349,43 +1245,11 @@ export default function DashboardProvinsiPage() {
             <SelectFilter value={jenisSel} onChange={onJenis} options={jenisList} className="w-44" />
           )}
           <SelectFilter value={statusSel} onChange={onStatus} options={statusList} className="w-36" />
-          {/* Sort by Skor */}
-          <div className="flex items-center gap-1 ml-auto">
-            <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wide mr-1">Urutkan:</span>
-            {(["default", "skor-desc", "skor-asc"] as const).map(s => (
-              <button key={s} onClick={() => setSortBy(s)}
-                className={`px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border transition-all ${
-                  sortBy === s ? "bg-purple-600 text-white border-purple-600" : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"
-                }`}>
-                {s === "default" ? "Default" : s === "skor-desc" ? "Skor ↓" : "Skor ↑"}
-              </button>
-            ))}
-          </div>
-          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl ml-auto">
             <span className="text-xs font-black text-slate-700">{rows.length}</span>
             <span className="text-xs text-slate-500">wilayah</span>
           </div>
         </div>
-
-        {/* Statistik Skor Ringkas */}
-        {skorAvg !== null && (
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { label: "Rata-rata Skor", val: skorAvg, icon: <Activity size={14} />, color: "text-blue-700 bg-blue-50 border-blue-200" },
-              { label: "Skor Tertinggi", val: skorMax!, icon: <TrendingUp size={14} />, color: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-              { label: "Skor Terendah", val: skorMin!, icon: <TrendingDown size={14} />, color: "text-red-700 bg-red-50 border-red-200" },
-            ].map(({ label, val, icon, color }) => (
-              <div key={label} className={`flex items-center gap-3 px-4 py-3 rounded-2xl border ${color}`}>
-                <div className="flex-shrink-0">{icon}</div>
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wide opacity-70">{label}</p>
-                  <p className="text-lg font-black leading-tight">{val.toFixed(2)}</p>
-                  <p className="text-[10px] opacity-60">skala 1–4</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
 
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Distribusi Capaian</p>
@@ -1400,10 +1264,6 @@ export default function DashboardProvinsiPage() {
                   <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] sticky left-0 bg-slate-50 min-w-36">Kab/Kota</th>
                   <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-28">Jenis</th>
                   <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Status</th>
-                  <th className="px-3 py-3 text-center font-bold text-purple-600 uppercase tracking-wide text-[10px] min-w-20 bg-purple-50/40">Skor</th>
-                  {hasTren && (
-                    <th className="px-3 py-3 text-center font-bold text-indigo-600 uppercase tracking-wide text-[10px] min-w-20 bg-indigo-50/40">Tren</th>
-                  )}
                   {codes.map(c => (
                     <th key={c} className="px-3 py-3 text-center font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-16">{c}</th>
                   ))}
@@ -1412,43 +1272,25 @@ export default function DashboardProvinsiPage() {
               <tbody className="divide-y divide-slate-100">
                 {pagedRows.length === 0 ? (
                   <tr>
-                    <td colSpan={codes.length + (hasTren ? 5 : 4)} className="text-center py-16 text-slate-400">
+                    <td colSpan={codes.length + 3} className="text-center py-16 text-slate-400">
                       <Search size={20} className="mx-auto mb-2 opacity-40" />
                       <p className="text-xs">Tidak ada data ditemukan</p>
                     </td>
                   </tr>
-                ) : pagedRows.map((row, i) => {
-                  const skor = calcRowSkor(row, indKeys);
-                  const tren = hasTren ? calcRowTren(row, indKeys) : null;
-                  return (
-                    <tr key={i} className="hover:bg-purple-50/20 transition-colors group">
-                      <td className="px-4 py-3 font-semibold text-slate-800 sticky left-0 bg-white group-hover:bg-purple-50/20 z-[5]">{row["Kab/Kota"]}</td>
-                      <td className="px-4 py-3 text-slate-500">{row["Jenis Satuan Pendidikan"]}</td>
-                      <td className="px-4 py-3 text-slate-500">{row["Status Satuan Pendidikan"]}</td>
-                      <td className="px-3 py-3 text-center bg-purple-50/20"><SkorBadge skor={skor} /></td>
-                      {hasTren && (
-                        <td className="px-3 py-3 text-center bg-indigo-50/20"><TrenBadge tren={tren} /></td>
-                      )}
-                      {indKeys.map(k => (
-                        <td key={k} className="px-3 py-3 text-center"><LabelBadge label={row[k]} /></td>
-                      ))}
-                    </tr>
-                  );
-                })}
+                ) : pagedRows.map((row, i) => (
+                  <tr key={i} className="hover:bg-blue-50/30 transition-colors group">
+                    <td className="px-4 py-3 font-semibold text-slate-800 sticky left-0 bg-white group-hover:bg-blue-50/30 z-[5]">{row["Kab/Kota"]}</td>
+                    <td className="px-4 py-3 text-slate-500">{row["Jenis Satuan Pendidikan"]}</td>
+                    <td className="px-4 py-3 text-slate-500">{row["Status Satuan Pendidikan"]}</td>
+                    {indKeys.map(k => (
+                      <td key={k} className="px-3 py-3 text-center"><LabelBadge label={row[k]} /></td>
+                    ))}
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
           <PaginationBar page={localPage} total={totalPages} onChange={setLocalPage} />
-        </div>
-
-        {/* Legenda Skor */}
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2">ℹ️ Keterangan Skor &amp; Tren</p>
-          <div className="flex flex-wrap gap-4 text-xs text-slate-600">
-            <span><strong className="text-purple-700">Skor</strong> = rata-rata nilai indikator (Tinggi=4, Baik=3, Sedang=2, Kurang/Rendah=1)</span>
-            {hasTren && <span><strong className="text-indigo-700">Tren</strong> = perbandingan skor tahun ini vs tahun lalu</span>}
-            {!hasTren && <span className="text-slate-400">Tren tidak tersedia — data hanya memiliki satu tahun</span>}
-          </div>
         </div>
       </div>
     );
@@ -1526,25 +1368,6 @@ export default function DashboardProvinsiPage() {
       </div>
     );
   }
-
-  const sharedProps = {
-    tahun, SectionHeader, DashboardCard, LabelBadge, PerubahanBadge, totalDashboardStats,
-    baikTinggiPercent, sedangPercent, kurangRendahPercent, filterStatus, setFilterStatus,
-    indikatorStats, setSchoolModal, setSchoolModalSearch, setSchoolModalPage,
-    setSchoolModalKabkot, setSchoolModalKecamatan, PRIORITY_INDICATORS, viewMode, setViewMode,
-    jenjangStats, jenjangOptionsProvinsi, SelectFilter, filterJenjang, setFilterJenjang,
-    statusOptionsProvinsi, filterCapaian, setFilterCapaian, groupedProvData, getJenjangGradient,
-    capaianGroup, borderColorForGroup, allChartIndKeys, chartIndKeys, allKabkotData,
-    chartJenjangAll, chartIndJenjang, setChartIndJenjang, getIndColor, chartApxKeysDasmen,
-    chartApxKeysPaud, kabkotDasmen, chartJenjangDasmen, chartApxJenjang, setChartApxJenjang,
-    getApxColor, kabkotPaud, chartJenjangPaud, chartTrendIndJenjang, setChartTrendIndJenjang,
-    chartTrendApxJenjang, setChartTrendApxJenjang, StackedBarChart, TrendChart, fKD, iKD,
-    sKD, setSKD, oKDJ, fKDJ, setFKDJ, oKDS, fKDS, setFKDS, KabkotTable, fKP, iKP, sKP,
-    setSKP, oKPS, fKPS, setFKPS, fSD, pagedSD, iSD, pageSD, setPageSD, sSD, setSSD,
-    oSDJ, fSDJ, setFSDJ, oSDS, fSDS, setFSDS, oSDK, fSDK, setFSDK, SatdikTable, PAGE_SIZE,
-    fSP, pagedSP, iSP, pageSP, setPageSP, sSP, setSSP, oSPJ, fSPJ, setFSPJ, oSPS, fSPS,
-    setFSPS, oSPK, fSPK, setFSPK,
-  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -1845,7 +1668,29 @@ export default function DashboardProvinsiPage() {
       </div>
 
       {/* Tab Bar */}
-      <TabBar activeTab={activeTab} isTabSwitching={isTabSwitching} handleTabChange={handleTabChange} />
+      <div className="bg-white border-b border-slate-200 sticky top-16 z-10 shadow-sm">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex gap-0.5 overflow-x-auto scrollbar-none">
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                disabled={isTabSwitching}
+                className={`flex items-center gap-2 px-4 py-3.5 text-sm font-semibold transition-all border-b-2 whitespace-nowrap ${
+                  activeTab === tab.id
+                    ? `${tab.activeColor} ${tab.activeBorder} ${tab.activeBg}`
+                    : "text-slate-500 border-transparent hover:text-slate-700 hover:bg-slate-50"
+                } ${isTabSwitching ? "opacity-50 cursor-wait" : ""}`}
+              >
+                <span className={activeTab === tab.id ? tab.activeColor : "text-slate-400"}>
+                  {tab.icon}
+                </span>
+                {tab.short}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Content */}
       <div className="max-w-6xl mx-auto w-full px-6 py-8">
@@ -1915,40 +1760,821 @@ export default function DashboardProvinsiPage() {
               <>
                 {/* Tab: Ringkasan */}
                 {activeTab === "ringkasan" && (
-                  tahun === "2024" ? 
-                    <Ringkasan2024 tahun={tahun} jenjangList={jenjangList} ringkasan={ringkasan} getJenjangGradient={getJenjangGradient} SectionHeader={SectionHeader} /> 
-                  : 
-                    <Ringkasan2025 tahun={tahun} jenjangList={jenjangList} ringkasan={ringkasan} getJenjangGradient={getJenjangGradient} SectionHeader={SectionHeader} />
+                  <div>
+                    <SectionHeader
+                      icon={<BookMarked size={18} />}
+                      title="Ringkasan Capaian Jenjang"
+                      badge={`${jenjangList.length} jenjang · Tahun ${tahun}`}
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {jenjangList.map(jenjang => {
+                        const items = ringkasan.filter(r => r.Jenjang === jenjang);
+                        const gradient = getJenjangGradient(jenjang);
+                        
+                        return (
+                          <div key={jenjang} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-md transition-all duration-200">
+                            <div className={`bg-gradient-to-r ${gradient} px-5 py-4 flex items-center gap-3`}>
+                              <div className="w-8 h-8 rounded-xl bg-white/20 border border-white/20 flex items-center justify-center flex-shrink-0">
+                                {jenjang.includes("SD") && <School size={14} className="text-white" />}
+                                {jenjang.includes("SMP") && <BookOpen size={14} className="text-white" />}
+                                {jenjang.includes("SMA") && <GraduationCap size={14} className="text-white" />}
+                                {jenjang.includes("PAUD") && <Building2 size={14} className="text-white" />}
+                              </div>
+                              <div>
+                                <span className="font-black text-white text-base">{jenjang}</span>
+                                <p className="text-white/60 text-[10px] mt-0.5">{items.length} indikator prioritas</p>
+                              </div>
+                            </div>
+                            <div className="divide-y divide-slate-100/70">
+                              {items.map((item, i) => (
+                                <div key={i} className="px-5 py-3.5 hover:bg-slate-50/80 transition flex items-start gap-3">
+                                  <div className="w-1 h-1 rounded-full bg-slate-300 mt-1.5 flex-shrink-0" />
+                                  <div>
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
+                                      {item.Capaian}
+                                    </p>
+                                    <p className="text-xs text-slate-700 font-semibold leading-tight">
+                                      {item["Indikator Prioritas"]}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 )}
 
                 {/* Tab: Indikator Prioritas */}
                 {activeTab === "provinsi" && (
-                  tahun === "2024" ? <IndikatorPrioritas2024 {...sharedProps} /> : <IndikatorPrioritas2025 {...sharedProps} />
+                  <div>
+                    <SectionHeader
+                      icon={<BarChart3 size={18} />}
+                      title="Rekap Capaian Indikator Prioritas"
+                      badge={`8 Indikator Utama · Tahun ${tahun} · ${filterStatus === "Semua" ? "Negeri + Swasta" : filterStatus}`}
+                    />
+
+                    {/* Dashboard Cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+                      <DashboardCard
+                        title="BAIK / TINGGI"
+                        value={totalDashboardStats.baikTinggi}
+                        icon={<CheckCircle2 size={20} className="text-white" />}
+                        color="bg-gradient-to-br from-emerald-500 to-emerald-600"
+                        trend={baikTinggiPercent > 50 ? "up" : baikTinggiPercent > 30 ? "neutral" : "down"}
+                        trendValue={`${baikTinggiPercent}% dari total`}
+                        subtitle={`${totalDashboardStats.baikTinggi} dari ${totalDashboardStats.total} sekolah`}
+                      />
+                      <DashboardCard
+                        title="SEDANG"
+                        value={totalDashboardStats.sedang}
+                        icon={<Info size={20} className="text-white" />}
+                        color="bg-gradient-to-br from-yellow-500 to-yellow-600"
+                        trend={sedangPercent > 40 ? "neutral" : "down"}
+                        trendValue={`${sedangPercent}% dari total`}
+                      />
+                      <DashboardCard
+                        title="KURANG / RENDAH"
+                        value={totalDashboardStats.kurangRendah}
+                        icon={<AlertCircle size={20} className="text-white" />}
+                        color="bg-gradient-to-br from-red-500 to-red-600"
+                        trend={kurangRendahPercent > 30 ? "down" : "up"}
+                        trendValue={`${kurangRendahPercent}% dari total`}
+                      />
+                      <DashboardCard
+                        title="TOTAL INDIKATOR"
+                        value={totalDashboardStats.total}
+                        icon={<ListChecks size={20} className="text-white" />}
+                        color="bg-gradient-to-br from-blue-600 to-blue-700"
+                      />
+                    </div>
+
+                    {/* Rekap per Indikator */}
+                    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden mb-6">
+                      <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-sm">
+                          <ListChecks size={14} className="text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-bold text-slate-900">Capaian per Indikator Prioritas</h3>
+                          <p className="text-[10px] text-slate-400 mt-0.5">Jumlah sekolah per kategori capaian indikator</p>
+                        </div>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="bg-slate-50 border-b border-slate-200">
+                              <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px] w-16">Kode</th>
+                              <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px]">Indikator</th>
+                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-emerald-600">Baik/Tinggi <span className="text-[9px] font-normal opacity-60 normal-case">↗ klik lihat sekolah</span></th>
+                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-amber-600">Sedang <span className="text-[9px] font-normal opacity-60 normal-case">↗ klik</span></th>
+                              <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-red-600">Kurang/Rendah <span className="text-[9px] font-normal opacity-60 normal-case">↗ klik</span></th>
+                              <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px] min-w-40">Distribusi</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {PRIORITY_INDICATORS.map(p => {
+                              const s = indikatorStats[p.code];
+                              if (!s) return null;
+                              const total = s.baikTinggi + s.sedang + s.kurangRendah + s.tidakTersedia;
+                              const baikPct = total > 0 ? Math.round((s.baikTinggi / total) * 100) : 0;
+                              const sedangPct = total > 0 ? Math.round((s.sedang / total) * 100) : 0;
+                              const kurangPct = total > 0 ? Math.round((s.kurangRendah / total) * 100) : 0;
+                              return (
+                                <tr key={p.code} className="hover:bg-slate-50/70 transition-colors">
+                                  <td className="px-5 py-3.5">
+                                    <span className="font-mono text-xs font-black text-blue-700 bg-blue-50 px-2 py-1 rounded-lg border border-blue-100">
+                                      {p.code}
+                                    </span>
+                                  </td>
+                                  <td className="px-5 py-3.5">
+                                    <p className="text-sm font-semibold text-slate-800">{p.fullName}</p>
+                                    <p className="text-[10px] text-slate-400 mt-0.5">{p.description}</p>
+                                  </td>
+                                  <td className="px-5 py-3.5 text-center">
+                                    {total > 0 ? (
+                                      <button
+                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Baik / Tinggi" }); setSchoolModalSearch(""); setSchoolModalPage(1); setSchoolModalKabkot("Semua"); setSchoolModalKecamatan("Semua"); }}
+                                        className="inline-flex flex-col items-center gap-0.5 group/btn cursor-pointer hover:bg-emerald-50 rounded-xl px-3 py-1.5 transition-all border border-transparent hover:border-emerald-200"
+                                        title={`Lihat ${s.baikTinggi} sekolah dengan capaian Baik/Tinggi`}
+                                      >
+                                        <span className="text-base font-black text-emerald-700 group-hover/btn:underline">{s.baikTinggi}</span>
+                                        <span className="text-[10px] text-emerald-500 font-medium">{baikPct}%</span>
+                                      </button>
+                                    ) : <span className="text-slate-300">–</span>}
+                                  </td>
+                                  <td className="px-5 py-3.5 text-center">
+                                    {total > 0 ? (
+                                      <button
+                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Sedang" }); setSchoolModalSearch(""); setSchoolModalPage(1); setSchoolModalKabkot("Semua"); setSchoolModalKecamatan("Semua"); }}
+                                        className="inline-flex flex-col items-center gap-0.5 group/btn cursor-pointer hover:bg-amber-50 rounded-xl px-3 py-1.5 transition-all border border-transparent hover:border-amber-200"
+                                        title={`Lihat ${s.sedang} sekolah dengan capaian Sedang`}
+                                      >
+                                        <span className="text-base font-black text-amber-600 group-hover/btn:underline">{s.sedang}</span>
+                                        <span className="text-[10px] text-amber-500 font-medium">{sedangPct}%</span>
+                                      </button>
+                                    ) : <span className="text-slate-300">–</span>}
+                                  </td>
+                                  <td className="px-5 py-3.5 text-center">
+                                    {total > 0 ? (
+                                      <button
+                                        onClick={() => { setSchoolModal({ indCode: p.code, indName: p.fullName, labelGroup: "Kurang / Rendah" }); setSchoolModalSearch(""); setSchoolModalPage(1); setSchoolModalKabkot("Semua"); setSchoolModalKecamatan("Semua"); }}
+                                        className="inline-flex flex-col items-center gap-0.5 group/btn cursor-pointer hover:bg-red-50 rounded-xl px-3 py-1.5 transition-all border border-transparent hover:border-red-200"
+                                        title={`Lihat ${s.kurangRendah} sekolah dengan capaian Kurang/Rendah`}
+                                      >
+                                        <span className="text-base font-black text-red-600 group-hover/btn:underline">{s.kurangRendah}</span>
+                                        <span className="text-[10px] text-red-400 font-medium">{kurangPct}%</span>
+                                      </button>
+                                    ) : <span className="text-slate-300">–</span>}
+                                  </td>
+                                  <td className="px-5 py-3.5">
+                                    {total > 0 ? (
+                                      <div>
+                                        <div className="flex rounded-full overflow-hidden h-2 gap-px w-full">
+                                          {baikPct > 0 && (
+                                            <div className="h-full rounded-l-full" style={{ width: `${baikPct}%`, background: "#22c55e" }} title={`Baik/Tinggi: ${baikPct}%`} />
+                                          )}
+                                          {sedangPct > 0 && (
+                                            <div className="h-full" style={{ width: `${sedangPct}%`, background: "#f59e0b" }} title={`Sedang: ${sedangPct}%`} />
+                                          )}
+                                          {kurangPct > 0 && (
+                                            <div className="h-full rounded-r-full" style={{ width: `${kurangPct}%`, background: "#ef4444" }} title={`Kurang/Rendah: ${kurangPct}%`} />
+                                          )}
+                                        </div>
+                                        <p className="text-[9px] text-slate-400 mt-1">{total} sekolah</p>
+                                      </div>
+                                    ) : (
+                                      <span className="text-[10px] text-slate-300">Tidak ada data</span>
+                                    )}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* Progress Ringkasan */}
+                    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 mb-6">
+                      <div className="flex items-center justify-between mb-5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md shadow-blue-100">
+                            <PieChart size={14} className="text-white" />
+                          </div>
+                          <div>
+                            <h3 className="text-sm font-bold text-slate-900">Distribusi Capaian</h3>
+                            <p className="text-[10px] text-slate-400">{totalDashboardStats.total} capaian sekolah tercatat</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
+                          <button
+                            onClick={() => setViewMode("grid")}
+                            className={`p-1.5 rounded-lg transition-all ${viewMode === "grid" ? "bg-white text-blue-600 shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
+                            title="Tampilan Grid"
+                          >
+                            <Grid3x3 size={15} />
+                          </button>
+                          <button
+                            onClick={() => setViewMode("list")}
+                            className={`p-1.5 rounded-lg transition-all ${viewMode === "list" ? "bg-white text-blue-600 shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
+                            title="Tampilan List"
+                          >
+                            <LayoutGrid size={15} />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="flex rounded-full overflow-hidden h-4 gap-0.5 mb-4">
+                        {baikTinggiPercent > 0 && (
+                          <div
+                            className="flex items-center justify-center text-[10px] font-bold text-white transition-all duration-500 rounded-l-full"
+                            style={{ width: `${baikTinggiPercent}%`, background: "#22c55e" }}
+                          >
+                            {baikTinggiPercent > 15 && `${baikTinggiPercent}%`}
+                          </div>
+                        )}
+                        {sedangPercent > 0 && (
+                          <div
+                            className="flex items-center justify-center text-[10px] font-bold text-white transition-all duration-500"
+                            style={{ width: `${sedangPercent}%`, background: "#f59e0b" }}
+                          >
+                            {sedangPercent > 15 && `${sedangPercent}%`}
+                          </div>
+                        )}
+                        {kurangRendahPercent > 0 && (
+                          <div
+                            className="flex items-center justify-center text-[10px] font-bold text-white transition-all duration-500 rounded-r-full"
+                            style={{ width: `${kurangRendahPercent}%`, background: "#ef4444" }}
+                          >
+                            {kurangRendahPercent > 15 && `${kurangRendahPercent}%`}
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-4">
+                        {[
+                          { color: "#22c55e", label: "Baik / Tinggi", count: totalDashboardStats.baikTinggi, pct: baikTinggiPercent },
+                          { color: "#f59e0b", label: "Sedang", count: totalDashboardStats.sedang, pct: sedangPercent },
+                          { color: "#ef4444", label: "Kurang / Rendah", count: totalDashboardStats.kurangRendah, pct: kurangRendahPercent },
+                        ].map(item => (
+                          <div key={item.label} className="flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: item.color }} />
+                            <span className="text-xs text-slate-500">{item.label}</span>
+                            <span className="text-xs font-black text-slate-800">{item.count}</span>
+                            <span className="text-[10px] text-slate-400">({item.pct}%)</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Tabel Ringkasan per Jenjang */}
+                    {Object.keys(jenjangStats).length > 0 && (
+                      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                        <div className="px-5 py-4 bg-gradient-to-r from-blue-50 to-white border-b border-slate-200">
+                          <div className="flex items-center gap-2">
+                            <Activity size={16} className="text-blue-600" />
+                            <h3 className="text-sm font-bold text-slate-800">Ringkasan Capaian per Jenjang</h3>
+                          </div>
+                        </div>
+                        <div className="overflow-x-auto">
+                          <table className="text-sm w-full">
+                            <thead>
+                              <tr className="bg-slate-50 border-b border-slate-200">
+                                <th className="px-5 py-3 text-left font-bold text-slate-600">Jenjang</th>
+                                <th className="px-5 py-3 text-center font-bold text-slate-600">Baik/Tinggi</th>
+                                <th className="px-5 py-3 text-center font-bold text-slate-600">Sedang</th>
+                                <th className="px-5 py-3 text-center font-bold text-slate-600">Kurang/Rendah</th>
+                                <th className="px-5 py-3 text-left font-bold text-slate-600">Trend</th>
+                               </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                              {Object.entries(jenjangStats)
+                                .sort((a, b) => b[1].total - a[1].total)
+                                .map(([jenjang, stats]) => {
+                                  const baikPercent = stats.total > 0 ? Math.round((stats.baikTinggi / stats.total) * 100) : 0;
+                                  let trendIcon = null;
+                                  let trendText = "";
+                                  let trendColor = "";
+                                  if (baikPercent >= 60) {
+                                    trendIcon = <TrendingUp size={12} className="text-emerald-600" />;
+                                    trendText = "Baik";
+                                    trendColor = "text-emerald-700";
+                                  } else if (baikPercent >= 40) {
+                                    trendIcon = <Minus size={12} className="text-yellow-600" />;
+                                    trendText = "Cukup";
+                                    trendColor = "text-yellow-700";
+                                  } else {
+                                    trendIcon = <TrendingDown size={12} className="text-red-600" />;
+                                    trendText = "Perlu Perhatian";
+                                    trendColor = "text-red-700";
+                                  }
+                                  
+                                  return (
+                                    <tr key={jenjang} className="hover:bg-slate-50 transition-colors">
+                                      <td className="px-5 py-3 font-semibold text-slate-800">{jenjang}</td>
+                                      <td className="px-5 py-3 text-center">
+                                        <span className="inline-flex items-center justify-center px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-sm">
+                                          {stats.baikTinggi}
+                                        </span>
+                                       </td>
+                                      <td className="px-5 py-3 text-center">
+                                        <span className="inline-flex items-center justify-center px-3 py-1 rounded-lg bg-yellow-50 text-yellow-700 font-bold text-sm">
+                                          {stats.sedang}
+                                        </span>
+                                        </td>
+                                      <td className="px-5 py-3 text-center">
+                                        <span className="inline-flex items-center justify-center px-3 py-1 rounded-lg bg-red-50 text-red-700 font-bold text-sm">
+                                          {stats.kurangRendah}
+                                        </span>
+                                        </td>
+                                      <td className="px-5 py-3">
+                                        <div className="flex items-center gap-2">
+                                          {trendIcon}
+                                          <span className={`text-xs font-medium ${trendColor}`}>
+                                            {trendText}
+                                          </span>
+                                          <div className="flex-1 max-w-24 ml-1">
+                                            <div className="bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                              <div 
+                                                className="h-full rounded-full bg-emerald-500 transition-all"
+                                                style={{ width: `${baikPercent}%` }}
+                                              />
+                                            </div>
+                                          </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                  );
+                                })}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Info Indikator */}
+                    <div className="bg-blue-50/60 border border-blue-100 rounded-2xl p-5 mb-6">
+                      <h3 className="text-xs font-bold text-blue-700 mb-3 flex items-center gap-2 uppercase tracking-wider">
+                        <Info size={12} className="text-blue-500" />
+                        8 Indikator Prioritas
+                      </h3>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {PRIORITY_INDICATORS.map(p => (
+                          <div key={p.code} className="flex items-center gap-2 bg-white rounded-xl px-3 py-2 border border-blue-100/60">
+                            <span className="font-mono text-xs font-black text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded-lg flex-shrink-0">
+                              {p.code}
+                            </span>
+                            <span className="text-xs text-slate-600 font-medium truncate">{p.fullName}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Filter Bar */}
+                    <div className="flex flex-wrap gap-2 mb-6 items-center p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
+                      <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1">
+                        <Filter size={11} />
+                        <span>Filter</span>
+                      </div>
+                      <SelectFilter
+                        value={filterJenjang}
+                        onChange={setFilterJenjang}
+                        options={jenjangOptionsProvinsi}
+                        className="w-44"
+                        icon={<School size={12} />}
+                      />
+                      <SelectFilter
+                        value={filterStatus}
+                        onChange={setFilterStatus}
+                        options={statusOptionsProvinsi}
+                        className="w-36"
+                        icon={<Building2 size={12} />}
+                      />
+                      <div className="flex gap-1.5 flex-wrap">
+                        {(["Semua", "Baik / Tinggi", "Sedang", "Kurang / Rendah"] as const).map(opt => {
+                          const isActive = filterCapaian === opt;
+                          const colorMap: Record<string, { active: string; dot?: string }> = {
+                            "Semua": { active: "bg-slate-800 text-white border-slate-800" },
+                            "Baik / Tinggi": { active: "bg-emerald-600 text-white border-emerald-600", dot: "bg-emerald-500" },
+                            "Sedang": { active: "bg-amber-500 text-white border-amber-500", dot: "bg-amber-400" },
+                            "Kurang / Rendah": { active: "bg-red-600 text-white border-red-600", dot: "bg-red-500" },
+                          };
+                          const { active, dot } = colorMap[opt];
+                          return (
+                            <button
+                              key={opt}
+                              onClick={() => setFilterCapaian(opt)}
+                              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 ${
+                                isActive
+                                  ? active
+                                  : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                              }`}
+                            >
+                              {dot && !isActive && <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />}
+                              {opt === "Semua" ? "Semua" : opt}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl">
+                        <span className="text-xs font-black text-slate-700">
+                          {Object.keys(groupedProvData).filter(j => filterJenjang === "Semua" || j === filterJenjang).length}
+                        </span>
+                        <span className="text-xs text-slate-500">Jenjang</span>
+                      </div>
+                    </div>
+
+                    {/* Cards Grid */}
+                    <div className="space-y-6">
+                      {Object.keys(groupedProvData)
+                        .filter(j => filterJenjang === "Semua" || j === filterJenjang)
+                        .map(jenjang => {
+                          const indikatorMap = groupedProvData[jenjang];
+                          const indikatorCodes = Object.keys(indikatorMap);
+                          const gradient = getJenjangGradient(jenjang);
+
+                          let hasVisible = false;
+                          for (const kode of indikatorCodes) {
+                            const rows = indikatorMap[kode];
+                            let filtered = rows;
+                            if (filterStatus !== "Semua") filtered = filtered.filter(r => r["Status Satuan Pendidikan"] === filterStatus);
+                            if (filterCapaian !== "Semua") {
+                              filtered = filtered.filter(r => {
+                                const label = ((tahun === "2025" ? r["Label Capaian 2025"] : r["Label Capaian 2024"]) ?? "").trim();
+                                return capaianGroup(label) === filterCapaian;
+                              });
+                            }
+                            if (filtered.length > 0) { hasVisible = true; break; }
+                          }
+                          if (!hasVisible) return null;
+
+                          return (
+                            <div key={jenjang} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                              <div className={`bg-gradient-to-r ${gradient} px-5 py-4 flex items-center justify-between`}>
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center border border-white/20">
+                                    {jenjang.includes("SD") && <School size={14} className="text-white" />}
+                                    {jenjang.includes("SMP") && <BookOpen size={14} className="text-white" />}
+                                    {jenjang.includes("SMA") && <GraduationCap size={14} className="text-white" />}
+                                    {jenjang.includes("PAUD") && <Building2 size={14} className="text-white" />}
+                                  </div>
+                                  <div>
+                                    <span className="font-black text-white text-base">{jenjang}</span>
+                                    <span className="text-white/60 text-xs ml-2.5">{indikatorCodes.length} indikator</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="p-5">
+                                <div className={`grid ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid-cols-1"} gap-3`}>
+                                  {indikatorCodes.map(kode => {
+                                    const rows = indikatorMap[kode];
+                                    let filteredRows = rows;
+                                    if (filterStatus !== "Semua") {
+                                      filteredRows = filteredRows.filter(r => r["Status Satuan Pendidikan"] === filterStatus);
+                                    }
+                                    if (filterCapaian !== "Semua") {
+                                      filteredRows = filteredRows.filter(r => {
+                                        const label = ((tahun === "2025" ? r["Label Capaian 2025"] : r["Label Capaian 2024"]) ?? "").trim();
+                                        return capaianGroup(label) === filterCapaian;
+                                      });
+                                    }
+                                    if (filteredRows.length === 0) return null;
+
+                                    const indicatorInfo = PRIORITY_INDICATORS.find(p => p.code === kode);
+                                    const indicatorName = indicatorInfo?.fullName || kode;
+                                    const indicatorDesc = indicatorInfo?.description || "";
+
+                                    return filteredRows.map((row, idx) => {
+                                      const label = ((tahun === "2025" ? row["Label Capaian 2025"] : row["Label Capaian 2024"]) ?? "").trim();
+                                      const grup = capaianGroup(label);
+                                      const nilaiVal = tahun === "2025" ? row["Nilai Capaian 2025"] : row["Nilai Capaian 2024"];
+                                      const perubahan = tahun === "2025" ? row["Perubahan Nilai Capaian dari Tahun Lalu"] : undefined;
+                                      const borderColor = borderColorForGroup(grup);
+                                      const status = row["Status Satuan Pendidikan"] || "";
+                                      const isNegeri = status === "Negeri";
+                                      const numericValue = nilaiVal ? parseFloat(nilaiVal) : null;
+                                      
+                                      return (
+                                        <div
+                                          key={`${kode}-${status}-${idx}`}
+                                          className="group relative rounded-2xl border overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 bg-white"
+                                          style={{ borderColor: `${borderColor}40` }}
+                                        >
+                                          {/* Card Header */}
+                                          <div 
+                                            className="px-4 pt-4 pb-3"
+                                            style={{ background: `linear-gradient(145deg, ${borderColor}12 0%, ${borderColor}05 100%)` }}
+                                          >
+                                            <div className="flex items-start justify-between gap-2 mb-2">
+                                              <div className="flex items-center gap-2">
+                                                <div 
+                                                  className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-xs shadow-sm flex-shrink-0"
+                                                  style={{ background: borderColor }}
+                                                >
+                                                  {kode}
+                                                </div>
+                                                <div>
+                                                  <p className="text-xs font-bold text-slate-800 leading-tight">{indicatorName}</p>
+                                                  <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-md inline-block mt-0.5 ${
+                                                    isNegeri ? "bg-blue-50 text-blue-600" : "bg-violet-50 text-violet-600"
+                                                  }`}>
+                                                    {status}
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <LabelBadge label={label} />
+                                            </div>
+                                            {indicatorDesc && (
+                                              <p className="text-[10px] text-slate-400 line-clamp-1 mt-1">
+                                                {indicatorDesc}
+                                              </p>
+                                            )}
+                                          </div>
+
+                                          {/* Card Body */}
+                                          <div className="px-4 py-3">
+                                            <div className="flex items-end justify-between mb-2">
+                                              <div>
+                                                <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mb-0.5">
+                                                  Nilai {tahun}
+                                                </p>
+                                                <div className="flex items-baseline gap-1.5">
+                                                  <span className="text-2xl font-black text-slate-900 tracking-tight">
+                                                    {nilaiVal ?? "–"}
+                                                  </span>
+                                                  {nilaiVal && (
+                                                    <span className="text-xs text-slate-400 font-medium">/ 100</span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                              {(() => {
+                                                if (!row["Nilai Capaian 2024"] || tahun !== "2025") return null;
+                                                const oldVal = parseFloat(row["Nilai Capaian 2024"]);
+                                                const newVal = parseFloat(nilaiVal || "0");
+                                                const diff = newVal - oldVal;
+                                                if (isNaN(diff) || diff === 0) return null;
+                                                return (
+                                                  <div className={`text-right flex flex-col items-end`}>
+                                                    <span className={`text-xs font-bold ${diff > 0 ? "text-emerald-600" : "text-red-500"}`}>
+                                                      {diff > 0 ? "▲" : "▼"} {Math.abs(diff).toFixed(1)}
+                                                    </span>
+                                                    <span className="text-[9px] text-slate-400">dari 2024</span>
+                                                  </div>
+                                                );
+                                              })()}
+                                            </div>
+
+                                            {numericValue !== null && !isNaN(numericValue) && (
+                                              <div>
+                                                <div className="bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                                  <div 
+                                                    className="h-full rounded-full transition-all duration-700"
+                                                    style={{ width: `${numericValue}%`, background: borderColor }}
+                                                  />
+                                                </div>
+                                                <div className="flex justify-between mt-1 text-[9px] text-slate-300">
+                                                  <span>0</span>
+                                                  <span>100</span>
+                                                </div>
+                                              </div>
+                                            )}
+                                          </div>
+
+                                          {/* Card Footer */}
+                                          {perubahan && (
+                                            <div className="px-4 pb-3">
+                                              <PerubahanBadge val={perubahan} />
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    });
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+
+                      {Object.keys(groupedProvData).filter(j => filterJenjang === "Semua" || j === filterJenjang).length === 0 && (
+                        <div className="text-center py-20">
+                          <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
+                            <Search size={24} className="text-slate-400" />
+                          </div>
+                          <p className="text-sm font-semibold text-slate-600">Tidak ada data ditemukan</p>
+                          <p className="text-xs text-slate-400 mt-1">Coba ubah filter yang dipilih</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 )}
 
-                {/* Tab: GrafikKabkot */}
+                {/* Tab: Grafik Kab/Kota */}
                 {activeTab === "grafik-kabkot" && (
-                  tahun === "2024" ? <GrafikKabkot2024 {...sharedProps} /> : <GrafikKabkot2025 {...sharedProps} />
+                  <div className="space-y-8">
+                    <SectionHeader
+                      icon={<PieChart size={18} />}
+                      title="Grafik Capaian 27 Kab/Kota"
+                      badge={`Tahun ${tahun} · Data per kabupaten/kota`}
+                    />
+
+                    {/* ── Grafik 1: Indikator Prioritas per Jenjang ── */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-5 rounded-full bg-blue-500" />
+                        <h3 className="text-base font-black text-slate-800">1. Capaian Indikator Prioritas per Kab/Kota</h3>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-4 ml-3">
+                        Skor rata-rata (1=Kurang · 2=Sedang · 3=Baik · 4=Tinggi) untuk setiap indikator prioritas A.1–D.10
+                      </p>
+                      {(allChartIndKeys.length > 0 || chartIndKeys.length > 0) ? (
+                        <StackedBarChart
+                          title="Indikator Prioritas (A.1, A.2, A.3, D.1, D.3, D.4, D.8, D.10)"
+                          subtitle="Pilih jenjang untuk memfilter data"
+                          data={allKabkotData}
+                          jenjangList={chartJenjangAll}
+                          selectedJenjang={chartIndJenjang}
+                          onJenjangChange={setChartIndJenjang}
+                          indikatorKeys={allChartIndKeys.length > 0 ? allChartIndKeys : chartIndKeys}
+                          colorFn={getIndColor}
+                        />
+                      ) : (
+                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 text-center">
+                          <p className="text-sm font-semibold text-amber-700">Data indikator prioritas kabkot belum tersedia</p>
+                          <p className="text-xs text-amber-600 mt-1">Pastikan kolom <code>A.1_Label Capaian</code>, <code>A.2_Label Capaian</code>, dst. ada di file JSON</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* ── Grafik 2: APK, APM, APS per Jenjang ── */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-5 rounded-full bg-emerald-500" />
+                        <h3 className="text-base font-black text-slate-800">2. Capaian APK, APM, dan APS per Kab/Kota</h3>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-4 ml-3">
+                        Angka Partisipasi Kasar (APK), Murni (APM), dan Sekolah (APS) — skor rata-rata per kab/kota
+                      </p>
+                      {chartApxKeysDasmen.length > 0 ? (
+                        <StackedBarChart
+                          title="APK / APM / APS — Dasmen & Vokasi"
+                          subtitle="Pilih jenjang SD / SMP / SMA / SMK"
+                          data={kabkotDasmen}
+                          jenjangList={chartJenjangDasmen}
+                          selectedJenjang={chartApxJenjang}
+                          onJenjangChange={setChartApxJenjang}
+                          indikatorKeys={chartApxKeysDasmen}
+                          colorFn={getApxColor}
+                        />
+                      ) : chartApxKeysPaud.length > 0 ? (
+                        <StackedBarChart
+                          title="APK / APM / APS — PAUD"
+                          subtitle="Data PAUD"
+                          data={kabkotPaud}
+                          jenjangList={chartJenjangPaud}
+                          selectedJenjang={chartApxJenjang}
+                          onJenjangChange={setChartApxJenjang}
+                          indikatorKeys={chartApxKeysPaud}
+                          colorFn={getApxColor}
+                        />
+                      ) : (
+                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 text-center">
+                          <p className="text-sm font-semibold text-amber-700">Data APK/APM/APS kabkot belum tersedia</p>
+                          <p className="text-xs text-amber-600 mt-1">Pastikan kolom seperti <code>APK_Label Capaian</code>, <code>APM_Label Capaian</code>, <code>APS_Label Capaian</code> ada di file JSON</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* ── Grafik 3: Trend Indikator Prioritas ── */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-5 rounded-full bg-purple-500" />
+                        <h3 className="text-base font-black text-slate-800">3. Tren Indikator Prioritas — Naik & Turun per Kab/Kota</h3>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-4 ml-3">
+                        Berapa banyak indikator yang meningkat atau menurun dibanding tahun sebelumnya
+                      </p>
+                      <TrendChart
+                        title="Tren Indikator Prioritas (2024 → 2025)"
+                        subtitle="Jumlah indikator yang naik (hijau), turun (merah), atau tetap (abu)"
+                        data={allKabkotData}
+                        jenjangList={chartJenjangAll}
+                        selectedJenjang={chartTrendIndJenjang}
+                        onJenjangChange={setChartTrendIndJenjang}
+                        tahun={tahun}
+                        indikatorKeys={allChartIndKeys.length > 0 ? allChartIndKeys : chartIndKeys}
+                        colorFn={getIndColor}
+                      />
+                    </div>
+
+                    {/* ── Grafik 4: Trend APK/APM/APS ── */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-5 rounded-full bg-orange-500" />
+                        <h3 className="text-base font-black text-slate-800">4. Tren APK, APM, APS — Naik & Turun per Kab/Kota</h3>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-4 ml-3">
+                        Perubahan capaian APK/APM/APS dibandingkan tahun sebelumnya per kab/kota
+                      </p>
+                      <TrendChart
+                        title="Tren APK / APM / APS (2024 → 2025)"
+                        subtitle="Jumlah indikator partisipasi yang naik (hijau), turun (merah), atau tetap (abu)"
+                        data={chartApxKeysDasmen.length > 0 ? kabkotDasmen : kabkotPaud}
+                        jenjangList={chartApxKeysDasmen.length > 0 ? chartJenjangDasmen : chartJenjangPaud}
+                        selectedJenjang={chartTrendApxJenjang}
+                        onJenjangChange={setChartTrendApxJenjang}
+                        tahun={tahun}
+                        indikatorKeys={chartApxKeysDasmen.length > 0 ? chartApxKeysDasmen : chartApxKeysPaud}
+                        colorFn={getApxColor}
+                      />
+                    </div>
+
+                    {/* Info box */}
+                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+                      <p className="text-xs font-bold text-slate-600 mb-2">ℹ️ Tentang Grafik ini</p>
+                      <ul className="text-xs text-slate-500 space-y-1">
+                        <li>• Skor dihitung dari label capaian: <strong>Tinggi=4, Baik=3, Sedang=2, Kurang/Rendah=1</strong></li>
+                        <li>• Jika satu kab/kota memiliki data Negeri dan Swasta, nilai dirata-rata</li>
+                        <li>• Data tren memerlukan kolom tahun ganda (<code>_Label Capaian 2024</code> & <code>_Label Capaian 2025</code>) di file JSON</li>
+                        <li>• APK/APM/APS akan muncul otomatis jika kolom tersedia di data JSON</li>
+                      </ul>
+                    </div>
+                  </div>
                 )}
 
-                {/* Tab: KabkotDasmen */}
+                {/* Tab: Kab/Kota Dasmen */}
                 {activeTab === "kabkot-dasmen" && (
-                  tahun === "2024" ? <KabkotDasmen2024 {...sharedProps} /> : <KabkotDasmen2025 {...sharedProps} />
+                  <div>
+                    <SectionHeader
+                      icon={<MapPin size={18} />}
+                      title="Capaian Kab/Kota — Dasmen & Vokasi"
+                      badge={`Tahun ${tahun}`}
+                    />
+                    <KabkotTable
+                      rows={fKD} indKeys={iKD}
+                      search={sKD} onSearch={setSKD}
+                      jenisList={oKDJ} jenisSel={fKDJ} onJenis={setFKDJ}
+                      statusList={oKDS} statusSel={fKDS} onStatus={setFKDS}
+                    />
+                  </div>
                 )}
 
-                {/* Tab: KabkotPaud */}
+                {/* Tab: Kab/Kota PAUD */}
                 {activeTab === "kabkot-paud" && (
-                  tahun === "2024" ? <KabkotPaud2024 {...sharedProps} /> : <KabkotPaud2025 {...sharedProps} />
+                  <div>
+                    <SectionHeader
+                      icon={<Layers size={18} />}
+                      title="Capaian Kab/Kota — PAUD"
+                      badge={`Tahun ${tahun}`}
+                    />
+                    <KabkotTable
+                      rows={fKP} indKeys={iKP}
+                      search={sKP} onSearch={setSKP}
+                      statusList={oKPS} statusSel={fKPS} onStatus={setFKPS}
+                    />
+                  </div>
                 )}
 
-                {/* Tab: SatdikDasmen */}
+                {/* Tab: Satdik Dasmen */}
                 {activeTab === "satdik-dasmen" && (
-                  tahun === "2024" ? <SatdikDasmen2024 {...sharedProps} /> : <SatdikDasmen2025 {...sharedProps} />
+                  <div>
+                    <SectionHeader
+                      icon={<School size={18} />}
+                      title="Capaian Satuan Pendidikan — Dasmen & Vokasi"
+                      badge={`Tahun ${tahun} · SATDIK keagamaan tidak ditampilkan`}
+                    />
+                    <SatdikTable
+                      allRows={fSD} paged={pagedSD} indKeys={iSD}
+                      page={pageSD} totalPages={Math.ceil(fSD.length / PAGE_SIZE)} onPage={setPageSD}
+                      search={sSD} onSearch={setSSD}
+                      jenisList={oSDJ} jenisSel={fSDJ} onJenis={setFSDJ}
+                      statusList={oSDS} statusSel={fSDS} onStatus={setFSDS}
+                      kabList={oSDK} kabSel={fSDK} onKab={setFSDK}
+                    />
+                  </div>
                 )}
 
-                {/* Tab: SatdikPaud */}
+                {/* Tab: Satdik PAUD */}
                 {activeTab === "satdik-paud" && (
-                  tahun === "2024" ? <SatdikPaud2024 {...sharedProps} /> : <SatdikPaud2025 {...sharedProps} />
+                  <div>
+                    <SectionHeader
+                      icon={<GraduationCap size={18} />}
+                      title="Capaian Satuan Pendidikan — PAUD"
+                      badge={`Tahun ${tahun} · SATDIK keagamaan tidak ditampilkan`}
+                    />
+                    <SatdikTable
+                      allRows={fSP} paged={pagedSP} indKeys={iSP}
+                      page={pageSP} totalPages={Math.ceil(fSP.length / PAGE_SIZE)} onPage={setPageSP}
+                      search={sSP} onSearch={setSSP}
+                      jenisList={oSPJ} jenisSel={fSPJ} onJenis={setFSPJ}
+                      statusList={oSPS} statusSel={fSPS} onStatus={setFSPS}
+                      kabList={oSPK} kabSel={fSPK} onKab={setFSPK}
+                    />
+                  </div>
                 )}
               </>
             )}
