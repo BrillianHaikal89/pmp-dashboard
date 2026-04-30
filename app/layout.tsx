@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description: "Dashboard analitik Rapor Pendidikan PMP",
 };
 
-const MAINTENANCE_MODE = false;
+const MAINTENANCE_MODE = true;
 
 export default function RootLayout({
   children,
