@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import MaintenancePage from "./page";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +17,7 @@ export const metadata: Metadata = {
   description: "Dashboard analitik Rapor Pendidikan PMP",
 };
 
-const MAINTENANCE_MODE = true;
+const MAINTENANCE_MODE = false;
 
 export default function RootLayout({
   children,
@@ -29,7 +28,7 @@ export default function RootLayout({
     return (
       <html lang="id">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <MaintenancePage />
+          {children}
         </body>
       </html>
     );

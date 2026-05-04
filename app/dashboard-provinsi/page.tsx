@@ -12,8 +12,7 @@ import {
 import Link from "next/link";
 import Ringkasan2024 from "./components/ringkasan/2024";
 import Ringkasan2025 from "./components/ringkasan/2025";
-import IndikatorPrioritas2024 from "./components/indikator-prioritas/2024";
-import IndikatorPrioritas2025 from "./components/indikator-prioritas/2025";
+import IndikatorPrioritas from "./components/indikator-prioritas/indikator-prioritas";
 import GrafikKabkot2024 from "./components/grafik-kabkot/2024";
 import GrafikKabkot2025 from "./components/grafik-kabkot/2025";
 import KabkotDasmen2024 from "./components/kabkot-dasmen/2024";
@@ -459,14 +458,14 @@ function SectionHeader({ icon, title, badge }: { icon: React.ReactNode; title: s
 
 function DashboardCard({ title, value, icon, color, trend, trendValue, subtitle }: {
   title: string;
-  value: number;
+  value: React.ReactNode;
   icon: React.ReactNode;
   color: string;
-  trend?: "up" | "down" | "neutral";
+  trend?: "up" | "down" | "neutral" | "none";
   trendValue?: string;
   subtitle?: string;
 }) {
-  const trendIcon = trend === "up" ? <TrendingUp size={12} /> : trend === "down" ? <TrendingDown size={12} /> : <Minus size={12} />;
+  const trendIcon = trend === "none" ? null : trend === "up" ? <TrendingUp size={12} /> : trend === "down" ? <TrendingDown size={12} /> : <Minus size={12} />;
   const trendColor = trend === "up" ? "text-emerald-600 bg-emerald-50" : trend === "down" ? "text-red-600 bg-red-50" : "text-slate-500 bg-slate-100";
   
   return (
@@ -1923,7 +1922,7 @@ export default function DashboardProvinsiPage() {
 
                 {/* Tab: Indikator Prioritas */}
                 {activeTab === "provinsi" && (
-                  tahun === "2024" ? <IndikatorPrioritas2024 {...sharedProps} /> : <IndikatorPrioritas2025 {...sharedProps} />
+                  <IndikatorPrioritas {...sharedProps} />
                 )}
 
                 {/* Tab: GrafikKabkot */}
