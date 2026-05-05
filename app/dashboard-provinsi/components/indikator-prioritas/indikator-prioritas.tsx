@@ -43,9 +43,9 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
           <DashboardCard
             title="BAIK / TINGGI"
             value={
-              <div className="flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 <span>{baikTinggiPercent}%</span>
-              </div>
+              </span>
             }
             icon={<CheckCircle2 size={20} className="text-white" />}
             color="bg-gradient-to-br from-emerald-500 to-emerald-600"
@@ -56,9 +56,9 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
           <DashboardCard
             title="SEDANG"
             value={
-              <div className="flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 <span>{sedangPercent}%</span>
-              </div>
+              </span>
             }
             icon={<Info size={20} className="text-white" />}
             color="bg-gradient-to-br from-yellow-500 to-yellow-600"
@@ -69,9 +69,9 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
           <DashboardCard
             title="KURANG / RENDAH"
             value={
-              <div className="flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 <span>{kurangRendahPercent}%</span>
-              </div>
+              </span>
             }
             icon={<AlertCircle size={20} className="text-white" />}
             color="bg-gradient-to-br from-red-500 to-red-600"
