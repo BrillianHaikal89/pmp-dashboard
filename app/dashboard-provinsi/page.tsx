@@ -58,6 +58,24 @@ interface CapaianSatdik {
   Kecamatan: string;
   [key: string]: string;
 }
+// rekap_capaian.json — satu baris per satdik, kolom indikator langsung (A.1, A.2, dst.)
+interface RekapCapaian {
+  NPSN: number | string;
+  "Nama Satuan Pendidikan": string;
+  "Jenis Satuan Pendidikan": string;
+  "Status Satuan Pendidikan": string;
+  "Kabupaten/Kota": string;
+  Kecamatan: string;
+  "A.1"?: string;
+  "A.2"?: string;
+  "A.3"?: string;
+  "D.1"?: string;
+  "D.3"?: string;
+  "D.4"?: string;
+  "D.8"?: string;
+  "D.10"?: string;
+  [key: string]: string | number | undefined;
+}
 // ─── Constants ────────────────────────────────────────────────────────────────
 const PRIORITY_CODES = ["A.1", "A.2", "A.3", "D.1", "D.3", "D.4", "D.8", "D.10"];
 
@@ -784,6 +802,8 @@ export default function DashboardProvinsiPage() {
   const [kabkotPaud,   setKabkotPaud]   = useState<CapaianKabkot[]>([]);
   const [satdikDasmen, setSatdikDasmen] = useState<CapaianSatdik[]>([]);
   const [satdikPaud,   setSatdikPaud]   = useState<CapaianSatdik[]>([]);
+  const [rekapCapaian, setRekapCapaian] = useState<RekapCapaian[]>([]);
+  const [spmValue, setSpmValue] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState<string | null>(null);
 
@@ -804,7 +824,8 @@ export default function DashboardProvinsiPage() {
   const [schoolModal, setSchoolModal] = useState<{
     indCode: string;
     indName: string;
-    labelGroup: "Baik / Tinggi" | "Sedang" | "Kurang / Rendah";
+    labelGroup: "Baik / Tinggi" | "Sedang" | "Kurang / Rendah" | "Tidak Tersedia";
+    filterJenjang?: string;
   } | null>(null);
   const [schoolModalSearch, setSchoolModalSearch] = useState("");
   const [schoolModalPage, setSchoolModalPage] = useState(1);
@@ -832,7 +853,8 @@ export default function DashboardProvinsiPage() {
           '3_capaian_kabkot_dasmen_vokasi.json',
           '4_capaian_kabkot_paud.json',
           '5_capaian_satdik_dasmen_vokasi.json',
-          '6_capaian_satdik_paud.json'
+          '6_capaian_satdik_paud.json',
+          'rekap_capaian.json',
         ];
         
         const results = await Promise.allSettled(
@@ -854,7 +876,8 @@ export default function DashboardProvinsiPage() {
           kabkotDasmenResult,
           kabkotPaudResult,
           satdikDasmenResult,
-          satdikPaudResult
+          satdikPaudResult,
+          rekapCapaianResult,
         ] = results;
         
         const hasRealData = results.some(r => r.status === 'fulfilled' && Array.isArray(r.value) && r.value.length > 0);
@@ -867,6 +890,13 @@ export default function DashboardProvinsiPage() {
         
         if (hasRealData) {
           setRingkasan(ringkasanResult.status === 'fulfilled' ? ringkasanResult.value : []);
+          // Ambil nilai SPM dari elemen pertama array (objek dengan key "SPM")
+          if (ringkasanResult.status === 'fulfilled' && Array.isArray(ringkasanResult.value)) {
+            const spmEntry = ringkasanResult.value.find((item: any) => item.SPM !== undefined);
+            setSpmValue(spmEntry ? spmEntry.SPM : null);
+          } else {
+            setSpmValue(null);
+          }
           setCapaianProv(capaianProvResult.status === 'fulfilled' ? capaianProvResult.value : []);
           setKabkotDasmen(kabkotDasmenResult.status === 'fulfilled' ? kabkotDasmenResult.value : []);
           setKabkotPaud(kabkotPaudResult.status === 'fulfilled' ? kabkotPaudResult.value : []);
@@ -880,6 +910,7 @@ export default function DashboardProvinsiPage() {
               ? filterNonReligiousSatdik(satdikPaudResult.value) 
               : []
           );
+          setRekapCapaian(rekapCapaianResult?.status === 'fulfilled' ? rekapCapaianResult.value : []);
         } else if (useMockData) {
           // Use mock data
           setRingkasan(MOCK_DATA_2024.ringkasan);
@@ -926,61 +957,91 @@ export default function DashboardProvinsiPage() {
   }, [allPriorityProvData, filterStatus]);
 
   const totalDashboardStats = useMemo(() => {
+    // Gunakan rekapCapaian jika tersedia, fallback ke satdik
+    const sourceData = rekapCapaian.length > 0 ? rekapCapaian : [...satdikDasmen, ...satdikPaud];
+    const useRekap = rekapCapaian.length > 0;
+
     let baikTinggi = 0, sedang = 0, kurangRendah = 0, tidakTersedia = 0;
 
-    const allSatdik = [...satdikDasmen, ...satdikPaud];
-    for (const satdik of allSatdik) {
-      if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) continue;
-
-      let counted = false;
-      for (const code of PRIORITY_CODES) {
-        const labelKey = Object.keys(satdik).find(k => {
-          const ku = k.toUpperCase();
-          const cu = code.toUpperCase();
-          return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
-        });
-        if (!labelKey) continue;
-        const labelVal = (satdik[labelKey] ?? "").trim();
-        if (!labelVal) continue;
-        counted = true;
-        if (labelVal === "Tinggi" || labelVal === "Baik") baikTinggi++;
-        else if (labelVal === "Sedang") sedang++;
-        else if (labelVal === "Kurang" || labelVal === "Rendah") kurangRendah++;
-        else tidakTersedia++;
+    if (useRekap) {
+      for (const row of rekapCapaian) {
+        if (filterStatus !== "Semua" && row["Status Satuan Pendidikan"] !== filterStatus) continue;
+        for (const code of PRIORITY_CODES) {
+          const labelVal = ((row[code] as string) ?? "").trim();
+          if (!labelVal) continue;
+          if (labelVal === "Tinggi" || labelVal === "Baik") baikTinggi++;
+          else if (labelVal === "Sedang") sedang++;
+          else if (labelVal === "Kurang" || labelVal === "Rendah") kurangRendah++;
+          else tidakTersedia++;
+        }
+      }
+    } else {
+      for (const satdik of sourceData as CapaianSatdik[]) {
+        if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) continue;
+        for (const code of PRIORITY_CODES) {
+          const labelKey = Object.keys(satdik).find(k => {
+            const ku = k.toUpperCase();
+            const cu = code.toUpperCase();
+            return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
+          });
+          if (!labelKey) continue;
+          const labelVal = (satdik[labelKey] ?? "").trim();
+          if (!labelVal) continue;
+          if (labelVal === "Tinggi" || labelVal === "Baik") baikTinggi++;
+          else if (labelVal === "Sedang") sedang++;
+          else if (labelVal === "Kurang" || labelVal === "Rendah") kurangRendah++;
+          else tidakTersedia++;
+        }
       }
     }
 
     const total = baikTinggi + sedang + kurangRendah + tidakTersedia;
     return { baikTinggi, sedang, kurangRendah, tidakTersedia, total };
-  }, [satdikDasmen, satdikPaud, filterStatus]);
+  }, [rekapCapaian, satdikDasmen, satdikPaud, filterStatus]);
 
   const jenjangStats = useMemo(() => {
     const stats: Record<string, { baikTinggi: number; sedang: number; kurangRendah: number; tidakTersedia: number; total: number }> = {};
 
-    const allSatdik = [...satdikDasmen, ...satdikPaud];
-    for (const satdik of allSatdik) {
-      if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) continue;
-      const jenjang = satdik["Jenis Satuan Pendidikan"] || "Lainnya";
-      if (!stats[jenjang]) stats[jenjang] = { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 };
-
-      for (const code of PRIORITY_CODES) {
-        const labelKey = Object.keys(satdik).find(k => {
-          const ku = k.toUpperCase();
-          const cu = code.toUpperCase();
-          return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
-        });
-        if (!labelKey) continue;
-        const labelVal = (satdik[labelKey] ?? "").trim();
-        if (!labelVal) continue;
-        if (labelVal === "Tinggi" || labelVal === "Baik") stats[jenjang].baikTinggi++;
-        else if (labelVal === "Sedang") stats[jenjang].sedang++;
-        else if (labelVal === "Kurang" || labelVal === "Rendah") stats[jenjang].kurangRendah++;
-        else stats[jenjang].tidakTersedia++;
-        stats[jenjang].total++;
+    if (rekapCapaian.length > 0) {
+      for (const row of rekapCapaian) {
+        if (filterStatus !== "Semua" && row["Status Satuan Pendidikan"] !== filterStatus) continue;
+        const jenjang = row["Jenis Satuan Pendidikan"] || "Lainnya";
+        if (!stats[jenjang]) stats[jenjang] = { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 };
+        for (const code of PRIORITY_CODES) {
+          const labelVal = ((row[code] as string) ?? "").trim();
+          if (!labelVal) continue;
+          if (labelVal === "Tinggi" || labelVal === "Baik") stats[jenjang].baikTinggi++;
+          else if (labelVal === "Sedang") stats[jenjang].sedang++;
+          else if (labelVal === "Kurang" || labelVal === "Rendah") stats[jenjang].kurangRendah++;
+          else stats[jenjang].tidakTersedia++;
+          stats[jenjang].total++;
+        }
+      }
+    } else {
+      const allSatdik = [...satdikDasmen, ...satdikPaud];
+      for (const satdik of allSatdik) {
+        if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) continue;
+        const jenjang = satdik["Jenis Satuan Pendidikan"] || "Lainnya";
+        if (!stats[jenjang]) stats[jenjang] = { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 };
+        for (const code of PRIORITY_CODES) {
+          const labelKey = Object.keys(satdik).find(k => {
+            const ku = k.toUpperCase();
+            const cu = code.toUpperCase();
+            return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
+          });
+          if (!labelKey) continue;
+          const labelVal = (satdik[labelKey] ?? "").trim();
+          if (!labelVal) continue;
+          if (labelVal === "Tinggi" || labelVal === "Baik") stats[jenjang].baikTinggi++;
+          else if (labelVal === "Sedang") stats[jenjang].sedang++;
+          else if (labelVal === "Kurang" || labelVal === "Rendah") stats[jenjang].kurangRendah++;
+          else stats[jenjang].tidakTersedia++;
+          stats[jenjang].total++;
+        }
       }
     }
     return stats;
-  }, [satdikDasmen, satdikPaud, filterStatus]);
+  }, [rekapCapaian, satdikDasmen, satdikPaud, filterStatus]);
 
   const indikatorStats = useMemo(() => {
     const stats: Record<string, { baikTinggi: number; sedang: number; kurangRendah: number; tidakTersedia: number; total: number; label: string }> = {};
@@ -990,46 +1051,91 @@ export default function DashboardProvinsiPage() {
       stats[p.code] = { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0, label: p.fullName };
     }
 
-    // Hitung jumlah SEKOLAH (satdik) per indikator prioritas, bukan jumlah baris capaianProv
-    const allSatdik = [...satdikDasmen, ...satdikPaud];
-    for (const satdik of allSatdik) {
-      // Filter status jika ada
-      if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) continue;
-
-      for (const code of PRIORITY_CODES) {
-        if (!stats[code]) continue;
-        // Cari kolom label capaian untuk kode ini di data satdik
-        const labelKey = Object.keys(satdik).find(k => {
-          const ku = k.toUpperCase();
-          const cu = code.toUpperCase();
-          return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
-        });
-        if (!labelKey) continue;
-
-        const labelVal = (satdik[labelKey] ?? "").trim();
-        if (!labelVal) continue;
-
-        if (labelVal === "Tinggi" || labelVal === "Baik") stats[code].baikTinggi++;
-        else if (labelVal === "Sedang") stats[code].sedang++;
-        else if (labelVal === "Kurang" || labelVal === "Rendah") stats[code].kurangRendah++;
-        else stats[code].tidakTersedia++;
-        stats[code].total++;
+    if (rekapCapaian.length > 0) {
+      // Hitung dari rekap_capaian.json — kolom langsung (A.1, A.2, dst.)
+      for (const row of rekapCapaian) {
+        if (filterStatus !== "Semua" && row["Status Satuan Pendidikan"] !== filterStatus) continue;
+        for (const code of PRIORITY_CODES) {
+          if (!stats[code]) continue;
+          const labelVal = ((row[code] as string) ?? "").trim();
+          if (!labelVal) continue;
+          if (labelVal === "Tinggi" || labelVal === "Baik") stats[code].baikTinggi++;
+          else if (labelVal === "Sedang") stats[code].sedang++;
+          else if (labelVal === "Kurang" || labelVal === "Rendah") stats[code].kurangRendah++;
+          else stats[code].tidakTersedia++;
+          stats[code].total++;
+        }
+      }
+    } else {
+      // Fallback ke satdik data (kolom "A.1_Label Capaian" dll.)
+      const allSatdik = [...satdikDasmen, ...satdikPaud];
+      for (const satdik of allSatdik) {
+        if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) continue;
+        for (const code of PRIORITY_CODES) {
+          if (!stats[code]) continue;
+          const labelKey = Object.keys(satdik).find(k => {
+            const ku = k.toUpperCase();
+            const cu = code.toUpperCase();
+            return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
+          });
+          if (!labelKey) continue;
+          const labelVal = (satdik[labelKey] ?? "").trim();
+          if (!labelVal) continue;
+          if (labelVal === "Tinggi" || labelVal === "Baik") stats[code].baikTinggi++;
+          else if (labelVal === "Sedang") stats[code].sedang++;
+          else if (labelVal === "Kurang" || labelVal === "Rendah") stats[code].kurangRendah++;
+          else stats[code].tidakTersedia++;
+          stats[code].total++;
+        }
       }
     }
     return stats;
-  }, [satdikDasmen, satdikPaud, filterStatus]);
+  }, [rekapCapaian, satdikDasmen, satdikPaud, filterStatus]);
 
   const schoolModalRows = useMemo(() => {
     if (!schoolModal) return [];
-    const { indCode, labelGroup } = schoolModal;
+    const { indCode, labelGroup, filterJenjang } = schoolModal;
+
+    // Helper to check jenjang match
+    const matchJenjang = (row: Record<string, string | number | undefined>) => {
+      if (!filterJenjang || filterJenjang === "Semua") return true;
+      const jenis = ((row["Jenis Satuan Pendidikan"] as string) ?? "").toUpperCase();
+      const filter = filterJenjang.toUpperCase();
+      // SD matches SD Umum, SD Negeri etc; SMP matches SMP Umum etc; SMA matches SMA & SMK
+      if (filter === "SMA") return jenis.startsWith("SMA") || jenis.startsWith("SMK");
+      return jenis.startsWith(filter);
+    };
+
+    // Gunakan rekapCapaian jika tersedia (kolom langsung seperti "A.1")
+    if (rekapCapaian.length > 0) {
+      return rekapCapaian.filter(row => {
+        if (filterStatus !== "Semua" && row["Status Satuan Pendidikan"] !== filterStatus) return false;
+        if (!matchJenjang(row as unknown as Record<string, string | number | undefined>)) return false;
+        const labelVal = ((row[indCode] as string) ?? "").trim();
+        if (labelGroup === "Tidak Tersedia") return !labelVal || (labelVal !== "Tinggi" && labelVal !== "Baik" && labelVal !== "Sedang" && labelVal !== "Kurang" && labelVal !== "Rendah");
+        if (!labelVal) return false;
+        if (labelGroup === "Baik / Tinggi") return labelVal === "Tinggi" || labelVal === "Baik";
+        if (labelGroup === "Sedang") return labelVal === "Sedang";
+        if (labelGroup === "Kurang / Rendah") return labelVal === "Kurang" || labelVal === "Rendah";
+        return false;
+      }) as unknown as CapaianSatdik[];
+    }
+
+    // Fallback: gunakan satdik data (kolom "A.1_Label Capaian" dll.)
     const allSatdik = [...satdikDasmen, ...satdikPaud];
     return allSatdik.filter(satdik => {
       if (filterStatus !== "Semua" && satdik["Status Satuan Pendidikan"] !== filterStatus) return false;
+      if (!matchJenjang(satdik as unknown as Record<string, string | number | undefined>)) return false;
       const labelKey = Object.keys(satdik).find(k => {
         const ku = k.toUpperCase();
         const cu = indCode.toUpperCase();
         return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
       });
+      if (labelGroup === "Tidak Tersedia") {
+        if (!labelKey) return true;
+        const labelVal = (satdik[labelKey] ?? "").trim();
+        return !labelVal || (labelVal !== "Tinggi" && labelVal !== "Baik" && labelVal !== "Sedang" && labelVal !== "Kurang" && labelVal !== "Rendah");
+      }
       if (!labelKey) return false;
       const labelVal = (satdik[labelKey] ?? "").trim();
       if (!labelVal) return false;
@@ -1038,7 +1144,7 @@ export default function DashboardProvinsiPage() {
       if (labelGroup === "Kurang / Rendah") return labelVal === "Kurang" || labelVal === "Rendah";
       return false;
     });
-  }, [schoolModal, satdikDasmen, satdikPaud, filterStatus]);
+  }, [schoolModal, rekapCapaian, satdikDasmen, satdikPaud, filterStatus]);
 
   const schoolModalKabkotOptions = useMemo(() => {
     const opts = [...new Set(schoolModalRows.map(r => r["Kabupaten/Kota"]).filter(Boolean))].sort();
@@ -1543,6 +1649,7 @@ export default function DashboardProvinsiPage() {
     oSDJ, fSDJ, setFSDJ, oSDS, fSDS, setFSDS, oSDK, fSDK, setFSDK, SatdikTable, PAGE_SIZE,
     fSP, pagedSP, iSP, pageSP, setPageSP, sSP, setSSP, oSPJ, fSPJ, setFSPJ, oSPS, fSPS,
     setFSPS, oSPK, fSPK, setFSPK,
+    rekapCapaian, satdikDasmen, satdikPaud,
   };
 
   return (
@@ -1563,7 +1670,9 @@ export default function DashboardProvinsiPage() {
                   className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-xs shadow-sm"
                   style={{
                     background: schoolModal.labelGroup === "Baik / Tinggi" ? "#22c55e"
-                      : schoolModal.labelGroup === "Sedang" ? "#f59e0b" : "#ef4444"
+                      : schoolModal.labelGroup === "Sedang" ? "#f59e0b"
+                      : schoolModal.labelGroup === "Kurang / Rendah" ? "#ef4444"
+                      : "#94a3b8"
                   }}
                 >
                   {schoolModal.indCode}
@@ -1575,9 +1684,13 @@ export default function DashboardProvinsiPage() {
                       className="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full"
                       style={{
                         background: schoolModal.labelGroup === "Baik / Tinggi" ? "#dcfce7"
-                          : schoolModal.labelGroup === "Sedang" ? "#fef9c3" : "#fee2e2",
+                          : schoolModal.labelGroup === "Sedang" ? "#fef9c3"
+                          : schoolModal.labelGroup === "Kurang / Rendah" ? "#fee2e2"
+                          : "#f1f5f9",
                         color: schoolModal.labelGroup === "Baik / Tinggi" ? "#166534"
-                          : schoolModal.labelGroup === "Sedang" ? "#854d0e" : "#991b1b",
+                          : schoolModal.labelGroup === "Sedang" ? "#854d0e"
+                          : schoolModal.labelGroup === "Kurang / Rendah" ? "#991b1b"
+                          : "#475569",
                       }}
                     >
                       {schoolModal.labelGroup}
@@ -1585,6 +1698,11 @@ export default function DashboardProvinsiPage() {
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
                     {schoolModalFiltered.length.toLocaleString("id-ID")} sekolah ditemukan
+                    {schoolModal.filterJenjang && schoolModal.filterJenjang !== "Semua" && (
+                      <span className="ml-2 px-1.5 py-0.5 rounded-md bg-blue-100 text-blue-700 font-semibold text-[10px]">
+                        Jenjang {schoolModal.filterJenjang}
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
@@ -1694,12 +1812,14 @@ export default function DashboardProvinsiPage() {
                       </td>
                     </tr>
                   ) : schoolModalPaged.map((row, i) => {
-                    const labelKey = Object.keys(row).find(k => {
+                    // Coba kolom langsung (rekap_capaian: "A.1") dulu, fallback ke kolom satdik ("A.1_Label Capaian")
+                    const directVal = ((row as unknown as Record<string, string>)[schoolModal.indCode] ?? "").trim();
+                    const labelKey = !directVal ? Object.keys(row).find(k => {
                       const ku = k.toUpperCase();
                       const cu = schoolModal.indCode.toUpperCase();
                       return ku.startsWith(cu + "_") && ku.includes("LABEL CAPAIAN");
-                    });
-                    const labelVal = labelKey ? (row[labelKey] ?? "").trim() : "";
+                    }) : undefined;
+                    const labelVal = directVal || (labelKey ? (row[labelKey] ?? "").trim() : "");
                     return (
                       <tr key={row.NPSN || i} className="hover:bg-blue-50/30 transition-colors group">
                         <td className="px-4 py-3 font-semibold text-slate-800 leading-snug">{row["Nama Satuan Pendidikan"]}</td>
@@ -1815,8 +1935,8 @@ export default function DashboardProvinsiPage() {
             {!loading && !error && (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mt-8">
                 {[
-                  { icon: <Layers size={15} />, label: "Kab/Kota", val: new Set(kabkotPaud.map(k => k["Kab/Kota"])).size, gradient: "from-pink-400/80 to-pink-500/80" },
-                  { icon: <Users size={15} />, label: "Total Satdik", val: satdikDasmen.length + satdikPaud.length, gradient: "from-orange-400/80 to-orange-500/80" },
+                  { icon: <Layers size={15} />, label: "Kab/Kota", val: new Set(kabkotPaud.map(k => k["Kab/Kota"])).size.toLocaleString("id"), gradient: "from-pink-400/80 to-pink-500/80" },
+                  { icon: <Users size={15} />, label: "SPM", val: spmValue ?? "–", gradient: "from-orange-400/80 to-orange-500/80" },
                 ].map((s, i) => (
                   <div
                     key={i}
@@ -1826,7 +1946,7 @@ export default function DashboardProvinsiPage() {
                     <div className={`w-8 h-8 rounded-xl bg-gradient-to-br ${s.gradient} flex items-center justify-center mb-3 border border-white/20`}>
                       {s.icon}
                     </div>
-                    <p className="text-2xl font-black tracking-tight">{s.val.toLocaleString("id")}</p>
+                    <p className="text-2xl font-black tracking-tight">{s.val}</p>
                     <p className="text-xs text-blue-200 mt-0.5 leading-tight">{s.label}</p>
                   </div>
                 ))}
