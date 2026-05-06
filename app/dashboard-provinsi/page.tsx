@@ -1167,7 +1167,7 @@ export default function DashboardProvinsiPage() {
     const q = schoolModalSearch.toLowerCase();
     return rows.filter(r =>
       r["Nama Satuan Pendidikan"]?.toLowerCase().includes(q) ||
-      r.NPSN?.includes(q) ||
+      String(r.NPSN ?? "").includes(q) ||
       r["Kabupaten/Kota"]?.toLowerCase().includes(q)
     );
   }, [schoolModalRows, schoolModalSearch, schoolModalKabkot, schoolModalKecamatan]);
@@ -1266,14 +1266,14 @@ export default function DashboardProvinsiPage() {
     (fSDJ === "Semua" || c["Jenis Satuan Pendidikan"] === fSDJ) &&
     (fSDS === "Semua" || c["Status Satuan Pendidikan"] === fSDS) &&
     (fSDK === "Semua" || c["Kabupaten/Kota"] === fSDK) &&
-    (!sSD || c["Nama Satuan Pendidikan"]?.toLowerCase().includes(sSD.toLowerCase()) || c.NPSN?.includes(sSD))
+    (!sSD || c["Nama Satuan Pendidikan"]?.toLowerCase().includes(sSD.toLowerCase()) || String(c.NPSN ?? "").includes(sSD))
   ), [satdikDasmen, fSDJ, fSDS, fSDK, sSD]);
 
   const fSP = useMemo(() => satdikPaud.filter(c =>
     (fSPJ === "Semua" || c["Jenis Satuan Pendidikan"] === fSPJ) &&
     (fSPS === "Semua" || c["Status Satuan Pendidikan"] === fSPS) &&
     (fSPK === "Semua" || c["Kabupaten/Kota"] === fSPK) &&
-    (!sSP || c["Nama Satuan Pendidikan"]?.toLowerCase().includes(sSP.toLowerCase()) || c.NPSN?.includes(sSP))
+    (!sSP || c["Nama Satuan Pendidikan"]?.toLowerCase().includes(sSP.toLowerCase()) || String(c.NPSN ?? "").includes(sSP))
   ), [satdikPaud, fSPJ, fSPS, fSPK, sSP]);
 
   useEffect(() => setPageSD(1), [fSD.length]);
