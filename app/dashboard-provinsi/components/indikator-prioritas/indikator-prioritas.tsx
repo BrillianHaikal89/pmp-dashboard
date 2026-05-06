@@ -179,7 +179,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
             icon={<CheckCircle2 size={20} className="text-white" />}
             color="bg-gradient-to-br from-emerald-500 to-emerald-600"
             trend="none"
-            trendValue={`${(cardStats?.baikTinggi || 0).toLocaleString("id-ID")} sekolah`}
+            trendValue=""
             subtitle=""
           />
           <DashboardCard
@@ -188,7 +188,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
             icon={<Info size={20} className="text-white" />}
             color="bg-gradient-to-br from-yellow-500 to-yellow-600"
             trend="none"
-            trendValue={`${(cardStats?.sedang || 0).toLocaleString("id-ID")} sekolah`}
+            trendValue=""
             subtitle=""
           />
           <DashboardCard
@@ -197,7 +197,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
             icon={<AlertCircle size={20} className="text-white" />}
             color="bg-gradient-to-br from-red-500 to-red-600"
             trend="none"
-            trendValue={`${(cardStats?.kurangRendah || 0).toLocaleString("id-ID")} sekolah`}
+            trendValue=""
             subtitle=""
           />
           <DashboardCard
@@ -206,7 +206,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
             icon={<HelpCircle size={20} className="text-white" />}
             color="bg-gradient-to-br from-slate-400 to-slate-500"
             trend="none"
-            trendValue={`${(cardStats?.tidakTersedia || 0).toLocaleString("id-ID")} sekolah`}
+            trendValue=""
             subtitle=""
           />
         </div>
