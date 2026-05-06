@@ -36,9 +36,10 @@ export default function Ringkasan2025({
         badge={`${jenjangList.length} jenjang Â· Tahun ${tahun}`}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {jenjangList.map((jenjang) => {
+        {jenjangList.filter(Boolean).map((jenjang) => {
+          const j = jenjang ?? "";
           const items = ringkasan.filter((r) => r.Jenjang === jenjang);
-          const gradient = getJenjangGradient(jenjang);
+          const gradient = getJenjangGradient(j);
 
           return (
             <div
@@ -50,16 +51,16 @@ export default function Ringkasan2025({
                 className={`bg-gradient-to-r ${gradient} px-5 py-4 flex items-center gap-3`}
               >
                 <div className="w-8 h-8 rounded-xl bg-white/20 border border-white/20 flex items-center justify-center flex-shrink-0">
-                  {jenjang.includes("SD") && (
+                  {j.includes("SD") && (
                     <School size={14} className="text-white" />
                   )}
-                  {jenjang.includes("SMP") && (
+                  {j.includes("SMP") && (
                     <BookOpen size={14} className="text-white" />
                   )}
-                  {jenjang.includes("SMA") && (
+                  {j.includes("SMA") && (
                     <GraduationCap size={14} className="text-white" />
                   )}
-                  {jenjang.includes("PAUD") && (
+                  {j.includes("PAUD") && (
                     <Building2 size={14} className="text-white" />
                   )}
                 </div>

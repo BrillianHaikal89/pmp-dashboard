@@ -1325,11 +1325,12 @@ export default function DashboardProvinsiPage() {
     return grouped;
   }, [filteredProvData]);
 
-  const getJenjangGradient = (jenjang: string): string => {
-    if (jenjang.toUpperCase().includes("SD")) return "from-blue-500 to-blue-600";
-    if (jenjang.toUpperCase().includes("SMP")) return "from-violet-500 to-violet-600";
-    if (jenjang.toUpperCase().includes("SMA") || jenjang.toUpperCase().includes("SMK")) return "from-amber-500 to-amber-600";
-    if (jenjang.toUpperCase().includes("PAUD") || jenjang.toUpperCase().includes("TK")) return "from-rose-500 to-rose-600";
+  const getJenjangGradient = (jenjang: string | undefined | null): string => {
+    const j = (jenjang ?? "").toUpperCase();
+    if (j.includes("SD")) return "from-blue-500 to-blue-600";
+    if (j.includes("SMP")) return "from-violet-500 to-violet-600";
+    if (j.includes("SMA") || j.includes("SMK")) return "from-amber-500 to-amber-600";
+    if (j.includes("PAUD") || j.includes("TK")) return "from-rose-500 to-rose-600";
     return "from-slate-500 to-slate-600";
   };
 
