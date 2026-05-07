@@ -803,6 +803,7 @@ export default function DashboardProvinsiPage() {
   const [satdikDasmen, setSatdikDasmen] = useState<CapaianSatdik[]>([]);
   const [satdikPaud,   setSatdikPaud]   = useState<CapaianSatdik[]>([]);
   const [rekapCapaian, setRekapCapaian] = useState<RekapCapaian[]>([]);
+  const [indikatorMenurunMeningkat, setIndikatorMenurunMeningkat] = useState<Record<string, string>[]>([]);
   const [spmValue, setSpmValue] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState<string | null>(null);
@@ -869,6 +870,29 @@ export default function DashboardProvinsiPage() {
               })
           )
         );
+
+        // Load indikator_menurun_meningkat — coba beberapa kemungkinan nama file
+        const mmCandidates = [
+          'indikator_menurun_meningkat.json',
+          'indikator_prioritas_menurun_meningkat.json',
+          'indikator_prioritas_menurun_meningkat .json', // dengan spasi (sesuai screenshot)
+        ];
+        let mmData: Record<string, string>[] = [];
+        for (const candidate of mmCandidates) {
+          try {
+            const res = await fetch(`/dataProvinsi/${tahun}/${candidate}`);
+            if (res.ok) {
+              const data = await res.json();
+              if (Array.isArray(data) && data.length > 0) {
+                mmData = data;
+                break;
+              }
+            }
+          } catch {
+            // coba kandidat berikutnya
+          }
+        }
+        setIndikatorMenurunMeningkat(mmData);
         
         const [
           ringkasanResult,
@@ -1651,6 +1675,7 @@ export default function DashboardProvinsiPage() {
     fSP, pagedSP, iSP, pageSP, setPageSP, sSP, setSSP, oSPJ, fSPJ, setFSPJ, oSPS, fSPS,
     setFSPS, oSPK, fSPK, setFSPK,
     rekapCapaian, satdikDasmen, satdikPaud,
+    indikatorMenurunMeningkat,
   };
 
   return (

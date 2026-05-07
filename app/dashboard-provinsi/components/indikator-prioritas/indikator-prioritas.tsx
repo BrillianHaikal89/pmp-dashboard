@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { BarChart3, CheckCircle2, Info, AlertCircle, ListChecks, Filter, HelpCircle } from 'lucide-react';
+import { BarChart3, CheckCircle2, Info, AlertCircle, ListChecks, Filter, HelpCircle, TrendingUp, TrendingDown, Minus, ArrowUpDown } from 'lucide-react';
 
 const JENJANG_OPTIONS = [
   { value: "Semua", label: "Semua" },
@@ -12,7 +12,9 @@ const JENJANG_OPTIONS = [
 
 function normalizeJenjang(jenis: string): string {
   const j = (jenis ?? "").toUpperCase();
-  if (j.startsWith("SD")) return "SD";
+  // PAUD: TK, KB, TPA, SPS, PAUD (any variant)
+  if (j.startsWith("TK") || j.startsWith("KB") || j.startsWith("TPA") || j.startsWith("SPS") || j.startsWith("PAUD")) return "PAUD";
+  if (j.startsWith("SD") || j.startsWith("MI")) return "SD";
   if (j.startsWith("SMP") || j.startsWith("MTS")) return "SMP";
   if (j.startsWith("SMA") || j.startsWith("SMK") || j.startsWith("MA")) return "SMA";
   return jenis;
@@ -43,14 +45,26 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     fSP, pagedSP, iSP, pageSP, setPageSP, sSP, setSSP, oSPJ, fSPJ, setFSPJ,
     oSPS, fSPS, setFSPS, oSPK, fSPK, setFSPK,
     rekapCapaian, satdikDasmen, satdikPaud,
+    // New: indikator menurun meningkat data
+    indikatorMenurunMeningkat,
   } = props;
 
   const [filterJenjangRekap, setFilterJenjangRekap] = useState<string>("Semua");
+
+  // ─── Filter states untuk section menurun/meningkat ───────────────────────────
+  const [filterJenjangMMT, setFilterJenjangMMT] = useState<string>("Semua"); // SD | SMP | SMA | Semua
+  const [filterStatusMMT, setFilterStatusMMT] = useState<string>("Semua");   // Negeri | Swasta | Semua
+  const [pageMMT, setPageMMT] = useState<number>(1);
+  const MMT_PAGE_SIZE = 10;
+  // ─── Detail modal state ───────────────────────────────────────────────────────
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [detailModal, setDetailModal] = useState<{ rows: Record<string, string>[]; title: string; label: string } | null>(null);
 
   // Aggregate jenjangStats (which is keyed by raw jenis like "SD Umum") into SD/SMP/SMA buckets
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const normalizedJenjangStats = useMemo<Record<string, any>>(() => {
     const result: Record<string, { baikTinggi: number; sedang: number; kurangRendah: number; tidakTersedia: number; total: number }> = {
+      PAUD: { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
       SD: { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
       SMP: { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
       SMA: { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
@@ -79,9 +93,10 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     for (const code of PRIORITY_CODES) {
       result[code] = {
         Semua: { ...(indikatorStats[code] || {}) },
-        SD:  { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
-        SMP: { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
-        SMA: { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
+        PAUD: { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
+        SD:   { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
+        SMP:  { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
+        SMA:  { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
       };
     }
 
@@ -94,7 +109,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     for (const row of sourceRows) {
       const rawJenis = row["Jenis Satuan Pendidikan"] || "";
       const norm = normalizeJenjang(rawJenis);
-      if (!["SD", "SMP", "SMA"].includes(norm)) continue;
+      if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) continue;
 
       for (const code of PRIORITY_CODES) {
         if (!result[code]) continue;
@@ -136,6 +151,91 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
   }, [filterJenjangRekap, totalDashboardStats, normalizedJenjangStats]);
 
   const pct = (n: number) => (cardStats?.total || 0) > 0 ? Math.round((n / cardStats.total) * 100) : 0;
+
+  // ─── Compute filter options & filtered rows untuk Menurun/Meningkat ───────────
+  const mmtData: Record<string, string>[] = useMemo(() => {
+    if (!Array.isArray(indikatorMenurunMeningkat)) return [];
+    return indikatorMenurunMeningkat;
+  }, [indikatorMenurunMeningkat]);
+
+  // Jenjang & Status options are fixed — no longer derived from data (avoids duplicate-key error)
+  const MMT_JENJANG_OPTIONS = ["Semua", "PAUD", "SD", "SMP", "SMA"] as const;
+  const MMT_STATUS_OPTIONS = ["Semua", "Negeri", "Swasta"] as const;
+
+  // Classify each row's perubahan: "Naik", "Turun", "Tidak Berubah", "Tidak Tersedia"
+  function classifyPerubahan(val: string): "Naik" | "Turun" | "Tidak Berubah" | "Tidak Tersedia" {
+    const v = (val ?? "").toLowerCase();
+    if (v.includes("naik")) return "Naik";
+    if (v.includes("turun")) return "Turun";
+    if (v.includes("tidak berubah")) return "Tidak Berubah";
+    return "Tidak Tersedia";
+  }
+
+  const mmtFiltered = useMemo(() => {
+    return mmtData.filter(row => {
+      // Only include rows with valid jenjang (PAUD/SD/SMP/SMA) — exclude "Semua" and unknown
+      const norm = normalizeJenjang(row["Jenis Satuan Pendidikan"] || "");
+      if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) return false;
+      // Only include rows with Negeri or Swasta status — exclude rows where Status = "Semua"
+      const status = (row["Status Satuan Pendidikan"] || "").trim();
+      if (!["Negeri", "Swasta"].includes(status)) return false;
+      // Filter by selected jenjang
+      if (filterJenjangMMT !== "Semua" && norm !== filterJenjangMMT) return false;
+      // Filter by selected status
+      if (filterStatusMMT !== "Semua" && status !== filterStatusMMT) return false;
+      return true;
+    });
+  }, [mmtData, filterJenjangMMT, filterStatusMMT]);
+
+  // Detect "Perubahan" key dynamically: 2024 data uses "...Tahun 2023", 2025 uses "...Tahun 2024"
+  const perubahanKey = useMemo(() => {
+    if (mmtData.length === 0) return "Perubahan Nilai Capaian dari Tahun 2023";
+    const row = mmtData[0];
+    return (
+      Object.keys(row).find(k => k.toLowerCase().startsWith("perubahan nilai capaian dari tahun"))
+      ?? "Perubahan Nilai Capaian dari Tahun 2023"
+    );
+  }, [mmtData]);
+
+  // Summary stats untuk header cards
+  const mmtSummary = useMemo(() => {
+    let naik = 0, turun = 0, tetap = 0, tidakTersedia = 0;
+    for (const row of mmtFiltered) {
+      const cls = classifyPerubahan(row[perubahanKey] || "");
+      if (cls === "Naik") naik++;
+      else if (cls === "Turun") turun++;
+      else if (cls === "Tidak Berubah") tetap++;
+      else tidakTersedia++;
+    }
+    return { naik, turun, tetap, tidakTersedia, total: naik + turun + tetap + tidakTersedia };
+  }, [mmtFiltered, perubahanKey]);
+
+  // Determine the "perubahan" column key - tahun 2024 uses "Perubahan Nilai Capaian dari Tahun 2023"
+  // tahun 2025 uses "Perubahan Nilai Capaian dari Tahun 2024" — detected dynamically above
+  // Detect BOTH nilai capaian keys dynamically (current year & previous year)
+  const { nilaiCapaianKeyTahunIni, nilaiCapaianKeyTahunLalu, labelTahunIni, labelTahunLalu } = useMemo(() => {
+    if (mmtData.length === 0) return { nilaiCapaianKeyTahunIni: "Nilai Capaian 2024", nilaiCapaianKeyTahunLalu: "Nilai Capaian 2023", labelTahunIni: "2024", labelTahunLalu: "2023" };
+    const row = mmtData[0];
+    // Find all "Nilai Capaian 20xx" keys
+    const nilaiKeys = Object.keys(row).filter(k => /nilai capaian 20\d\d$/i.test(k));
+    // Sort descending to get latest first
+    nilaiKeys.sort((a, b) => b.localeCompare(a));
+    const keyIni = nilaiKeys[0] ?? "Nilai Capaian 2024";
+    const keyLalu = nilaiKeys[1] ?? "Nilai Capaian 2023";
+    // Extract year numbers from keys
+    const yearIni = keyIni.match(/\d{4}/)?.[0] ?? "2024";
+    const yearLalu = keyLalu.match(/\d{4}/)?.[0] ?? "2023";
+    return { nilaiCapaianKeyTahunIni: keyIni, nilaiCapaianKeyTahunLalu: keyLalu, labelTahunIni: yearIni, labelTahunLalu: yearLalu };
+  }, [mmtData]);
+
+  // Keep nilaiCapaianKey2024 as alias for backward compat with labelCapaianKey2024 usage
+  const nilaiCapaianKey2024 = nilaiCapaianKeyTahunIni;
+
+  const labelCapaianKey2024 = useMemo(() => {
+    if (mmtData.length === 0) return "Label Capaian 2024";
+    const row = mmtData[0];
+    return Object.keys(row).find(k => k.toLowerCase().includes("label capaian 20")) ?? "Label Capaian 2024";
+  }, [mmtData]);
 
   return (
     <>
@@ -336,6 +436,416 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
           </div>
         </div>
       </div>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          SECTION BARU: Indikator Menurun & Meningkat
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <div className="mt-8">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+          <SectionHeader
+            icon={<ArrowUpDown size={18} />}
+            title="Indikator Menurun &amp; Meningkat"
+            badge={`Perubahan Capaian Tahun ${tahun}`}
+          />
+        </div>
+
+        {/* Summary cards — percentage prominent */}
+        {mmtData.length > 0 && (
+          <div className="grid grid-cols-4 gap-3 mb-5">
+            {/* Meningkat */}
+            <div className="bg-white rounded-xl border border-emerald-200 shadow-sm px-4 py-3 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-sm flex-shrink-0">
+                <TrendingUp size={16} className="text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Meningkat</p>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-2xl font-black text-emerald-600 leading-none">{mmtSummary.total > 0 ? Math.round((mmtSummary.naik / mmtSummary.total) * 100) : 0}%</span>
+                  <span className="text-[11px] text-slate-400 font-semibold">{mmtSummary.naik}</span>
+                </div>
+                <div className="h-1 rounded-full bg-emerald-100 overflow-hidden mt-1.5">
+                  <div className="h-full rounded-full bg-emerald-500" style={{ width: `${mmtSummary.total > 0 ? (mmtSummary.naik / mmtSummary.total) * 100 : 0}%` }} />
+                </div>
+              </div>
+            </div>
+            {/* Menurun */}
+            <div className="bg-white rounded-xl border border-red-200 shadow-sm px-4 py-3 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-sm flex-shrink-0">
+                <TrendingDown size={16} className="text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Menurun</p>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-2xl font-black text-red-600 leading-none">{mmtSummary.total > 0 ? Math.round((mmtSummary.turun / mmtSummary.total) * 100) : 0}%</span>
+                  <span className="text-[11px] text-slate-400 font-semibold">{mmtSummary.turun}</span>
+                </div>
+                <div className="h-1 rounded-full bg-red-100 overflow-hidden mt-1.5">
+                  <div className="h-full rounded-full bg-red-500" style={{ width: `${mmtSummary.total > 0 ? (mmtSummary.turun / mmtSummary.total) * 100 : 0}%` }} />
+                </div>
+              </div>
+            </div>
+            {/* Tidak Berubah */}
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm px-4 py-3 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-slate-400 to-slate-500 flex items-center justify-center shadow-sm flex-shrink-0">
+                <Minus size={16} className="text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Tidak Berubah</p>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-2xl font-black text-slate-600 leading-none">{mmtSummary.total > 0 ? Math.round((mmtSummary.tetap / mmtSummary.total) * 100) : 0}%</span>
+                  <span className="text-[11px] text-slate-400 font-semibold">{mmtSummary.tetap}</span>
+                </div>
+                <div className="h-1 rounded-full bg-slate-100 overflow-hidden mt-1.5">
+                  <div className="h-full rounded-full bg-slate-400" style={{ width: `${mmtSummary.total > 0 ? (mmtSummary.tetap / mmtSummary.total) * 100 : 0}%` }} />
+                </div>
+              </div>
+            </div>
+            {/* Tidak Tersedia */}
+            <div className="bg-white rounded-xl border border-blue-200 shadow-sm px-4 py-3 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center shadow-sm flex-shrink-0">
+                <Info size={16} className="text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Tdk Tersedia</p>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-2xl font-black text-blue-600 leading-none">{mmtSummary.total > 0 ? Math.round((mmtSummary.tidakTersedia / mmtSummary.total) * 100) : 0}%</span>
+                  <span className="text-[11px] text-slate-400 font-semibold">{mmtSummary.tidakTersedia}</span>
+                </div>
+                <div className="h-1 rounded-full bg-blue-100 overflow-hidden mt-1.5">
+                  <div className="h-full rounded-full bg-blue-400" style={{ width: `${mmtSummary.total > 0 ? (mmtSummary.tidakTersedia / mmtSummary.total) * 100 : 0}%` }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Filter bar — select dropdowns */}
+        <div className="flex flex-wrap gap-4 items-center mb-4 p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
+          {/* Filter Jenjang — select */}
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1 whitespace-nowrap">
+              <Filter size={11} />
+              Jenis Satuan Pendidikan
+            </span>
+            <select
+              value={filterJenjangMMT}
+              onChange={e => { setFilterJenjangMMT(e.target.value); setPageMMT(1); }}
+              className="text-xs font-semibold text-slate-700 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 cursor-pointer transition-colors hover:bg-white"
+            >
+              {MMT_JENJANG_OPTIONS.map(opt => (
+                <option key={`jenjang-${opt}`} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Filter Status — select */}
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">Status Satuan Pendidikan</span>
+            <select
+              value={filterStatusMMT}
+              onChange={e => { setFilterStatusMMT(e.target.value); setPageMMT(1); }}
+              className="text-xs font-semibold text-slate-700 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 cursor-pointer transition-colors hover:bg-white"
+            >
+              {MMT_STATUS_OPTIONS.map(opt => (
+                <option key={`status-${opt}`} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Count badge */}
+          <div className="ml-auto flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+            <span className="text-xs font-black text-slate-700">{mmtFiltered.length}</span>
+            <span className="text-xs text-slate-500">data</span>
+          </div>
+        </div>
+
+        {/* Table */}
+        {mmtData.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-12 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto mb-4">
+              <ArrowUpDown size={20} className="text-slate-400" />
+            </div>
+            <p className="text-sm font-bold text-slate-600 mb-1">Data Belum Tersedia</p>
+            <p className="text-xs text-slate-400">
+              File <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono">indikator_menurun_meningkat.json</code> tidak ditemukan untuk tahun {tahun}.
+            </p>
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-sm">
+                <ListChecks size={14} className="text-white" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">
+                  Perubahan Nilai Capaian Indikator Prioritas
+                </h3>
+                <p className="text-[10px] text-slate-400 mt-0.5">
+                  Nilai capaian dan perubahan per indikator — {mmtFiltered.length.toLocaleString("id-ID")} baris
+                </p>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px] w-52">No / Indikator</th>
+                    <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px]">Jenis Satuan Pendidikan</th>
+                    <th className="px-5 py-3 text-center font-bold text-slate-500 uppercase tracking-wider text-[10px]">Status Satuan Pendidikan</th>
+                    <th className="px-5 py-3 text-center font-bold text-slate-500 uppercase tracking-wider text-[10px]">Nilai Capaian {labelTahunLalu}</th>
+                    <th className="px-5 py-3 text-center font-bold text-slate-500 uppercase tracking-wider text-[10px]">Nilai Capaian {labelTahunIni}</th>
+                    <th className="px-5 py-3 text-center font-bold text-slate-500 uppercase tracking-wider text-[10px]">Perubahan dari {labelTahunLalu}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {mmtFiltered.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="text-center py-16 text-slate-400">
+                        <p className="text-xs">Tidak ada data sesuai filter</p>
+                      </td>
+                    </tr>
+                  ) : mmtFiltered.slice((pageMMT - 1) * MMT_PAGE_SIZE, pageMMT * MMT_PAGE_SIZE).map((row, idx) => {
+                    const noCode = row["No"] || "";
+                    // Find matching indicator info from PRIORITY_INDICATORS
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const indInfo = (PRIORITY_INDICATORS as any[]).find((p: any) => p.code === noCode);
+                    const perubahan = row[perubahanKey] || "–";
+                    const nilaiCapaian2023 = row[nilaiCapaianKeyTahunLalu] || "–";
+                    const nilaiCapaian2024 = row[nilaiCapaianKeyTahunIni] || "–";
+                    const cls = classifyPerubahan(perubahan);
+                    return (
+                      <tr key={`mmt-${idx}`} className="hover:bg-slate-50/70 transition-colors">
+                        {/* No / Indikator — styled like the image */}
+                        <td className="px-5 py-3.5">
+                          <div className="flex items-start gap-3">
+                            <span className="font-mono text-xs font-black text-blue-700 bg-blue-50 px-2 py-1 rounded-lg border border-blue-100 flex-shrink-0 leading-tight">
+                              {noCode || "–"}
+                            </span>
+                            {indInfo && (
+                              <div className="min-w-0">
+                                <p className="text-sm font-bold text-slate-800 leading-tight">{indInfo.fullName}</p>
+                                <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">{indInfo.description}</p>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        {/* Jenis Satuan Pendidikan */}
+                        <td className="px-5 py-3.5">
+                          <p className="text-sm font-semibold text-slate-800">{row["Jenis Satuan Pendidikan"] || "–"}</p>
+                        </td>
+                        {/* Status Satuan Pendidikan */}
+                        <td className="px-5 py-3.5 text-center">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
+                            row["Status Satuan Pendidikan"] === "Negeri"
+                              ? "bg-blue-50 text-blue-700 border-blue-200"
+                              : row["Status Satuan Pendidikan"] === "Swasta"
+                              ? "bg-purple-50 text-purple-700 border-purple-200"
+                              : "bg-slate-50 text-slate-600 border-slate-200"
+                          }`}>{row["Status Satuan Pendidikan"] || "–"}</span>
+                        </td>
+                        {/* Nilai Capaian 2023 */}
+                        <td className="px-5 py-3.5 text-center">
+                          <span className="text-sm font-semibold text-slate-600">{nilaiCapaian2023}</span>
+                        </td>
+                        {/* Nilai Capaian 2024 */}
+                        <td className="px-5 py-3.5 text-center">
+                          <span className="text-sm font-bold text-slate-800">{nilaiCapaian2024}</span>
+                        </td>
+                        {/* Perubahan */}
+                        <td className="px-5 py-3.5 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold border ${
+                            cls === "Naik"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              : cls === "Turun"
+                              ? "bg-red-50 text-red-700 border-red-200"
+                              : cls === "Tidak Berubah"
+                              ? "bg-slate-50 text-slate-600 border-slate-200"
+                              : "bg-slate-50 text-slate-400 border-slate-200"
+                          }`}>
+                            {cls === "Naik" && <TrendingUp size={11} />}
+                            {cls === "Turun" && <TrendingDown size={11} />}
+                            {cls === "Tidak Berubah" && <Minus size={11} />}
+                            {perubahan}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {/* Pagination footer */}
+            {mmtFiltered.length > MMT_PAGE_SIZE && (
+              <div className="px-5 py-3 border-t border-slate-100 flex items-center justify-between gap-4 bg-slate-50/60">
+                <span className="text-[11px] text-slate-400">
+                  Menampilkan <span className="font-bold text-slate-600">{(pageMMT - 1) * MMT_PAGE_SIZE + 1}–{Math.min(pageMMT * MMT_PAGE_SIZE, mmtFiltered.length)}</span> dari <span className="font-bold text-slate-600">{mmtFiltered.length}</span> data
+                </span>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setPageMMT(1)}
+                    disabled={pageMMT === 1}
+                    className="w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-200 text-slate-600"
+                    title="Halaman pertama"
+                  >«</button>
+                  <button
+                    onClick={() => setPageMMT(p => Math.max(1, p - 1))}
+                    disabled={pageMMT === 1}
+                    className="w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-200 text-slate-600"
+                    title="Sebelumnya"
+                  >‹</button>
+                  {Array.from({ length: Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE) }, (_, i) => i + 1)
+                    .filter(p => p === 1 || p === Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE) || Math.abs(p - pageMMT) <= 1)
+                    .reduce<(number | "…")[]>((acc, p, i, arr) => {
+                      if (i > 0 && typeof arr[i-1] === "number" && (p as number) - (arr[i-1] as number) > 1) acc.push("…");
+                      acc.push(p);
+                      return acc;
+                    }, [])
+                    .map((p, i) => p === "…" ? (
+                      <span key={`ellipsis-${i}`} className="w-7 h-7 flex items-center justify-center text-xs text-slate-400">…</span>
+                    ) : (
+                      <button
+                        key={p}
+                        onClick={() => setPageMMT(p as number)}
+                        className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center transition-all ${
+                          pageMMT === p
+                            ? "bg-blue-600 text-white shadow-sm"
+                            : "hover:bg-slate-200 text-slate-600"
+                        }`}
+                      >{p}</button>
+                    ))
+                  }
+                  <button
+                    onClick={() => setPageMMT(p => Math.min(Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE), p + 1))}
+                    disabled={pageMMT === Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE)}
+                    className="w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-200 text-slate-600"
+                    title="Berikutnya"
+                  >›</button>
+                  <button
+                    onClick={() => setPageMMT(Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE))}
+                    disabled={pageMMT === Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE)}
+                    className="w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-200 text-slate-600"
+                    title="Halaman terakhir"
+                  >»</button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* ─── Detail Modal ──────────────────────────────────────────────────────── */}
+      {detailModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6" onClick={() => setDetailModal(null)}>
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+          {/* Panel — wide enough to show all columns without h-scroll */}
+          <div
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col border border-slate-200"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between gap-3 flex-shrink-0">
+              <div className="flex items-center gap-3">
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-sm flex-shrink-0 ${
+                  detailModal.label === "Baik / Tinggi" ? "bg-gradient-to-br from-emerald-500 to-emerald-600"
+                  : detailModal.label === "Sedang" ? "bg-gradient-to-br from-amber-400 to-amber-500"
+                  : detailModal.label === "Kurang / Rendah" ? "bg-gradient-to-br from-red-500 to-red-600"
+                  : "bg-gradient-to-br from-slate-400 to-slate-500"
+                }`}>
+                  <ListChecks size={15} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">Detail Capaian — {detailModal.label}</h3>
+                  <p className="text-[10px] text-slate-400 mt-0.5">{detailModal.title} · {detailModal.rows.length} data</p>
+                </div>
+              </div>
+              {/* X button — visible with dark background */}
+              <button
+                onClick={() => setDetailModal(null)}
+                className="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors flex-shrink-0 shadow-sm"
+                title="Tutup"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+            {/* Body — vertical scroll only, table fills full width */}
+            <div className="overflow-y-auto flex-1">
+              {detailModal.rows.length === 0 ? (
+                <div className="p-12 text-center text-slate-400 text-xs">Tidak ada data</div>
+              ) : (
+                <table className="w-full text-sm table-fixed">
+                  <colgroup>
+                    <col style={{ width: "7%" }} />
+                    <col style={{ width: "16%" }} />
+                    <col style={{ width: "10%" }} />
+                    <col style={{ width: "12%" }} />
+                    <col style={{ width: "12%" }} />
+                    <col style={{ width: "11%" }} />
+                    <col style={{ width: "32%" }} />
+                  </colgroup>
+                  <thead className="sticky top-0 z-10">
+                    <tr className="bg-slate-50 border-b border-slate-200">
+                      <th className="px-3 py-2.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[9px]">No</th>
+                      <th className="px-3 py-2.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[9px]">Jenis Satdik</th>
+                      <th className="px-3 py-2.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[9px]">Status</th>
+                      <th className="px-3 py-2.5 text-center font-bold text-slate-500 uppercase tracking-wider text-[9px]">Label Capaian</th>
+                      <th className="px-3 py-2.5 text-center font-bold text-slate-500 uppercase tracking-wider text-[9px]">Nilai Capaian</th>
+                      <th className="px-3 py-2.5 text-center font-bold text-slate-500 uppercase tracking-wider text-[9px]">Thn. {tahun ? Number(tahun) - 1 : "Lalu"}</th>
+                      <th className="px-3 py-2.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[9px]">Definisi</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {(() => {
+                      // Detect keys dynamically from first row of modal data
+                      const firstRow = detailModal.rows[0] || {};
+                      const modalKeys = Object.keys(firstRow);
+                      const modalLabelKey = modalKeys.find(k => k.toLowerCase().includes("label capaian 20")) ?? "Label Capaian 2025";
+                      const modalNilaiKey = modalKeys.find(k => k.toLowerCase().includes("nilai capaian 20") && !k.toLowerCase().includes("2024") && !k.toLowerCase().includes("2023")) ?? "Nilai Capaian 2025";
+                      const modalThnLaluKey = modalKeys.find(k => k.toLowerCase().includes("nilai capaian 20") && k !== modalNilaiKey) ?? "Nilai Capaian 2024";
+                      return detailModal.rows.map((row, i) => (
+                        <tr key={`detail-${i}`} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="px-3 py-2.5">
+                            <span className="font-mono text-[11px] font-black text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-100">
+                              {row["No"] || "–"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2.5">
+                            <p className="text-xs font-semibold text-slate-800 break-words">{row["Jenis Satuan Pendidikan"] || "–"}</p>
+                          </td>
+                          <td className="px-3 py-2.5">
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-semibold border ${
+                              row["Status Satuan Pendidikan"] === "Negeri"
+                                ? "bg-blue-50 text-blue-700 border-blue-200"
+                                : row["Status Satuan Pendidikan"] === "Swasta"
+                                ? "bg-purple-50 text-purple-700 border-purple-200"
+                                : "bg-slate-50 text-slate-600 border-slate-200"
+                            }`}>{row["Status Satuan Pendidikan"] || "–"}</span>
+                          </td>
+                          <td className="px-3 py-2.5 text-center">
+                            <LabelBadge label={row[modalLabelKey] || ""} />
+                          </td>
+                          <td className="px-3 py-2.5 text-center">
+                            <span className="font-bold text-slate-800 text-sm">{row[modalNilaiKey] || "–"}</span>
+                          </td>
+                          <td className="px-3 py-2.5 text-center">
+                            <span className="text-slate-500 text-xs font-medium">{row[modalThnLaluKey] || "–"}</span>
+                          </td>
+                          <td className="px-3 py-2.5">
+                            <p className="text-[10px] text-slate-500 leading-relaxed break-words">
+                              {row["Definisi Capaian"] || "–"}
+                            </p>
+                          </td>
+                        </tr>
+                      ));
+                    })()}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
