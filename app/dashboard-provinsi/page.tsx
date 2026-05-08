@@ -58,6 +58,28 @@ interface CapaianSatdik {
   Kecamatan: string;
   [key: string]: string;
 }
+// 10_indikator_tertinggi_terendah.json — satu baris per satdik dengan perubahan per indikator
+interface PerubahanIndikator {
+  "Perubahan dari Tahun Lalu": string;
+  "Perubahan Nilai": string;
+}
+interface IndikatorTertinggiTerendah {
+  NPSN: string;
+  "Nama Satuan Pendidikan": string;
+  "Jenis Satuan Pendidikan": string;
+  "Status Satuan Pendidikan": string;
+  "Kabupaten/Kota": string;
+  Kecamatan: string;
+  "A.1"?: PerubahanIndikator;
+  "A.2"?: PerubahanIndikator;
+  "A.3"?: PerubahanIndikator;
+  "D.1"?: PerubahanIndikator;
+  "D.3"?: PerubahanIndikator;
+  "D.4"?: PerubahanIndikator;
+  "D.8"?: PerubahanIndikator;
+  "D.10"?: PerubahanIndikator;
+  [key: string]: string | PerubahanIndikator | undefined;
+}
 // rekap_capaian.json — satu baris per satdik, kolom indikator langsung (A.1, A.2, dst.)
 interface RekapCapaian {
   NPSN: number | string;
@@ -804,6 +826,8 @@ export default function DashboardProvinsiPage() {
   const [satdikPaud,   setSatdikPaud]   = useState<CapaianSatdik[]>([]);
   const [rekapCapaian, setRekapCapaian] = useState<RekapCapaian[]>([]);
   const [indikatorMenurunMeningkat, setIndikatorMenurunMeningkat] = useState<Record<string, string>[]>([]);
+  const [indikatorTertinggiTerendah, setIndikatorTertinggiTerendah] = useState<IndikatorTertinggiTerendah[]>([]);
+  const [ttTahunSumber, setTtTahunSumber] = useState<string | null>(null);
   const [spmValue, setSpmValue] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState<string | null>(null);
@@ -845,6 +869,8 @@ export default function DashboardProvinsiPage() {
   useEffect(() => {
     setLoading(true);
     setError(null);
+    setIndikatorTertinggiTerendah([]); // reset saat ganti tahun
+    setTtTahunSumber(null);
     
     const loadData = async () => {
       try {
@@ -893,7 +919,7 @@ export default function DashboardProvinsiPage() {
           }
         }
         setIndikatorMenurunMeningkat(mmData);
-        
+
         const [
           ringkasanResult,
           capaianProvResult,
@@ -905,6 +931,50 @@ export default function DashboardProvinsiPage() {
         ] = results;
         
         const hasRealData = results.some(r => r.status === 'fulfilled' && Array.isArray(r.value) && r.value.length > 0);
+
+        // Load 10_indikator_tertinggi_terendah — dilakukan setelah hasRealData check
+        // sehingga selalu dijalankan terlepas dari status data utama.
+        // Jika tidak ditemukan untuk tahun aktif, fallback ke tahun sebelumnya.
+        const ttCandidates = [
+          '10_indikator_tertinggi_terendah.json',
+        ];
+        const tahunFallback = tahun === "2025" ? "2024" : null;
+        let ttData: IndikatorTertinggiTerendah[] = [];
+        // Coba tahun aktif dulu
+        for (const ttCandidate of ttCandidates) {
+          try {
+            const ttRes = await fetch(`/dataProvinsi/${tahun}/${ttCandidate}`);
+            if (ttRes.ok) {
+              const ttJson = await ttRes.json();
+              if (Array.isArray(ttJson) && ttJson.length > 0) {
+                ttData = ttJson;
+                setTtTahunSumber(tahun);
+                break;
+              }
+            }
+          } catch {
+            // coba kandidat berikutnya
+          }
+        }
+        // Jika tidak ditemukan dan ada fallback tahun, coba tahun sebelumnya
+        if (ttData.length === 0 && tahunFallback) {
+          for (const ttCandidate of ttCandidates) {
+            try {
+              const ttRes = await fetch(`/dataProvinsi/${tahunFallback}/${ttCandidate}`);
+              if (ttRes.ok) {
+                const ttJson = await ttRes.json();
+                if (Array.isArray(ttJson) && ttJson.length > 0) {
+                  ttData = ttJson;
+                  setTtTahunSumber(tahunFallback);
+                  break;
+                }
+              }
+            } catch {
+              // coba kandidat berikutnya
+            }
+          }
+        }
+        setIndikatorTertinggiTerendah(ttData);
         
         if (!hasRealData && !useMockData) {
           setError(`Tidak ada data ditemukan untuk tahun ${tahun}. Silakan periksa file JSON di folder public/dataProvinsi/${tahun}/ atau gunakan data contoh.`);
@@ -1676,6 +1746,8 @@ export default function DashboardProvinsiPage() {
     setFSPS, oSPK, fSPK, setFSPK,
     rekapCapaian, satdikDasmen, satdikPaud,
     indikatorMenurunMeningkat,
+    indikatorTertinggiTerendah,
+    ttTahunSumber,
   };
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { BarChart3, CheckCircle2, Info, AlertCircle, ListChecks, Filter, HelpCircle, TrendingUp, TrendingDown, Minus, ArrowUpDown } from 'lucide-react';
+import { BarChart3, CheckCircle2, Info, AlertCircle, ListChecks, Filter, HelpCircle, TrendingUp, TrendingDown, Minus, ArrowUpDown, Trophy, Medal } from 'lucide-react';
 
 const JENJANG_OPTIONS = [
   { value: "Semua", label: "Semua" },
@@ -47,9 +47,84 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     rekapCapaian, satdikDasmen, satdikPaud,
     // New: indikator menurun meningkat data
     indikatorMenurunMeningkat,
+    // New: 10 indikator tertinggi dan terendah
+    indikatorTertinggiTerendah,
+    ttTahunSumber,
   } = props;
 
   const [filterJenjangRekap, setFilterJenjangRekap] = useState<string>("Semua");
+
+  // ─── State untuk filter 10 tertinggi/terendah ────────────────────────────────
+  const [filterIndikatorTT, setFilterIndikatorTT] = useState<string>("Semua");
+  const [filterJenjangTT, setFilterJenjangTT] = useState<string>("Semua");
+  const [filterStatusTT, setFilterStatusTT] = useState<string>("Semua");
+  const PRIORITY_CODES_TT = ["A.1", "A.2", "A.3", "D.1", "D.3", "D.4", "D.8", "D.10"];
+
+  // Hitung skor rata-rata perubahan nilai per satdik dari data 10_indikator_tertinggi_terendah
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ttData: any[] = useMemo(() => {
+    if (!Array.isArray(indikatorTertinggiTerendah)) return [];
+    return indikatorTertinggiTerendah;
+  }, [indikatorTertinggiTerendah]);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ttProcessed = useMemo<{ row: any; skor: number; indDetail: Record<string, { arah: string; nilai: number }> }[]>(() => {
+    if (ttData.length === 0) return [];
+    const codes = filterIndikatorTT === "Semua" ? PRIORITY_CODES_TT : [filterIndikatorTT];
+    return ttData
+      .filter(row => {
+        const norm = normalizeJenjang(row["Jenis Satuan Pendidikan"] || "");
+        if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) return false;
+        const status = (row["Status Satuan Pendidikan"] || "").trim();
+        if (!["Negeri", "Swasta"].includes(status)) return false;
+        if (filterJenjangTT !== "Semua" && norm !== filterJenjangTT) return false;
+        if (filterStatusTT !== "Semua" && status !== filterStatusTT) return false;
+        return true;
+      })
+      .map(row => {
+        const indDetail: Record<string, { arah: string; nilai: number }> = {};
+        let totalNilai = 0;
+        let countValid = 0;
+        for (const code of codes) {
+          // Support both flat format: "A.1 - Perubahan dari Tahun Lalu" / "A.1 - Perubahan Nilai"
+          // and nested object format: row[code]["Perubahan dari Tahun Lalu"]
+          let arah = "";
+          let nilaiStr = "";
+          const flatArahKey = `${code} - Perubahan dari Tahun Lalu`;
+          const flatNilaiKey = `${code} - Perubahan Nilai`;
+          if (flatArahKey in row) {
+            // Flat format (JSON dari field langsung)
+            arah = (row[flatArahKey] as string) ?? "";
+            nilaiStr = ((row[flatNilaiKey] as string) ?? "").replace(",", ".");
+          } else {
+            // Nested object format (format lama)
+            const ind = row[code];
+            if (!ind || typeof ind !== "object") continue;
+            arah = (ind["Perubahan dari Tahun Lalu"] as string) ?? "";
+            nilaiStr = ((ind["Perubahan Nilai"] as string) ?? "").replace(",", ".");
+          }
+          const nilai = parseFloat(nilaiStr);
+          if (isNaN(nilai) || arah.toLowerCase().includes("tidak tersedia")) continue;
+          const nilaiSigned = arah.toLowerCase() === "naik" ? nilai : arah.toLowerCase() === "turun" ? -nilai : 0;
+          indDetail[code] = { arah, nilai };
+          totalNilai += nilaiSigned;
+          countValid++;
+        }
+        const skor = countValid > 0 ? totalNilai / countValid : 0;
+        return { row, skor, indDetail };
+      })
+      .filter(d => Object.keys(d.indDetail).length > 0);
+  }, [ttData, filterIndikatorTT, filterJenjangTT, filterStatusTT]);
+
+  const top10Tertinggi = useMemo(
+    () => [...ttProcessed].sort((a, b) => b.skor - a.skor).slice(0, 10),
+    [ttProcessed]
+  );
+
+  const top10Terendah = useMemo(
+    () => [...ttProcessed].sort((a, b) => a.skor - b.skor).slice(0, 10),
+    [ttProcessed]
+  );
 
   // ─── Filter states untuk section menurun/meningkat ───────────────────────────
   const [filterJenjangMMT, setFilterJenjangMMT] = useState<string>("Semua"); // SD | SMP | SMA | Semua
@@ -730,6 +805,301 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                 </div>
               </div>
             )}
+          </div>
+        )}
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          SECTION: 10 Indikator Tertinggi & 10 Indikator Terendah
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <div className="mt-8">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+          <SectionHeader
+            icon={<Trophy size={18} />}
+            title="10 Indikator Tertinggi &amp; Terendah"
+            badge={`Satuan Pendidikan dengan Perubahan Capaian Terbesar & Terkecil${ttTahunSumber && ttTahunSumber !== tahun ? ` — Data Tahun ${ttTahunSumber} (data ${tahun} belum tersedia)` : ` — Tahun ${tahun}`}`}
+          />
+        </div>
+
+        {/* Filter bar */}
+        <div className="flex flex-wrap gap-4 items-center mb-5 p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
+          {/* Filter Indikator */}
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1 whitespace-nowrap">
+              <Filter size={11} />
+              Indikator
+            </span>
+            <select
+              value={filterIndikatorTT}
+              onChange={e => setFilterIndikatorTT(e.target.value)}
+              className="text-xs font-semibold text-slate-700 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 cursor-pointer transition-colors hover:bg-white"
+            >
+              <option value="Semua">Semua Indikator</option>
+              {PRIORITY_CODES_TT.map(code => (
+                <option key={code} value={code}>{code}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Filter Jenjang */}
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">Jenis Satdik</span>
+            <select
+              value={filterJenjangTT}
+              onChange={e => setFilterJenjangTT(e.target.value)}
+              className="text-xs font-semibold text-slate-700 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 cursor-pointer transition-colors hover:bg-white"
+            >
+              {["Semua", "PAUD", "SD", "SMP", "SMA"].map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Filter Status */}
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">Status</span>
+            <select
+              value={filterStatusTT}
+              onChange={e => setFilterStatusTT(e.target.value)}
+              className="text-xs font-semibold text-slate-700 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 cursor-pointer transition-colors hover:bg-white"
+            >
+              {["Semua", "Negeri", "Swasta"].map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Count badge */}
+          <div className="ml-auto flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+            <span className="text-xs font-black text-slate-700">{ttProcessed.length.toLocaleString("id-ID")}</span>
+            <span className="text-xs text-slate-500">satdik</span>
+          </div>
+        </div>
+
+        {ttData.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-12 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto mb-4">
+              <Trophy size={20} className="text-slate-400" />
+            </div>
+            <p className="text-sm font-bold text-slate-600 mb-1">Data Belum Tersedia</p>
+            <p className="text-xs text-slate-400">
+              File <code className="bg-slate-100 px-1 rounded text-[10px]">10_indikator_tertinggi_terendah.json</code> belum tersedia untuk tahun {tahun} maupun tahun sebelumnya.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+            {/* ── 10 Indikator TERTINGGI ── */}
+            <div className="bg-white rounded-2xl border border-emerald-200 shadow-sm overflow-hidden">
+              <div className="px-5 py-4 border-b border-emerald-100 flex items-center gap-3"
+                style={{ background: "linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)" }}>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-sm flex-shrink-0">
+                  <TrendingUp size={16} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-emerald-800">10 Indikator Tertinggi</h3>
+                  <p className="text-[10px] text-emerald-600 mt-0.5">Satdik dengan rata-rata kenaikan terbesar</p>
+                </div>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="bg-emerald-50/60 border-b border-emerald-100">
+                      <th className="px-3 py-2.5 text-left font-bold text-emerald-700 uppercase tracking-wider text-[9px] w-7">#</th>
+                      <th className="px-3 py-2.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[9px]">Satuan Pendidikan</th>
+                      <th className="px-3 py-2.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[9px]">Kab/Kota</th>
+                      <th className="px-3 py-2.5 text-center font-bold text-slate-500 uppercase tracking-wider text-[9px]">Jenis</th>
+                      {filterIndikatorTT !== "Semua" ? (
+                        <th className="px-3 py-2.5 text-center font-bold text-emerald-600 uppercase tracking-wider text-[9px]">{filterIndikatorTT}</th>
+                      ) : (
+                        PRIORITY_CODES_TT.map(code => (
+                          <th key={code} className="px-2 py-2.5 text-center font-bold text-slate-500 uppercase tracking-wider text-[9px]">{code}</th>
+                        ))
+                      )}
+                      <th className="px-3 py-2.5 text-center font-bold text-emerald-700 uppercase tracking-wider text-[9px]">Rata-rata</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {top10Tertinggi.length === 0 ? (
+                      <tr><td colSpan={filterIndikatorTT !== "Semua" ? 6 : 12} className="text-center py-8 text-slate-400 text-xs">Tidak ada data sesuai filter</td></tr>
+                    ) : top10Tertinggi.map(({ row, skor, indDetail }, idx) => (
+                      <tr key={row.NPSN || idx} className="hover:bg-emerald-50/40 transition-colors">
+                        <td className="px-3 py-2.5">
+                          {idx === 0 ? (
+                            <span className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center text-[10px] font-black text-yellow-900 shadow-sm">1</span>
+                          ) : idx === 1 ? (
+                            <span className="w-6 h-6 rounded-full bg-slate-300 flex items-center justify-center text-[10px] font-black text-slate-700 shadow-sm">2</span>
+                          ) : idx === 2 ? (
+                            <span className="w-6 h-6 rounded-full bg-amber-600/70 flex items-center justify-center text-[10px] font-black text-amber-950 shadow-sm">3</span>
+                          ) : (
+                            <span className="text-[11px] font-bold text-slate-400">{idx + 1}</span>
+                          )}
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <p className="font-semibold text-slate-800 leading-snug text-[11px]">{row["Nama Satuan Pendidikan"]}</p>
+                          <p className="text-[9px] text-slate-400 mt-0.5 font-mono">{row.NPSN}</p>
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <p className="text-[10px] text-slate-500">{row["Kabupaten/Kota"]}</p>
+                          <p className="text-[9px] text-slate-400">{row.Kecamatan}</p>
+                        </td>
+                        <td className="px-3 py-2.5 text-center">
+                          <span className="text-[9px] font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md border border-slate-200">
+                            {normalizeJenjang(row["Jenis Satuan Pendidikan"] || "")}
+                          </span>
+                        </td>
+                        {filterIndikatorTT !== "Semua" ? (
+                          <td className="px-3 py-2.5 text-center">
+                            {indDetail[filterIndikatorTT] ? (
+                              <span className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                                indDetail[filterIndikatorTT].arah === "Naik"
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                  : indDetail[filterIndikatorTT].arah === "Turun"
+                                  ? "bg-red-50 text-red-700 border-red-200"
+                                  : "bg-slate-50 text-slate-600 border-slate-200"
+                              }`}>
+                                {indDetail[filterIndikatorTT].arah === "Naik" && <TrendingUp size={9} />}
+                                {indDetail[filterIndikatorTT].arah === "Turun" && <TrendingDown size={9} />}
+                                {indDetail[filterIndikatorTT].nilai.toFixed(2)}
+                              </span>
+                            ) : <span className="text-slate-300 text-[10px]">–</span>}
+                          </td>
+                        ) : (
+                          PRIORITY_CODES_TT.map(code => (
+                            <td key={code} className="px-2 py-2.5 text-center">
+                              {indDetail[code] ? (
+                                <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold border ${
+                                  indDetail[code].arah === "Naik"
+                                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                    : indDetail[code].arah === "Turun"
+                                    ? "bg-red-50 text-red-700 border-red-200"
+                                    : "bg-slate-50 text-slate-600 border-slate-200"
+                                }`}>
+                                  {indDetail[code].arah === "Naik" && <TrendingUp size={8} />}
+                                  {indDetail[code].arah === "Turun" && <TrendingDown size={8} />}
+                                  {indDetail[code].nilai.toFixed(1)}
+                                </span>
+                              ) : <span className="text-slate-200 text-[9px]">–</span>}
+                            </td>
+                          ))
+                        )}
+                        <td className="px-3 py-2.5 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-black border ${
+                            skor >= 0 ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-red-50 text-red-700 border-red-200"
+                          }`}>
+                            {skor >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+                            {skor >= 0 ? "+" : ""}{skor.toFixed(2)}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* ── 10 Indikator TERENDAH ── */}
+            <div className="bg-white rounded-2xl border border-red-200 shadow-sm overflow-hidden">
+              <div className="px-5 py-4 border-b border-red-100 flex items-center gap-3"
+                style={{ background: "linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)" }}>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-sm flex-shrink-0">
+                  <TrendingDown size={16} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-red-800">10 Indikator Terendah</h3>
+                  <p className="text-[10px] text-red-500 mt-0.5">Satdik dengan rata-rata penurunan terbesar</p>
+                </div>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="bg-red-50/60 border-b border-red-100">
+                      <th className="px-3 py-2.5 text-left font-bold text-red-700 uppercase tracking-wider text-[9px] w-7">#</th>
+                      <th className="px-3 py-2.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[9px]">Satuan Pendidikan</th>
+                      <th className="px-3 py-2.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[9px]">Kab/Kota</th>
+                      <th className="px-3 py-2.5 text-center font-bold text-slate-500 uppercase tracking-wider text-[9px]">Jenis</th>
+                      {filterIndikatorTT !== "Semua" ? (
+                        <th className="px-3 py-2.5 text-center font-bold text-red-600 uppercase tracking-wider text-[9px]">{filterIndikatorTT}</th>
+                      ) : (
+                        PRIORITY_CODES_TT.map(code => (
+                          <th key={code} className="px-2 py-2.5 text-center font-bold text-slate-500 uppercase tracking-wider text-[9px]">{code}</th>
+                        ))
+                      )}
+                      <th className="px-3 py-2.5 text-center font-bold text-red-700 uppercase tracking-wider text-[9px]">Rata-rata</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {top10Terendah.length === 0 ? (
+                      <tr><td colSpan={filterIndikatorTT !== "Semua" ? 6 : 12} className="text-center py-8 text-slate-400 text-xs">Tidak ada data sesuai filter</td></tr>
+                    ) : top10Terendah.map(({ row, skor, indDetail }, idx) => (
+                      <tr key={row.NPSN || idx} className="hover:bg-red-50/40 transition-colors">
+                        <td className="px-3 py-2.5">
+                          <span className="text-[11px] font-bold text-slate-400">{idx + 1}</span>
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <p className="font-semibold text-slate-800 leading-snug text-[11px]">{row["Nama Satuan Pendidikan"]}</p>
+                          <p className="text-[9px] text-slate-400 mt-0.5 font-mono">{row.NPSN}</p>
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <p className="text-[10px] text-slate-500">{row["Kabupaten/Kota"]}</p>
+                          <p className="text-[9px] text-slate-400">{row.Kecamatan}</p>
+                        </td>
+                        <td className="px-3 py-2.5 text-center">
+                          <span className="text-[9px] font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md border border-slate-200">
+                            {normalizeJenjang(row["Jenis Satuan Pendidikan"] || "")}
+                          </span>
+                        </td>
+                        {filterIndikatorTT !== "Semua" ? (
+                          <td className="px-3 py-2.5 text-center">
+                            {indDetail[filterIndikatorTT] ? (
+                              <span className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                                indDetail[filterIndikatorTT].arah === "Naik"
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                  : indDetail[filterIndikatorTT].arah === "Turun"
+                                  ? "bg-red-50 text-red-700 border-red-200"
+                                  : "bg-slate-50 text-slate-600 border-slate-200"
+                              }`}>
+                                {indDetail[filterIndikatorTT].arah === "Naik" && <TrendingUp size={9} />}
+                                {indDetail[filterIndikatorTT].arah === "Turun" && <TrendingDown size={9} />}
+                                {indDetail[filterIndikatorTT].nilai.toFixed(2)}
+                              </span>
+                            ) : <span className="text-slate-300 text-[10px]">–</span>}
+                          </td>
+                        ) : (
+                          PRIORITY_CODES_TT.map(code => (
+                            <td key={code} className="px-2 py-2.5 text-center">
+                              {indDetail[code] ? (
+                                <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold border ${
+                                  indDetail[code].arah === "Naik"
+                                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                    : indDetail[code].arah === "Turun"
+                                    ? "bg-red-50 text-red-700 border-red-200"
+                                    : "bg-slate-50 text-slate-600 border-slate-200"
+                                }`}>
+                                  {indDetail[code].arah === "Naik" && <TrendingUp size={8} />}
+                                  {indDetail[code].arah === "Turun" && <TrendingDown size={8} />}
+                                  {indDetail[code].nilai.toFixed(1)}
+                                </span>
+                              ) : <span className="text-slate-200 text-[9px]">–</span>}
+                            </td>
+                          ))
+                        )}
+                        <td className="px-3 py-2.5 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-black border ${
+                            skor >= 0 ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-red-50 text-red-700 border-red-200"
+                          }`}>
+                            {skor >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+                            {skor >= 0 ? "+" : ""}{skor.toFixed(2)}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
         )}
       </div>
