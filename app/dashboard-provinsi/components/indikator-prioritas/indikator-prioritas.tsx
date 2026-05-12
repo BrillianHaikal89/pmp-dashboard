@@ -126,6 +126,55 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     [ttProcessed]
   );
 
+  // ─── Rekap meningkat / menurun / tetap PER INDIKATOR dari ttProcessed ──────
+  const ttSummaryPerInd = useMemo(() => {
+    // Selalu hitung dari semua kode prioritas, bukan hanya filterIndikatorTT
+    const result: Record<string, { meningkat: number; menurun: number; tetap: number; tidakTersedia: number; total: number }> = {};
+    for (const code of PRIORITY_CODES_TT) {
+      result[code] = { meningkat: 0, menurun: 0, tetap: 0, tidakTersedia: 0, total: 0 };
+    }
+    // Iterasi semua baris ttData yang lolos filter jenjang & status (tanpa filter indikator)
+    for (const rawRow of ttData) {
+      const norm = normalizeJenjang(rawRow["Jenis Satuan Pendidikan"] || "");
+      if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) continue;
+      const status = (rawRow["Status Satuan Pendidikan"] || "").trim();
+      if (!["Negeri", "Swasta"].includes(status)) continue;
+      if (filterJenjangTT !== "Semua" && norm !== filterJenjangTT) continue;
+      if (filterStatusTT !== "Semua" && status !== filterStatusTT) continue;
+      for (const code of PRIORITY_CODES_TT) {
+        let arah = "";
+        const flatArahKey = `${code} - Perubahan dari Tahun Lalu`;
+        const flatNilaiKey = `${code} - Perubahan Nilai`;
+        if (flatArahKey in rawRow) {
+          arah = (rawRow[flatArahKey] as string) ?? "";
+        } else {
+          const ind = rawRow[code];
+          if (!ind || typeof ind !== "object") {
+            result[code].tidakTersedia++;
+            result[code].total++;
+            continue;
+          }
+          arah = (ind["Perubahan dari Tahun Lalu"] as string) ?? "";
+        }
+        const flatNilai = flatNilaiKey in rawRow
+          ? parseFloat(((rawRow[flatNilaiKey] as string) ?? "").replace(",", "."))
+          : NaN;
+        const nilaiValid = !isNaN(flatNilai) || flatArahKey in rawRow;
+        if (arah.toLowerCase().includes("tidak tersedia") || (!nilaiValid && !(flatArahKey in rawRow))) {
+          result[code].tidakTersedia++;
+        } else if (arah.toLowerCase() === "naik") {
+          result[code].meningkat++;
+        } else if (arah.toLowerCase() === "turun") {
+          result[code].menurun++;
+        } else {
+          result[code].tetap++;
+        }
+        result[code].total++;
+      }
+    }
+    return result;
+  }, [ttData, filterJenjangTT, filterStatusTT]);
+
   // ─── Filter states untuk section menurun/meningkat ───────────────────────────
   const [filterJenjangMMT, setFilterJenjangMMT] = useState<string>("Semua"); // SD | SMP | SMA | Semua
   const [filterStatusMMT, setFilterStatusMMT] = useState<string>("Semua");   // Negeri | Swasta | Semua
@@ -225,7 +274,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     return normalizedJenjangStats[filterJenjangRekap] || { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 };
   }, [filterJenjangRekap, totalDashboardStats, normalizedJenjangStats]);
 
-  const pct = (n: number) => (cardStats?.total || 0) > 0 ? Math.round((n / cardStats.total) * 100) : 0;
+  const pct = (n: number) => (cardStats?.total || 0) > 0 ? ((n / cardStats.total) * 100).toFixed(2) : "0.00";
 
   // ─── Compute filter options & filtered rows untuk Menurun/Meningkat ───────────
   const mmtData: Record<string, string>[] = useMemo(() => {
@@ -421,10 +470,14 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                   const s = getStats(p.code);
                   if (!s) return null;
                   const total = (s.baikTinggi || 0) + (s.sedang || 0) + (s.kurangRendah || 0) + (s.tidakTersedia || 0);
-                  const baikPct = total > 0 ? Math.round(((s.baikTinggi || 0) / total) * 100) : 0;
-                  const sedangPct = total > 0 ? Math.round(((s.sedang || 0) / total) * 100) : 0;
-                  const kurangPct = total > 0 ? Math.round(((s.kurangRendah || 0) / total) * 100) : 0;
-                  const tidakPct = total > 0 ? Math.round(((s.tidakTersedia || 0) / total) * 100) : 0;
+                  const baikPct = total > 0 ? ((s.baikTinggi || 0) / total * 100).toFixed(2) : "0.00";
+                  const sedangPct = total > 0 ? ((s.sedang || 0) / total * 100).toFixed(2) : "0.00";
+                  const kurangPct = total > 0 ? ((s.kurangRendah || 0) / total * 100).toFixed(2) : "0.00";
+                  const tidakPct = total > 0 ? ((s.tidakTersedia || 0) / total * 100).toFixed(2) : "0.00";
+                  const baikNum = total > 0 ? (s.baikTinggi || 0) / total * 100 : 0;
+                  const sedangNum = total > 0 ? (s.sedang || 0) / total * 100 : 0;
+                  const kurangNum = total > 0 ? (s.kurangRendah || 0) / total * 100 : 0;
+                  const tidakNum = total > 0 ? (s.tidakTersedia || 0) / total * 100 : 0;
                   return (
                     <tr key={p.code} className="hover:bg-slate-50/70 transition-colors">
                       <td className="px-5 py-3.5">
@@ -445,7 +498,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                           >
                             <div className="absolute inset-0 bg-emerald-400/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                             <span className="text-xl font-black text-emerald-700 relative group-hover/btn:scale-105 transition-transform">{baikPct}%</span>
-                            <span className="text-[10px] text-emerald-600 font-bold relative">{(s.baikTinggi || 0).toLocaleString("id-ID")}</span>
+                            <span className="text-[10px] text-emerald-600 font-bold relative">{(s.baikTinggi || 0).toLocaleString("id-ID")} Sekolah</span>
                           </button>
                         ) : <span className="text-slate-300">—</span>}
                       </td>
@@ -458,7 +511,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                           >
                             <div className="absolute inset-0 bg-amber-400/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                             <span className="text-xl font-black text-amber-600 relative group-hover/btn:scale-105 transition-transform">{sedangPct}%</span>
-                            <span className="text-[10px] text-amber-600 font-bold relative">{(s.sedang || 0).toLocaleString("id-ID")}</span>
+                            <span className="text-[10px] text-amber-600 font-bold relative">{(s.sedang || 0).toLocaleString("id-ID")} Sekolah</span>
                           </button>
                         ) : <span className="text-slate-300">—</span>}
                       </td>
@@ -471,7 +524,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                           >
                             <div className="absolute inset-0 bg-red-400/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                             <span className="text-xl font-black text-red-600 relative group-hover/btn:scale-105 transition-transform">{kurangPct}%</span>
-                            <span className="text-[10px] text-red-600 font-bold relative">{(s.kurangRendah || 0).toLocaleString("id-ID")}</span>
+                            <span className="text-[10px] text-red-600 font-bold relative">{(s.kurangRendah || 0).toLocaleString("id-ID")} Sekolah</span>
                           </button>
                         ) : <span className="text-slate-300">—</span>}
                       </td>
@@ -484,7 +537,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                           >
                             <div className="absolute inset-0 bg-slate-400/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                             <span className="text-xl font-black text-slate-400 relative group-hover/btn:scale-105 transition-transform">{tidakPct}%</span>
-                            <span className="text-[10px] text-slate-400 font-bold relative">{(s.tidakTersedia || 0).toLocaleString("id-ID")}</span>
+                            <span className="text-[10px] text-slate-400 font-bold relative">{(s.tidakTersedia || 0).toLocaleString("id-ID")} Sekolah</span>
                           </button>
                         ) : <span className="text-slate-300">—</span>}
                       </td>
@@ -492,10 +545,10 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                         {total > 0 ? (
                           <div>
                             <div className="flex rounded-full overflow-hidden h-2 gap-px w-full">
-                              {baikPct > 0 && <div className="h-full rounded-l-full" style={{ width: `${baikPct}%`, background: "#22c55e" }} title={`Baik/Tinggi: ${baikPct}%`} />}
-                              {sedangPct > 0 && <div className="h-full" style={{ width: `${sedangPct}%`, background: "#f59e0b" }} title={`Sedang: ${sedangPct}%`} />}
-                              {kurangPct > 0 && <div className="h-full" style={{ width: `${kurangPct}%`, background: "#ef4444" }} title={`Kurang/Rendah: ${kurangPct}%`} />}
-                              {tidakPct > 0 && <div className="h-full rounded-r-full" style={{ width: `${tidakPct}%`, background: "#cbd5e1" }} title={`Tidak Tersedia: ${tidakPct}%`} />}
+                              {baikNum > 0 && <div className="h-full rounded-l-full" style={{ width: `${baikNum}%`, background: "#22c55e" }} title={`Baik/Tinggi: ${baikPct}%`} />}
+                              {sedangNum > 0 && <div className="h-full" style={{ width: `${sedangNum}%`, background: "#f59e0b" }} title={`Sedang: ${sedangPct}%`} />}
+                              {kurangNum > 0 && <div className="h-full" style={{ width: `${kurangNum}%`, background: "#ef4444" }} title={`Kurang/Rendah: ${kurangPct}%`} />}
+                              {tidakNum > 0 && <div className="h-full rounded-r-full" style={{ width: `${tidakNum}%`, background: "#cbd5e1" }} title={`Tidak Tersedia: ${tidakPct}%`} />}
                             </div>
                             <p className="text-[9px] text-slate-400 mt-1">{total.toLocaleString("id-ID")} sekolah</p>
                           </div>
@@ -536,7 +589,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Meningkat</p>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-2xl font-black text-emerald-600 leading-none">{mmtSummary.total > 0 ? Math.round((mmtSummary.naik / mmtSummary.total) * 100) : 0}%</span>
+                  <span className="text-2xl font-black text-emerald-600 leading-none">{mmtSummary.total > 0 ? ((mmtSummary.naik / mmtSummary.total) * 100).toFixed(2) : "0.00"}%</span>
                   <span className="text-[11px] text-slate-400 font-semibold">{mmtSummary.naik}</span>
                 </div>
                 <div className="h-1 rounded-full bg-emerald-100 overflow-hidden mt-1.5">
@@ -552,7 +605,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Menurun</p>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-2xl font-black text-red-600 leading-none">{mmtSummary.total > 0 ? Math.round((mmtSummary.turun / mmtSummary.total) * 100) : 0}%</span>
+                  <span className="text-2xl font-black text-red-600 leading-none">{mmtSummary.total > 0 ? ((mmtSummary.turun / mmtSummary.total) * 100).toFixed(2) : "0.00"}%</span>
                   <span className="text-[11px] text-slate-400 font-semibold">{mmtSummary.turun}</span>
                 </div>
                 <div className="h-1 rounded-full bg-red-100 overflow-hidden mt-1.5">
@@ -568,7 +621,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Tidak Berubah</p>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-2xl font-black text-slate-600 leading-none">{mmtSummary.total > 0 ? Math.round((mmtSummary.tetap / mmtSummary.total) * 100) : 0}%</span>
+                  <span className="text-2xl font-black text-slate-600 leading-none">{mmtSummary.total > 0 ? ((mmtSummary.tetap / mmtSummary.total) * 100).toFixed(2) : "0.00"}%</span>
                   <span className="text-[11px] text-slate-400 font-semibold">{mmtSummary.tetap}</span>
                 </div>
                 <div className="h-1 rounded-full bg-slate-100 overflow-hidden mt-1.5">
@@ -584,7 +637,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Tdk Tersedia</p>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-2xl font-black text-blue-600 leading-none">{mmtSummary.total > 0 ? Math.round((mmtSummary.tidakTersedia / mmtSummary.total) * 100) : 0}%</span>
+                  <span className="text-2xl font-black text-blue-600 leading-none">{mmtSummary.total > 0 ? ((mmtSummary.tidakTersedia / mmtSummary.total) * 100).toFixed(2) : "0.00"}%</span>
                   <span className="text-[11px] text-slate-400 font-semibold">{mmtSummary.tidakTersedia}</span>
                 </div>
                 <div className="h-1 rounded-full bg-blue-100 overflow-hidden mt-1.5">
@@ -817,7 +870,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
           <SectionHeader
             icon={<Trophy size={18} />}
-            title="10 Indikator Tertinggi &amp; Terendah"
+            title="10 Indikator Peningkatan Tertinggi &amp; Terendah"
             badge={`Satuan Pendidikan dengan Perubahan Capaian Terbesar & Terkecil${ttTahunSumber && ttTahunSumber !== tahun ? ` — Data Tahun ${ttTahunSumber} (data ${tahun} belum tersedia)` : ` — Tahun ${tahun}`}`}
           />
         </div>
@@ -888,6 +941,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
             </p>
           </div>
         ) : (
+          <>
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
             {/* ── 10 Indikator TERTINGGI ── */}
@@ -898,7 +952,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                   <TrendingUp size={16} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-emerald-800">10 Indikator Tertinggi</h3>
+                  <h3 className="text-sm font-black text-emerald-800">10 Indikator Peningkatan Tertinggi</h3>
                   <p className="text-[10px] text-emerald-600 mt-0.5">Satdik dengan rata-rata kenaikan terbesar</p>
                 </div>
               </div>
@@ -917,14 +971,14 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                           <th key={code} className="px-2 py-2.5 text-center font-bold text-slate-500 uppercase tracking-wider text-[9px]">{code}</th>
                         ))
                       )}
-                      <th className="px-3 py-2.5 text-center font-bold text-emerald-700 uppercase tracking-wider text-[9px]">Rata-rata</th>
+                      <th className="px-3 py-2.5 text-center font-bold text-emerald-700 uppercase tracking-wider text-[9px]">Rata-rata Peningkatan</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {top10Tertinggi.length === 0 ? (
                       <tr><td colSpan={filterIndikatorTT !== "Semua" ? 6 : 12} className="text-center py-8 text-slate-400 text-xs">Tidak ada data sesuai filter</td></tr>
                     ) : top10Tertinggi.map(({ row, skor, indDetail }, idx) => (
-                      <tr key={row.NPSN || idx} className="hover:bg-emerald-50/40 transition-colors">
+                      <tr key={`tertinggi-${row.NPSN || ""}-${row["Jenis Satuan Pendidikan"] || ""}-${idx}`} className="hover:bg-emerald-50/40 transition-colors">
                         <td className="px-3 py-2.5">
                           {idx === 0 ? (
                             <span className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center text-[10px] font-black text-yellow-900 shadow-sm">1</span>
@@ -978,7 +1032,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                                 }`}>
                                   {indDetail[code].arah === "Naik" && <TrendingUp size={8} />}
                                   {indDetail[code].arah === "Turun" && <TrendingDown size={8} />}
-                                  {indDetail[code].nilai.toFixed(1)}
+                                  {indDetail[code].nilai.toFixed(2)}
                                 </span>
                               ) : <span className="text-slate-200 text-[9px]">–</span>}
                             </td>
@@ -1007,7 +1061,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                   <TrendingDown size={16} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-red-800">10 Indikator Terendah</h3>
+                  <h3 className="text-sm font-black text-red-800">10 Indikator Peningkatan Terendah</h3>
                   <p className="text-[10px] text-red-500 mt-0.5">Satdik dengan rata-rata penurunan terbesar</p>
                 </div>
               </div>
@@ -1026,14 +1080,14 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                           <th key={code} className="px-2 py-2.5 text-center font-bold text-slate-500 uppercase tracking-wider text-[9px]">{code}</th>
                         ))
                       )}
-                      <th className="px-3 py-2.5 text-center font-bold text-red-700 uppercase tracking-wider text-[9px]">Rata-rata</th>
+                      <th className="px-3 py-2.5 text-center font-bold text-red-700 uppercase tracking-wider text-[9px]">Rata-rata Peningkatan</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {top10Terendah.length === 0 ? (
                       <tr><td colSpan={filterIndikatorTT !== "Semua" ? 6 : 12} className="text-center py-8 text-slate-400 text-xs">Tidak ada data sesuai filter</td></tr>
                     ) : top10Terendah.map(({ row, skor, indDetail }, idx) => (
-                      <tr key={row.NPSN || idx} className="hover:bg-red-50/40 transition-colors">
+                      <tr key={`terendah-${row.NPSN || ""}-${row["Jenis Satuan Pendidikan"] || ""}-${idx}`} className="hover:bg-red-50/40 transition-colors">
                         <td className="px-3 py-2.5">
                           <span className="text-[11px] font-bold text-slate-400">{idx + 1}</span>
                         </td>
@@ -1079,7 +1133,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                                 }`}>
                                   {indDetail[code].arah === "Naik" && <TrendingUp size={8} />}
                                   {indDetail[code].arah === "Turun" && <TrendingDown size={8} />}
-                                  {indDetail[code].nilai.toFixed(1)}
+                                  {indDetail[code].nilai.toFixed(2)}
                                 </span>
                               ) : <span className="text-slate-200 text-[9px]">–</span>}
                             </td>
@@ -1101,6 +1155,110 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
             </div>
 
           </div>
+
+          {/* ═══ SECTION: Rekap Perubahan Capaian per Indikator ═══ */}
+          <div className="mt-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+              <SectionHeader
+                icon={<ListChecks size={18} />}
+                title="Rekap Jumlah Sekolah yang Meningkat dan Menurun Indikator Prioritas"
+                badge={`Jumlah satdik meningkat, menurun, dan tetap per indikator${ttTahunSumber && ttTahunSumber !== tahun ? ` — Data Tahun ${ttTahunSumber}` : ` — Tahun ${tahun}`}`}
+              />
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-200">
+                      <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px] w-16">Kode</th>
+                      <th className="px-5 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[10px]">Indikator</th>
+                      <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-emerald-600">Meningkat</th>
+                      <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-red-600">Menurun</th>
+                      <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-amber-500">Tetap</th>
+                      <th className="px-5 py-3 text-center font-bold text-[10px] uppercase tracking-wider text-slate-400">Tidak Tersedia</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                    {PRIORITY_CODES_TT.map((code) => {
+                      const s = ttSummaryPerInd[code];
+                      if (!s) return null;
+                      const total = s.total;
+                      const meningkatPct = total > 0 ? ((s.meningkat / total) * 100).toFixed(2) : "0.00";
+                      const menurunPct   = total > 0 ? ((s.menurun   / total) * 100).toFixed(2) : "0.00";
+                      const tetapPct     = total > 0 ? ((s.tetap     / total) * 100).toFixed(2) : "0.00";
+                      const tidakPct     = total > 0 ? ((s.tidakTersedia / total) * 100).toFixed(2) : "0.00";
+                      // Nilai numerik untuk lebar bar
+                      const meningkatNum = total > 0 ? (s.meningkat / total) * 100 : 0;
+                      const menurunNum   = total > 0 ? (s.menurun   / total) * 100 : 0;
+                      const tetapNum     = total > 0 ? (s.tetap     / total) * 100 : 0;
+                      const tidakNum     = total > 0 ? (s.tidakTersedia / total) * 100 : 0;
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      const indInfo = (PRIORITY_INDICATORS as any[])?.find((p: any) => p.code === code);
+                      return (
+                        <tr key={`tt-rekap-${code}`} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="px-5 py-3.5">
+                            <span className="font-mono text-xs font-black text-blue-700 bg-blue-50 px-2 py-1 rounded-lg border border-blue-100">
+                              {code}
+                            </span>
+                          </td>
+                          <td className="px-5 py-3.5">
+                            {indInfo ? (
+                              <>
+                                <p className="text-sm font-semibold text-slate-800">{indInfo.fullName}</p>
+                                <p className="text-[10px] text-slate-400 mt-0.5">{indInfo.description}</p>
+                              </>
+                            ) : (
+                              <p className="text-sm font-semibold text-slate-800">{code}</p>
+                            )}
+                          </td>
+                          {/* Meningkat */}
+                          <td className="px-5 py-3.5 text-center">
+                            {total > 0 ? (
+                              <div className="inline-flex flex-col items-center justify-center gap-0.5 bg-emerald-50/60 rounded-xl px-2 py-2 min-w-[5rem] border border-emerald-100">
+                                <span className="text-xl font-black text-emerald-700">{meningkatPct}%</span>
+                                <span className="text-[10px] text-emerald-600 font-bold">{s.meningkat.toLocaleString("id-ID")} Sekolah</span>
+                              </div>
+                            ) : <span className="text-slate-300">—</span>}
+                          </td>
+                          {/* Menurun */}
+                          <td className="px-5 py-3.5 text-center">
+                            {total > 0 ? (
+                              <div className="inline-flex flex-col items-center justify-center gap-0.5 bg-red-50/60 rounded-xl px-2 py-2 min-w-[5rem] border border-red-100">
+                                <span className="text-xl font-black text-red-600">{menurunPct}%</span>
+                                <span className="text-[10px] text-red-600 font-bold">{s.menurun.toLocaleString("id-ID")}Sekolah</span>
+                              </div>
+                            ) : <span className="text-slate-300">—</span>}
+                          </td>
+                          {/* Tetap */}
+                          <td className="px-5 py-3.5 text-center">
+                            {total > 0 ? (
+                              <div className="inline-flex flex-col items-center justify-center gap-0.5 bg-amber-50/60 rounded-xl px-2 py-2 min-w-[5rem] border border-amber-100">
+                                <span className="text-xl font-black text-amber-600">{tetapPct}%</span>
+                                <span className="text-[10px] text-amber-600 font-bold">{s.tetap.toLocaleString("id-ID")} Sekolah</span>
+                              </div>
+                            ) : <span className="text-slate-300">—</span>}
+                          </td>
+                          {/* Tidak Tersedia */}
+                          <td className="px-5 py-3.5 text-center">
+                            {total > 0 ? (
+                              <div className="inline-flex flex-col items-center justify-center gap-0.5 bg-slate-50/80 rounded-xl px-2 py-2 min-w-[5rem] border border-slate-200">
+                                <span className="text-xl font-black text-slate-400">{tidakPct}%</span>
+                                <span className="text-[10px] text-slate-400 font-bold">{s.tidakTersedia.toLocaleString("id-ID")} Sekolah</span>
+                              </div>
+                            ) : <span className="text-slate-300">—</span>}
+                          </td>
+                          
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          </>
         )}
       </div>
 
