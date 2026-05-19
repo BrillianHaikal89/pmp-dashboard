@@ -13,7 +13,8 @@ import {
   TrendingUp, TrendingDown, Minus, Search, ChevronLeft,
   ChevronRight, ArrowUpDown, Menu, Award, Target, BookOpen,
   Filter, GitCompare, Calendar, ArrowRight, CheckCircle, XCircle,
-  Layers, ArrowLeft
+  Layers, ArrowLeft,
+  BarChart3
 } from "lucide-react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -44,12 +45,40 @@ interface AkarRow {
   indikator_prioritas: string; kelompok_akar: string; no_akar: string;
   indikator_akar: string; mengapa: string;
 }
+interface IndikatorPrioritasRow {
+  status: string; // jenjang
+  jenis?: string; // field baru 2025
+  no: string;
+  nilai_25: string;
+  delta: string;
+  nilai_24: string;
+  label?: string;          // field baru 2025: "Baik" | "Sedang" | "Kurang"
+  peringkat_prov?: string; // field baru 2025: peringkat provinsi
+}
+// Format satdik baru dengan field tren per indikator (A.1, A.2, dst.)
+interface SatdikIndikatorTren {
+  label: string;
+  tren: string; // "Naik" | "Turun" | "Stabil" | "-"
+  delta: string;
+  peringkat: string;
+}
+interface SatdikTrenRow {
+  npsn: string;
+  nama: string;
+  jenis: string;
+  status: string;
+  kab_kota: string;
+  kecamatan: string;
+  [key: string]: SatdikIndikatorTren | string; // A.1, A.2, dst.
+}
 interface DashData {
   spm_value: string; tahun?: string; ringkasan: any[];
   spm_nilai_num?: number | null;
   capaian_status?: string;
   kabkot: KabkotRow[]; satdik: SatdikRow[];
   paud: PaudRow[]; akar_masalah: AkarRow[];
+  indikator_prioritas?: IndikatorPrioritasRow[];
+  satdik_tren?: { total: number; data: SatdikTrenRow[] };
 }
 
 // ─── Get wilayah info based on slug ─────────────────────────────────────────
@@ -160,6 +189,7 @@ function YearSwitcher({ tahun, setTahun }: { tahun: TahunFilter; setTahun: (t: T
 // ─── Sidebar ─────────────────────────────────────────────────────────────────
 const MENU = [
   { id: "ringkasan", label: "Ringkasan", icon: LayoutDashboard },
+  { id: "prioritas", label: "Indikator Prioritas", icon: BarChart3},
   { id: "kabkot", label: "Capaian Kab/Kota", icon: MapPin },
   { id: "satdik", label: "Capaian Dasmen", icon: School },
   { id: "paud", label: "Capaian PAUD", icon: Baby },
@@ -811,7 +841,7 @@ function SatdikBanding({ d24, d25 }: { d24: SatdikRow[]; d25: SatdikRow[] }) {
         <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5 text-center">
           <Minus size={24} className="text-slate-400 mx-auto mb-2" />
           <p className="text-3xl font-black text-slate-600">{same}</p>
-          <p className="text-xs font-semibold text-slate-500 mt-1">Tetap</p>
+          <p className="text-xs font-semibold text-slate-500 mt-1">Tidak Berubah</p>
         </div>
         <div className="bg-red-50 border border-red-100 rounded-2xl p-5 text-center">
           <XCircle size={24} className="text-red-400 mx-auto mb-2" />
@@ -1007,7 +1037,7 @@ function PaudBanding({ d24, d25 }: { d24: PaudRow[]; d25: PaudRow[] }) {
       <div><h1 className="text-2xl font-bold text-slate-900">Perbandingan PAUD 2024 vs 2025</h1><p className="text-slate-500 text-sm mt-1">Perubahan capaian per satuan PAUD</p></div>
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 text-center"><CheckCircle size={24} className="text-emerald-500 mx-auto mb-2" /><p className="text-3xl font-black text-emerald-700">{improved}</p><p className="text-xs font-semibold text-emerald-600 mt-1">Meningkat</p></div>
-        <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5 text-center"><Minus size={24} className="text-slate-400 mx-auto mb-2" /><p className="text-3xl font-black text-slate-600">{same}</p><p className="text-xs font-semibold text-slate-500 mt-1">Tetap</p></div>
+        <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5 text-center"><Minus size={24} className="text-slate-400 mx-auto mb-2" /><p className="text-3xl font-black text-slate-600">{same}</p><p className="text-xs font-semibold text-slate-500 mt-1">Tidak Berubah</p></div>
         <div className="bg-red-50 border border-red-100 rounded-2xl p-5 text-center"><XCircle size={24} className="text-red-400 mx-auto mb-2" /><p className="text-3xl font-black text-red-600">{declined}</p><p className="text-xs font-semibold text-red-500 mt-1">Menurun</p></div>
       </div>
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
@@ -1141,7 +1171,7 @@ function AkarPage({ data, tahun }: { data: AkarRow[]; tahun: string }) {
             {item.indikator_prioritas && <p className="text-xs font-bold text-slate-800 border-l-4 border-blue-400 pl-3">{item.indikator_prioritas}</p>}
             <div><p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">Akar Masalah</p><p className="text-sm text-slate-800 font-semibold">{item.indikator_akar}</p></div>
             {item.mengapa && <div><p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">Mengapa</p><p className="text-xs text-slate-600 leading-relaxed line-clamp-3">{item.mengapa}</p></div>}
-            <div><span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"><AlertTriangle size={10} className="mr-1" />{item.kelompok}</span></div>
+            <div><span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">{item.kelompok}</span></div>
           </div>
         ))}
       </div>
@@ -1502,6 +1532,950 @@ function LoadingScreen({ msg }: { msg?: string }) {
   );
 }
 
+// ─── Satdik Tren Rekap (helper) ──────────────────────────────────────────────
+function getSatdikTrenStats(satdikTren: { total: number; data: SatdikTrenRow[] } | null) {
+  if (!satdikTren?.data?.length) return null;
+  const rows = satdikTren.data;
+  const indikatorKeys = Array.from(
+    new Set(rows.flatMap(r => Object.keys(r).filter(k => /^[A-Z]\.\d+/.test(k))))
+  ).sort();
+  const perIndikator = indikatorKeys.map(key => {
+    const naik  = rows.filter(r => (r[key] as SatdikIndikatorTren)?.tren?.toLowerCase() === "naik").length;
+    const turun = rows.filter(r => (r[key] as SatdikIndikatorTren)?.tren?.toLowerCase() === "turun").length;
+    const stabil = rows.filter(r => { const t = (r[key] as SatdikIndikatorTren)?.tren?.toLowerCase(); return t === "stabil" || t === "tidak berubah"; }).length;
+    return { key, naik, turun, stabil };
+  });
+  const jenisSet = Array.from(new Set(rows.map(r => r.jenis))).filter(Boolean).sort();
+  const kategorisasiSekolah = rows.map(r => {
+    const naikCount  = indikatorKeys.filter(k => (r[k] as SatdikIndikatorTren)?.tren?.toLowerCase() === "naik").length;
+    const turunCount = indikatorKeys.filter(k => (r[k] as SatdikIndikatorTren)?.tren?.toLowerCase() === "turun").length;
+    if (naikCount > turunCount) return "naik";
+    if (turunCount > naikCount) return "turun";
+    return "stabil";
+  });
+  const sekolahNaik   = kategorisasiSekolah.filter(k => k === "naik").length;
+  const sekolahTurun  = kategorisasiSekolah.filter(k => k === "turun").length;
+  const sekolahStabil = kategorisasiSekolah.filter(k => k === "stabil").length;
+  const perJenis = jenisSet.map(jenis => {
+    const sub = rows.map((r, i) => ({ r, kat: kategorisasiSekolah[i] })).filter(x => x.r.jenis === jenis);
+    return { jenis, total: sub.length, naik: sub.filter(x => x.kat === "naik").length, turun: sub.filter(x => x.kat === "turun").length };
+  });
+  return { total: rows.length, sekolahNaik, sekolahTurun, sekolahStabil, perIndikator, perJenis, indikatorKeys };
+}
+
+// ─── Satdik Label Stats — untuk data 2025 (delta = jarak ke benchmark, bukan YoY) ─
+function getSatdikLabelStats(satdikTren: { total: number; data: SatdikTrenRow[] } | null) {
+  if (!satdikTren?.data?.length) return null;
+  const rows = satdikTren.data;
+  const indikatorKeys = Array.from(
+    new Set(rows.flatMap(r => Object.keys(r).filter(k => /^[A-Z]\.\d+/.test(k))))
+  ).sort();
+
+  // Per indikator: hitung distribusi label Baik/Sedang/Kurang
+  const perIndikator = indikatorKeys.map(key => {
+    const baik   = rows.filter(r => (r[key] as SatdikIndikatorTren)?.label === "Baik").length;
+    const sedang = rows.filter(r => (r[key] as SatdikIndikatorTren)?.label === "Sedang").length;
+    const kurang = rows.filter(r => (r[key] as SatdikIndikatorTren)?.label === "Kurang").length;
+    return { key, baik, sedang, kurang };
+  });
+
+  // Per sekolah: klasifikasi berdasarkan label dominan
+  const jenisSet = Array.from(new Set(rows.map(r => r.jenis))).filter(Boolean).sort();
+  const kategorisasiSekolah = rows.map(r => {
+    const baikCount   = indikatorKeys.filter(k => (r[k] as SatdikIndikatorTren)?.label === "Baik").length;
+    const sedangCount = indikatorKeys.filter(k => (r[k] as SatdikIndikatorTren)?.label === "Sedang").length;
+    const kurangCount = indikatorKeys.filter(k => (r[k] as SatdikIndikatorTren)?.label === "Kurang").length;
+    if (baikCount >= sedangCount && baikCount >= kurangCount) return "baik";
+    if (kurangCount > baikCount && kurangCount >= sedangCount) return "kurang";
+    return "sedang";
+  });
+
+  const sekolahBaik   = kategorisasiSekolah.filter(k => k === "baik").length;
+  const sekolahSedang = kategorisasiSekolah.filter(k => k === "sedang").length;
+  const sekolahKurang = kategorisasiSekolah.filter(k => k === "kurang").length;
+
+  const perJenis = jenisSet.map(jenis => {
+    const sub = rows.map((r, i) => ({ r, kat: kategorisasiSekolah[i] })).filter(x => x.r.jenis === jenis);
+    return {
+      jenis,
+      total: sub.length,
+      baik:   sub.filter(x => x.kat === "baik").length,
+      sedang: sub.filter(x => x.kat === "sedang").length,
+      kurang: sub.filter(x => x.kat === "kurang").length,
+    };
+  });
+
+  return { total: rows.length, sekolahBaik, sekolahSedang, sekolahKurang, perIndikator, perJenis, indikatorKeys };
+}
+
+function SatdikTrenRekap({ satdikTren, tahun, compact }: {
+  satdikTren: { total: number; data: SatdikTrenRow[] } | null;
+  tahun?: string;
+  compact?: boolean;
+}) {
+  const isTahun25 = tahun === "2025";
+
+  // Untuk 2025: gunakan label-based stats; untuk 2024: gunakan tren-based stats
+  const labelStats = isTahun25 ? getSatdikLabelStats(satdikTren) : null;
+  const trenStats  = !isTahun25 ? getSatdikTrenStats(satdikTren) : null;
+  const hasData    = isTahun25 ? !!labelStats : !!trenStats;
+
+  if (!hasData) return (
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+      <div className="flex items-center gap-2 mb-3">
+        <School size={16} className="text-slate-400" />
+        <h3 className="font-semibold text-slate-700">Rekap Capaian Sekolah</h3>
+        {tahun && <span className="text-xs text-slate-400">— {tahun}</span>}
+      </div>
+      <p className="text-sm text-slate-400 text-center py-4">Data satdik belum tersedia</p>
+    </div>
+  );
+
+  const totalSekolah = isTahun25 ? (labelStats?.total ?? 0) : (trenStats?.total ?? 0);
+
+  // ── Render 2025: distribusi label dominan per sekolah ──
+  if (isTahun25 && labelStats) {
+    const chartData = labelStats.perJenis.map(j => ({
+      name: j.jenis.length > 18 ? j.jenis.slice(0, 16) + "…" : j.jenis,
+      Baik: j.baik,
+      Sedang: j.sedang,
+      Kurang: j.kurang,
+    }));
+
+    return (
+      <div className="bg-white rounded-2xl border border-violet-100 shadow-sm p-5 space-y-5">
+        <div className="flex items-center gap-2">
+          <School size={16} className="text-violet-500" />
+          <h3 className="font-semibold text-slate-900">Rekap Capaian Sekolah</h3>
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-violet-100 text-violet-700">2025</span>
+          <span className="text-xs text-slate-400 ml-1">berdasarkan label dominan per sekolah</span>
+          <span className="ml-auto text-xs text-slate-400">{totalSekolah} satuan pendidikan</span>
+        </div>
+
+        {/* 3 summary cards: Baik / Sedang / Kurang */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 text-center">
+            <CheckCircle size={20} className="text-emerald-500 mx-auto mb-1.5" />
+            <p className="text-2xl font-black text-emerald-700">{labelStats.sekolahBaik}</p>
+            <p className="text-xs font-semibold text-emerald-600 mt-0.5">Dominan Baik</p>
+            <p className="text-[10px] text-emerald-400 mt-0.5">{totalSekolah > 0 ? ((labelStats.sekolahBaik / totalSekolah) * 100).toFixed(1) : 0}% dari total</p>
+          </div>
+          <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-center">
+            <Minus size={20} className="text-amber-400 mx-auto mb-1.5" />
+            <p className="text-2xl font-black text-amber-700">{labelStats.sekolahSedang}</p>
+            <p className="text-xs font-semibold text-amber-600 mt-0.5">Dominan Sedang</p>
+            <p className="text-[10px] text-amber-400 mt-0.5">{totalSekolah > 0 ? ((labelStats.sekolahSedang / totalSekolah) * 100).toFixed(1) : 0}% dari total</p>
+          </div>
+          <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+            <XCircle size={20} className="text-red-400 mx-auto mb-1.5" />
+            <p className="text-2xl font-black text-red-600">{labelStats.sekolahKurang}</p>
+            <p className="text-xs font-semibold text-red-500 mt-0.5">Dominan Kurang</p>
+            <p className="text-[10px] text-red-400 mt-0.5">{totalSekolah > 0 ? ((labelStats.sekolahKurang / totalSekolah) * 100).toFixed(1) : 0}% dari total</p>
+          </div>
+        </div>
+
+        {!compact && (
+          <>
+            {/* Chart per jenis */}
+            {chartData.length > 0 && (
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">Distribusi Label per Jenis Sekolah</p>
+                <ResponsiveContainer width="100%" height={Math.max(160, chartData.length * 40)}>
+                  <BarChart data={chartData} layout="vertical" margin={{ left: 0, right: 24 }}>
+                    <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                    <XAxis type="number" tick={{ fontSize: 10 }} />
+                    <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={110} />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="Baik"   fill="#22c55e" radius={[0, 3, 3, 0]} />
+                    <Bar dataKey="Sedang" fill="#f59e0b" radius={[0, 3, 3, 0]} />
+                    <Bar dataKey="Kurang" fill="#ef4444" radius={[0, 3, 3, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+
+            {/* Table per indikator: Baik/Sedang/Kurang */}
+            {labelStats.perIndikator.length > 0 && (
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">Distribusi Label per Indikator</p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-100">
+                        <th className="text-left py-2.5 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide">Indikator</th>
+                        <th className="text-left py-2.5 px-3 text-xs font-bold text-emerald-600 uppercase tracking-wide">Baik</th>
+                        <th className="text-left py-2.5 px-3 text-xs font-bold text-amber-500 uppercase tracking-wide">Sedang</th>
+                        <th className="text-left py-2.5 px-3 text-xs font-bold text-red-500 uppercase tracking-wide">Kurang</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {labelStats.perIndikator.map((ind, i) => (
+                        <tr key={i} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                          <td className="py-2 px-3 font-mono text-xs font-bold text-slate-600">{ind.key}</td>
+                          <td className="py-2 px-3">
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                              <CheckCircle size={10} />{ind.baik}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3">
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100">
+                              <Minus size={10} />{ind.sedang}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3">
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
+                              <XCircle size={10} />{ind.kurang}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    );
+  }
+
+  // ── Render 2024: tren-based (Naik/Turun/Stabil) ──
+  const stats = trenStats!;
+  const chartData = stats.perJenis.map(j => ({
+    name: j.jenis.length > 18 ? j.jenis.slice(0, 16) + "…" : j.jenis,
+    Naik: j.naik,
+    Turun: j.turun,
+    "Tidak Berubah": j.total - j.naik - j.turun,
+  }));
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 space-y-5">
+      <div className="flex items-center gap-2">
+        <School size={16} className="text-blue-500" />
+        <h3 className="font-semibold text-slate-900">Rekap Tren Sekolah</h3>
+        {tahun && <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">{tahun}</span>}
+        <span className="ml-auto text-xs text-slate-400">{stats.total} satuan pendidikan</span>
+      </div>
+
+      {/* 3 summary cards */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 text-center">
+          <TrendingUp size={20} className="text-emerald-500 mx-auto mb-1.5" />
+          <p className="text-2xl font-black text-emerald-700">{stats.sekolahNaik}</p>
+          <p className="text-xs font-semibold text-emerald-600 mt-0.5">Sekolah Meningkat</p>
+          <p className="text-[10px] text-emerald-400 mt-0.5">{stats.total > 0 ? ((stats.sekolahNaik / stats.total) * 100).toFixed(1) : 0}% dari total</p>
+        </div>
+        <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 text-center">
+          <Minus size={20} className="text-slate-400 mx-auto mb-1.5" />
+          <p className="text-2xl font-black text-slate-600">{stats.sekolahStabil}</p>
+          <p className="text-xs font-semibold text-slate-500 mt-0.5">Tidak Berubah</p>
+          <p className="text-[10px] text-slate-400 mt-0.5">{stats.total > 0 ? ((stats.sekolahStabil / stats.total) * 100).toFixed(1) : 0}% dari total</p>
+        </div>
+        <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+          <TrendingDown size={20} className="text-red-400 mx-auto mb-1.5" />
+          <p className="text-2xl font-black text-red-600">{stats.sekolahTurun}</p>
+          <p className="text-xs font-semibold text-red-500 mt-0.5">Sekolah Menurun</p>
+          <p className="text-[10px] text-red-400 mt-0.5">{stats.total > 0 ? ((stats.sekolahTurun / stats.total) * 100).toFixed(1) : 0}% dari total</p>
+        </div>
+      </div>
+
+      {!compact && chartData.length > 0 && (
+        <>
+          <div>
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">Tren per Jenis Sekolah</p>
+            <ResponsiveContainer width="100%" height={Math.max(160, chartData.length * 40)}>
+              <BarChart data={chartData} layout="vertical" margin={{ left: 0, right: 24 }}>
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                <XAxis type="number" tick={{ fontSize: 10 }} />
+                <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={110} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="Naik" fill="#22c55e" radius={[0, 3, 3, 0]} />
+                <Bar dataKey="Turun" fill="#ef4444" radius={[0, 3, 3, 0]} />
+                <Bar dataKey="Tidak Berubah" fill="#94a3b8" radius={[0, 3, 3, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          {stats.perIndikator.length > 0 && (
+            <div>
+              <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">Rekap Tren per Indikator</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-100">
+                      <th className="text-left py-2.5 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide">Indikator</th>
+                      <th className="text-left py-2.5 px-3 text-xs font-bold text-emerald-600 uppercase tracking-wide">Naik</th>
+                      <th className="text-left py-2.5 px-3 text-xs font-bold text-red-500 uppercase tracking-wide">Turun</th>
+                      <th className="text-left py-2.5 px-3 text-xs font-bold text-slate-400 uppercase tracking-wide">Tidak Berubah</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {stats.perIndikator.map((ind, i) => (
+                      <tr key={i} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                        <td className="py-2 px-3 font-mono text-xs font-bold text-slate-600">{ind.key}</td>
+                        <td className="py-2 px-3">
+                          <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                            <TrendingUp size={10} />{ind.naik}
+                          </span>
+                        </td>
+                        <td className="py-2 px-3">
+                          <span className="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
+                            <TrendingDown size={10} />{ind.turun}
+                          </span>
+                        </td>
+                        <td className="py-2 px-3 text-xs text-slate-500 font-semibold">{ind.stabil}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+// ─── Label Distribution per Indikator (dari satdik_tren) ────────────────────
+function getLabelDistPerIndikator(satdikTren: { total: number; data: SatdikTrenRow[] } | null) {
+  if (!satdikTren?.data?.length) return {};
+  const rows = satdikTren.data;
+  const indikatorKeys = Array.from(
+    new Set(rows.flatMap(r => Object.keys(r).filter(k => /^[A-Z]\.\d+/.test(k))))
+  ).sort();
+
+  const result: Record<string, { baik: SatdikTrenRow[]; sedang: SatdikTrenRow[]; kurang: SatdikTrenRow[]; total: number }> = {};
+  indikatorKeys.forEach(key => {
+    const baik = rows.filter(r => (r[key] as SatdikIndikatorTren)?.label === "Baik");
+    const sedang = rows.filter(r => (r[key] as SatdikIndikatorTren)?.label === "Sedang");
+    const kurang = rows.filter(r => (r[key] as SatdikIndikatorTren)?.label === "Kurang");
+    result[key] = { baik, sedang, kurang, total: rows.length };
+  });
+  return result;
+}
+
+// Modal daftar sekolah per label per indikator
+function SekolahLabelModal({ indikator, label, sekolah, onClose }: {
+  indikator: string; label: string; sekolah: SatdikTrenRow[]; onClose: () => void;
+}) {
+  const [search, setSearch] = useState("");
+  const filtered = sekolah.filter(s =>
+    s.nama?.toLowerCase().includes(search.toLowerCase()) ||
+    s.npsn?.toLowerCase().includes(search.toLowerCase()) ||
+    s.kecamatan?.toLowerCase().includes(search.toLowerCase())
+  );
+  const labelColor = label === "Baik" ? "text-emerald-700 bg-emerald-100 border-emerald-200"
+    : label === "Sedang" ? "text-amber-700 bg-amber-100 border-amber-200"
+    : "text-red-700 bg-red-100 border-red-200";
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between p-5 border-b border-slate-100">
+          <div>
+            <h3 className="font-bold text-slate-900 text-base">Sekolah dengan Label <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-sm font-bold border ${labelColor}`}>{label}</span></h3>
+            <p className="text-xs text-slate-400 mt-0.5">Indikator {indikator} · {sekolah.length} sekolah</p>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100 transition text-slate-500 font-bold text-lg">✕</button>
+        </div>
+        <div className="p-4 border-b border-slate-50">
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-sm text-black bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="Cari nama, NPSN, kecamatan..." value={search} onChange={e => setSearch(e.target.value)} />
+          </div>
+        </div>
+        <div className="overflow-y-auto flex-1 p-2">
+          {filtered.length === 0 ? (
+            <p className="text-center text-slate-400 py-8 text-sm">Tidak ada data</p>
+          ) : (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-slate-50 rounded-lg">
+                  <th className="text-left py-2.5 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide">NPSN</th>
+                  <th className="text-left py-2.5 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide">Nama Sekolah</th>
+                  <th className="text-left py-2.5 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide">Jenis</th>
+                  <th className="text-left py-2.5 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide">Kecamatan</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((s, i) => (
+                  <tr key={i} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                    <td className="py-2 px-3 font-mono text-xs text-slate-400">{s.npsn}</td>
+                    <td className="py-2 px-3 text-xs font-semibold text-slate-800 max-w-[200px] truncate">{s.nama}</td>
+                    <td className="py-2 px-3 text-xs text-slate-500 whitespace-nowrap">{s.jenis}</td>
+                    <td className="py-2 px-3 text-xs text-slate-500">{s.kecamatan}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+        <div className="p-4 border-t border-slate-50 text-xs text-slate-400 text-right">{filtered.length} dari {sekolah.length} sekolah</div>
+      </div>
+    </div>
+  );
+}
+
+// Mapping keterangan indikator prioritas
+const INDIKATOR_INFO: Record<string, { nama: string; deskripsi: string }> = {
+  "A.1":  { nama: "Literasi",                    deskripsi: "Kemampuan memahami dan menggunakan informasi" },
+  "A.2":  { nama: "Numerasi",                    deskripsi: "Kemampuan bernalar menggunakan matematika" },
+  "A.3":  { nama: "Karakter",                    deskripsi: "Penguatan profil pelajar Pancasila" },
+  "D.1":  { nama: "Kualitas Pembelajaran",       deskripsi: "Partisipasi dalam pembelajaran" },
+  "D.3":  { nama: "Kepemimpinan Instruksional",  deskripsi: "Partisipasi dalam kegiatan sekolah" },
+  "D.4":  { nama: "Iklim Keamanan",              deskripsi: "Lingkungan belajar yang aman" },
+  "D.8":  { nama: "Iklim Kebinekaan",            deskripsi: "Penghargaan terhadap keberagaman" },
+  "D.10": { nama: "Iklim Inklusifitas",          deskripsi: "Keterlibatan semua pihak" },
+};
+
+// Urutan tampilan indikator
+const INDIKATOR_ORDER = ["A.1","A.2","A.3","D.1","D.3","D.4","D.8","D.10"];
+
+function sortIndikatorKeys(keys: string[]): string[] {
+  return [...keys].sort((a, b) => {
+    const ia = INDIKATOR_ORDER.indexOf(a);
+    const ib = INDIKATOR_ORDER.indexOf(b);
+    if (ia !== -1 && ib !== -1) return ia - ib;
+    if (ia !== -1) return -1;
+    if (ib !== -1) return 1;
+    return a.localeCompare(b);
+  });
+}
+
+// Kartu label distribusi per indikator (besar, clickable)
+function LabelDistCard({ indikatorKey, dist, tahun }: {
+  indikatorKey: string;
+  dist: { baik: SatdikTrenRow[]; sedang: SatdikTrenRow[]; kurang: SatdikTrenRow[]; total: number };
+  tahun?: string;
+}) {
+  const [modal, setModal] = useState<{ label: string; sekolah: SatdikTrenRow[] } | null>(null);
+  const { baik, sedang, kurang, total } = dist;
+  const pctBaik = total > 0 ? (baik.length / total) * 100 : 0;
+  const pctSedang = total > 0 ? (sedang.length / total) * 100 : 0;
+  const pctKurang = total > 0 ? (kurang.length / total) * 100 : 0;
+
+  const accentBorder = tahun === "2025" ? "border-violet-100" : "border-blue-100";
+  const info = INDIKATOR_INFO[indikatorKey];
+
+  return (
+    <>
+      {modal && (
+        <SekolahLabelModal
+          indikator={indikatorKey}
+          label={modal.label}
+          sekolah={modal.sekolah}
+          onClose={() => setModal(null)}
+        />
+      )}
+      <div className={`bg-white rounded-2xl border shadow-sm p-5 space-y-4 hover:shadow-md transition-shadow ${accentBorder}`}>
+        <div className="flex items-start gap-3">
+          <div className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-black text-sm font-mono ${tahun === "2025" ? "bg-violet-50 text-violet-700 border border-violet-200" : "bg-blue-50 text-blue-700 border border-blue-200"}`}>
+            {indikatorKey}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="font-bold text-slate-900 text-sm leading-tight">{info?.nama ?? indikatorKey}</p>
+            {info?.deskripsi && <p className="text-xs text-slate-400 mt-0.5 leading-snug">{info.deskripsi}</p>}
+          </div>
+          <span className="text-xs text-slate-400 font-semibold flex-shrink-0">{total} sekolah</span>
+        </div>
+
+        {/* Progress bar stacked */}
+        <div className="w-full h-3 rounded-full overflow-hidden flex" title={`Baik: ${pctBaik.toFixed(1)}% | Sedang: ${pctSedang.toFixed(1)}% | Kurang: ${pctKurang.toFixed(1)}%`}>
+          <div className="bg-emerald-400 h-full transition-all" style={{ width: `${pctBaik}%` }} />
+          <div className="bg-amber-400 h-full transition-all" style={{ width: `${pctSedang}%` }} />
+          <div className="bg-red-400 h-full transition-all" style={{ width: `${pctKurang}%` }} />
+        </div>
+
+        {/* 3 clickable stat buttons */}
+        <div className="grid grid-cols-3 gap-2">
+          <button
+            onClick={() => setModal({ label: "Baik", sekolah: baik })}
+            className="group flex flex-col items-center bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl p-3 transition-all cursor-pointer hover:shadow-sm hover:scale-105 active:scale-95"
+          >
+            <span className="text-3xl font-black text-emerald-700 leading-none">{pctBaik.toFixed(0)}<span className="text-lg">%</span></span>
+            <span className="text-[11px] font-bold text-emerald-600 mt-1">Baik</span>
+            <span className="text-[10px] text-emerald-400 mt-0.5">{baik.length} sekolah</span>
+            <span className="text-[9px] text-emerald-400 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Klik untuk lihat →</span>
+          </button>
+          <button
+            onClick={() => setModal({ label: "Sedang", sekolah: sedang })}
+            className="group flex flex-col items-center bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl p-3 transition-all cursor-pointer hover:shadow-sm hover:scale-105 active:scale-95"
+          >
+            <span className="text-3xl font-black text-amber-700 leading-none">{pctSedang.toFixed(0)}<span className="text-lg">%</span></span>
+            <span className="text-[11px] font-bold text-amber-600 mt-1">Sedang</span>
+            <span className="text-[10px] text-amber-400 mt-0.5">{sedang.length} sekolah</span>
+            <span className="text-[9px] text-amber-400 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Klik untuk lihat →</span>
+          </button>
+          <button
+            onClick={() => setModal({ label: "Kurang", sekolah: kurang })}
+            className="group flex flex-col items-center bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl p-3 transition-all cursor-pointer hover:shadow-sm hover:scale-105 active:scale-95"
+          >
+            <span className="text-3xl font-black text-red-700 leading-none">{pctKurang.toFixed(0)}<span className="text-lg">%</span></span>
+            <span className="text-[11px] font-bold text-red-600 mt-1">Kurang</span>
+            <span className="text-[10px] text-red-400 mt-0.5">{kurang.length} sekolah</span>
+            <span className="text-[9px] text-red-400 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Klik untuk lihat →</span>
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─── Indikator Prioritas: Single Year ────────────────────────────────────────
+function IndikatorPrioritasSingle({ data, tahun, satdikTren }: { data: IndikatorPrioritasRow[]; tahun: string; satdikTren?: { total: number; data: SatdikTrenRow[] } | null }) {
+  const [search, setSearch] = useState("");
+  const [filterJenjang, setFilterJenjang] = useState("Semua");
+  const [filterLabel, setFilterLabel] = useState("Semua");
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 20;
+
+  const isTahun25 = tahun === "2025";
+  const accentBg = isTahun25 ? "bg-violet-600" : "bg-blue-600";
+  const accentText = isTahun25 ? "text-violet-700" : "text-blue-700";
+  const accentBorder = isTahun25 ? "border-violet-200" : "border-blue-200";
+  const accentRing = isTahun25 ? "focus:ring-violet-400" : "focus:ring-blue-500";
+  const nilaiKey = isTahun25 ? "nilai_25" : "nilai_24";
+  const prevKey = isTahun25 ? "nilai_24" : "";
+
+  const jenjangOptions = useMemo(() => ["Semua", ...Array.from(new Set(data.map(d => d.status))).filter(Boolean).sort()], [data]);
+
+  const filtered = useMemo(() => {
+    let r = data;
+    if (filterJenjang !== "Semua") r = r.filter(d => d.status === filterJenjang);
+    if (isTahun25 && filterLabel !== "Semua") r = r.filter(d => d.label === filterLabel);
+    if (search) r = r.filter(d =>
+      d.no.toLowerCase().includes(search.toLowerCase()) ||
+      (d.label ?? "").toLowerCase().includes(search.toLowerCase()) ||
+      (d.jenis ?? "").toLowerCase().includes(search.toLowerCase())
+    );
+    return r;
+  }, [data, filterJenjang, filterLabel, search, isTahun25]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  // Stats — untuk 2025 gunakan label (Baik/Sedang/Kurang), untuk 2024 gunakan delta (Naik/Turun)
+  const totalData = data.length;
+
+  // Stats 2025: distribusi label
+  const jmlBaik   = isTahun25 ? data.filter(d => d.label === "Baik").length   : 0;
+  const jmlSedang = isTahun25 ? data.filter(d => d.label === "Sedang").length : 0;
+  const jmlKurang = isTahun25 ? data.filter(d => d.label === "Kurang").length : 0;
+
+  // Stats 2024: distribusi delta
+  const naik   = !isTahun25 ? data.filter(d => d.delta?.toLowerCase().startsWith("naik")).length  : 0;
+  const turun  = !isTahun25 ? data.filter(d => d.delta?.toLowerCase().startsWith("turun")).length : 0;
+  const stabil = !isTahun25 ? totalData - naik - turun : 0;
+
+  // Pie chart
+  const pieChart = isTahun25
+    ? [
+        { name: "Baik",   value: jmlBaik,   color: "#22c55e" },
+        { name: "Sedang", value: jmlSedang, color: "#f59e0b" },
+        { name: "Kurang", value: jmlKurang, color: "#ef4444" },
+      ].filter(d => d.value > 0)
+    : [
+        { name: "Naik",          value: naik,   color: "#22c55e" },
+        { name: "Turun",         value: turun,  color: "#ef4444" },
+        { name: "Tidak Berubah", value: stabil, color: "#94a3b8" },
+      ].filter(d => d.value > 0);
+
+  // Bar chart per jenjang
+  const jenjangDist = jenjangOptions.filter(j => j !== "Semua").map(j => ({
+    name: j.length > 16 ? j.slice(0, 14) + "…" : j,
+    fullName: j,
+    ...(isTahun25
+      ? {
+          baik:   data.filter(d => d.status === j && d.label === "Baik").length,
+          sedang: data.filter(d => d.status === j && d.label === "Sedang").length,
+          kurang: data.filter(d => d.status === j && d.label === "Kurang").length,
+        }
+      : {
+          naik:  data.filter(d => d.status === j && d.delta?.toLowerCase().startsWith("naik")).length,
+          turun: data.filter(d => d.status === j && d.delta?.toLowerCase().startsWith("turun")).length,
+        }),
+  }));
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900">Indikator Prioritas</h1>
+        <p className="text-slate-500 text-sm mt-1">Data indikator prioritas per jenjang — Tahun {tahun}</p>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className={"bg-white rounded-2xl shadow-sm border p-5 flex items-center gap-4 " + accentBorder}>
+          <div className={"w-12 h-12 rounded-xl flex items-center justify-center " + accentBg}>
+            <Target size={22} className="text-white" />
+          </div>
+          <div><p className="text-xs text-slate-500 font-semibold uppercase tracking-wide">Total Indikator</p>
+            <p className="text-2xl font-black text-slate-900">{totalData}</p></div>
+        </div>
+
+        {isTahun25 ? (
+          <>
+            <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 p-5 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center"><CheckCircle size={22} className="text-white" /></div>
+              <div><p className="text-xs text-slate-500 font-semibold uppercase tracking-wide">Label Baik</p>
+                <p className="text-2xl font-black text-emerald-700">{jmlBaik}</p></div>
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-amber-100 p-5 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-400 flex items-center justify-center"><Minus size={22} className="text-white" /></div>
+              <div><p className="text-xs text-slate-500 font-semibold uppercase tracking-wide">Label Sedang</p>
+                <p className="text-2xl font-black text-amber-700">{jmlSedang}</p></div>
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-red-100 p-5 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-red-500 flex items-center justify-center"><XCircle size={22} className="text-white" /></div>
+              <div><p className="text-xs text-slate-500 font-semibold uppercase tracking-wide">Label Kurang</p>
+                <p className="text-2xl font-black text-red-700">{jmlKurang}</p></div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 p-5 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center"><TrendingUp size={22} className="text-white" /></div>
+              <div><p className="text-xs text-slate-500 font-semibold uppercase tracking-wide">Naik</p>
+                <p className="text-2xl font-black text-emerald-700">{naik}</p></div>
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-red-100 p-5 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-red-500 flex items-center justify-center"><TrendingDown size={22} className="text-white" /></div>
+              <div><p className="text-xs text-slate-500 font-semibold uppercase tracking-wide">Turun</p>
+                <p className="text-2xl font-black text-red-700">{turun}</p></div>
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-slate-400 flex items-center justify-center"><Minus size={22} className="text-white" /></div>
+              <div><p className="text-xs text-slate-500 font-semibold uppercase tracking-wide">Tidak Berubah</p>
+                <p className="text-2xl font-black text-slate-600">{stabil}</p></div>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+          <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+            <BarChart3 size={16} className={isTahun25 ? "text-violet-500" : "text-blue-500"} />
+            {isTahun25 ? "Distribusi Label per Jenjang" : "Distribusi Delta per Jenjang"}
+          </h3>
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={jenjangDist} margin={{ left: 0, right: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+              <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+              <YAxis tick={{ fontSize: 10 }} />
+              <Tooltip />
+              <Legend />
+              {isTahun25 ? (
+                <>
+                  <Bar dataKey="baik"   name="Baik"   fill="#22c55e" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="sedang" name="Sedang" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="kurang" name="Kurang" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                </>
+              ) : (
+                <>
+                  <Bar dataKey="naik"  name="Naik"  fill="#22c55e" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="turun" name="Turun" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                </>
+              )}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+          <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+            <Award size={16} className={isTahun25 ? "text-violet-500" : "text-blue-500"} />
+            {isTahun25 ? "Proporsi Label Indikator" : "Proporsi Tren Delta"}
+          </h3>
+          <ResponsiveContainer width="100%" height={240}>
+            <PieChart>
+              <Pie data={pieChart} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                {pieChart.map((d, i) => <Cell key={i} fill={d.color} />)}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Rekap Tren Sekolah */}
+      <SatdikTrenRekap satdikTren={satdikTren ?? null} tahun={tahun} />
+
+      {/* Label Distribusi per Indikator */}
+      {satdikTren && (() => {
+        const labelDist = getLabelDistPerIndikator(satdikTren);
+        const indKeys = sortIndikatorKeys(Object.keys(labelDist));
+        if (!indKeys.length) return null;
+        return (
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <Award size={16} className={isTahun25 ? "text-violet-500" : "text-blue-500"} />
+              <h3 className="font-bold text-slate-900">Distribusi Label per Indikator</h3>
+              <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isTahun25 ? "bg-violet-100 text-violet-700" : "bg-blue-100 text-blue-700"}`}>{tahun}</span>
+              <span className="ml-auto text-xs text-slate-400">Klik Baik/Sedang/Kurang untuk melihat daftar sekolah</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {indKeys.map(key => (
+                <LabelDistCard key={key} indikatorKey={key} dist={labelDist[key]} tahun={tahun} />
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+        <div className="flex flex-wrap gap-2 mb-4">
+          <div className="relative flex-1 min-w-[180px]">
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input className={"w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm text-black placeholder-slate-400 bg-white focus:outline-none focus:ring-2 " + accentRing}
+              placeholder="Cari kode atau nama indikator..." value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} />
+          </div>
+          <select className="px-3 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white focus:outline-none"
+            value={filterJenjang} onChange={e => { setFilterJenjang(e.target.value); setPage(1); }}>
+            {jenjangOptions.map(j => <option key={j}>{j}</option>)}
+          </select>
+          {isTahun25 && (
+            <select className="px-3 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white focus:outline-none"
+              value={filterLabel} onChange={e => { setFilterLabel(e.target.value); setPage(1); }}>
+              {["Semua", "Baik", "Sedang", "Kurang"].map(l => <option key={l}>{l}</option>)}
+            </select>
+          )}
+        </div>
+        <p className="text-xs text-slate-400 mb-3">{filtered.length} indikator ditemukan</p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-slate-100 bg-slate-50">
+                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide whitespace-nowrap">Indikator</th>
+                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide whitespace-nowrap">Jenjang</th>
+                <th className="text-left py-3 px-3 text-xs font-bold text-blue-500 uppercase tracking-wide whitespace-nowrap">Nilai 2024</th>
+                <th className="text-left py-3 px-3 text-xs font-bold text-violet-500 uppercase tracking-wide whitespace-nowrap">Nilai 2025</th>
+                {isTahun25 && <th className="text-left py-3 px-3 text-xs font-bold text-emerald-600 uppercase tracking-wide whitespace-nowrap">Label</th>}
+                {isTahun25 && <th className="text-left py-3 px-3 text-xs font-bold text-slate-400 uppercase tracking-wide whitespace-nowrap">Peringkat Prov.</th>}
+                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide whitespace-nowrap">Perubahan Nilai Capaian</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paged.map((row, i) => {
+                const isNaik = row.delta?.toLowerCase().startsWith("naik");
+                const isTurun = row.delta?.toLowerCase().startsWith("turun");
+                return (
+                  <tr key={i} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                    <td className="py-3 px-3 font-mono text-xs text-slate-600 font-bold whitespace-nowrap">{row.no}</td>
+                    <td className="py-3 px-3 text-xs text-slate-600 whitespace-nowrap">{row.status}</td>
+                    <td className="py-3 px-3 font-bold text-sm text-blue-700">{row.nilai_24 || "—"}</td>
+                    <td className="py-3 px-3 font-bold text-sm text-violet-700">{row.nilai_25 || "—"}</td>
+                    {isTahun25 && <td className="py-3 px-3"><Badge label={row.label ?? ""} /></td>}
+                    {isTahun25 && <td className="py-3 px-3 text-xs text-slate-500 max-w-[180px] truncate" title={row.peringkat_prov ?? ""}>{row.peringkat_prov || "—"}</td>}
+                    <td className="py-3 px-3">
+                      <span className={"inline-flex items-center gap-1 text-xs font-semibold " + (isNaik ? "text-emerald-600" : isTurun ? "text-red-500" : "text-slate-400")}>
+                        {isNaik ? <TrendingUp size={12} /> : isTurun ? <TrendingDown size={12} /> : <Minus size={12} />}
+                        {row.delta || "—"}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+              {paged.length === 0 && (
+                <tr><td colSpan={isTahun25 ? 7 : 5} className="py-10 text-center text-slate-400 text-sm">Tidak ada data</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-50">
+          <p className="text-xs text-slate-400">Hal. {page}/{totalPages} · {filtered.length} data</p>
+          <div className="flex gap-1.5">
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-2 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 hover:bg-slate-100 transition"><ChevronLeft size={15} /></button>
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => { const pg = Math.max(1, Math.min(page - 2, totalPages - 4)) + i; return pg <= totalPages ? (<button key={pg} onClick={() => setPage(pg)} className={`w-8 h-8 rounded-lg text-xs font-bold transition ${pg === page ? (isTahun25 ? "bg-violet-600" : "bg-blue-600") + " text-white" : "border border-slate-200 text-slate-600 hover:bg-slate-100"}`}>{pg}</button>) : null; })}
+            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="p-2 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 hover:bg-slate-100 transition"><ChevronRight size={15} /></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Indikator Prioritas: Perbandingan ────────────────────────────────────────
+function IndikatorPrioritasBanding({ d24, d25, satdik24, satdik25 }: { d24: IndikatorPrioritasRow[]; d25: IndikatorPrioritasRow[]; satdik24?: { total: number; data: SatdikTrenRow[] } | null; satdik25?: { total: number; data: SatdikTrenRow[] } | null }) {
+  const [search, setSearch] = useState("");
+  const [filterJenjang, setFilterJenjang] = useState("Semua");
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 20;
+
+  const jenjangOptions = useMemo(() => ["Semua", ...Array.from(new Set([...d24, ...d25].map(d => d.status))).filter(Boolean).sort()], [d24, d25]);
+
+  const map25 = useMemo(() => {
+    const m: Record<string, IndikatorPrioritasRow> = {};
+    d25.forEach(r => { m[r.no + "__" + r.status] = r; });
+    return m;
+  }, [d25]);
+
+  const merged = useMemo(() => {
+    let r = d24.map(row => ({ ...row, r25: map25[row.no + "__" + row.status] ?? null }));
+    if (filterJenjang !== "Semua") r = r.filter(d => d.status === filterJenjang);
+    if (search) r = r.filter(d => d.no.toLowerCase().includes(search.toLowerCase()));
+    return r;
+  }, [d24, map25, filterJenjang, search]);
+
+  const totalPages = Math.ceil(merged.length / PAGE_SIZE);
+  const paged = merged.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  // Chart: count naik/turun per jenjang for 2024 vs 2025
+  const jenjangList = jenjangOptions.filter(j => j !== "Semua");
+  const jenjangChart = jenjangList.map(j => ({
+    name: j.length > 14 ? j.slice(0, 12) + "…" : j,
+    naik24: d24.filter(d => d.status === j && d.delta?.toLowerCase().startsWith("naik")).length,
+    naik25: d25.filter(d => d.status === j && d.delta?.toLowerCase().startsWith("naik")).length,
+  }));
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900">Perbandingan Indikator Prioritas</h1>
+        <p className="text-slate-500 text-sm mt-1">2024 vs 2025 — Tren delta per indikator prioritas</p>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+        <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2"><GitCompare size={16} className="text-rose-500" /> Jumlah Naik per Jenjang (2024 vs 2025)</h3>
+        <ResponsiveContainer width="100%" height={240}>
+          <BarChart data={jenjangChart} margin={{ left: 0, right: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+            <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="naik24" name="Naik 2024" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="naik25" name="Naik 2025" fill="#7c3aed" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Rekap Tren Sekolah — 2 kolom jika keduanya tersedia */}
+      {(satdik24 || satdik25) && (
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+          <SatdikTrenRekap satdikTren={satdik24 ?? null} tahun="2024" compact />
+          <SatdikTrenRekap satdikTren={satdik25 ?? null} tahun="2025" compact />
+        </div>
+      )}
+
+      {/* Label Distribusi per Indikator — 2024 */}
+      {satdik24 && (() => {
+        const labelDist = getLabelDistPerIndikator(satdik24);
+        const indKeys = sortIndikatorKeys(Object.keys(labelDist));
+        if (!indKeys.length) return null;
+        return (
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <Award size={16} className="text-blue-500" />
+              <h3 className="font-bold text-slate-900">Distribusi Label per Indikator</h3>
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">2024</span>
+              <span className="ml-auto text-xs text-slate-400">Klik untuk melihat daftar sekolah</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {indKeys.map(key => (
+                <LabelDistCard key={key} indikatorKey={key} dist={labelDist[key]} tahun="2024" />
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Label Distribusi per Indikator — 2025 */}
+      {satdik25 && (() => {
+        const labelDist = getLabelDistPerIndikator(satdik25);
+        const indKeys = sortIndikatorKeys(Object.keys(labelDist));
+        if (!indKeys.length) return null;
+        return (
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <Award size={16} className="text-violet-500" />
+              <h3 className="font-bold text-slate-900">Distribusi Label per Indikator</h3>
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-violet-100 text-violet-700">2025</span>
+              <span className="ml-auto text-xs text-slate-400">Klik untuk melihat daftar sekolah</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {indKeys.map(key => (
+                <LabelDistCard key={key} indikatorKey={key} dist={labelDist[key]} tahun="2025" />
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+        <div className="flex flex-wrap gap-2 mb-4">
+          <div className="relative flex-1 min-w-[180px]">
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-400"
+              placeholder="Cari kode atau nama indikator..." value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} />
+          </div>
+          <select className="px-3 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white focus:outline-none" value={filterJenjang} onChange={e => { setFilterJenjang(e.target.value); setPage(1); }}>
+            {jenjangOptions.map(j => <option key={j}>{j}</option>)}
+          </select>
+        </div>
+        <p className="text-xs text-slate-400 mb-3">{merged.length} indikator</p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-100">
+                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide">No</th>
+                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500 uppercase tracking-wide">Jenjang</th>
+                <th className="text-left py-3 px-3 text-xs font-bold text-blue-500 uppercase tracking-wide whitespace-nowrap">Nilai 2024</th>
+                <th className="text-left py-3 px-3 text-xs font-bold text-blue-500 uppercase tracking-wide whitespace-nowrap">Delta 2024</th>
+                <th className="text-left py-3 px-3 text-xs font-bold text-violet-500 uppercase tracking-wide whitespace-nowrap">Nilai 2025</th>
+                <th className="text-left py-3 px-3 text-xs font-bold text-violet-500 uppercase tracking-wide whitespace-nowrap">Delta 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paged.map((row, i) => {
+                const r25 = row.r25;
+                const isNaik24 = row.delta?.toLowerCase().startsWith("naik");
+                const isTurun24 = row.delta?.toLowerCase().startsWith("turun");
+                const isNaik25 = r25?.delta?.toLowerCase().startsWith("naik");
+                const isTurun25 = r25?.delta?.toLowerCase().startsWith("turun");
+                return (
+                  <tr key={i} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                    <td className="py-2.5 px-3 font-mono text-xs font-bold text-slate-500">{row.no}</td>
+                    <td className="py-2.5 px-3 text-xs text-slate-600 whitespace-nowrap">{row.status}</td>
+                    <td className="py-2.5 px-3 font-bold text-blue-700 text-sm">{row.nilai_24 || "—"}</td>
+                    <td className="py-2.5 px-3">
+                      <span className={"inline-flex items-center gap-1 text-xs font-semibold " + (isNaik24 ? "text-emerald-600" : isTurun24 ? "text-red-500" : "text-slate-400")}>
+                        {isNaik24 ? <TrendingUp size={11} /> : isTurun24 ? <TrendingDown size={11} /> : <Minus size={11} />}{row.delta || "—"}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 font-bold text-violet-700 text-sm">{r25?.nilai_25 || "—"}</td>
+                    <td className="py-2.5 px-3">
+                      {r25 ? (
+                        <span className={"inline-flex items-center gap-1 text-xs font-semibold " + (isNaik25 ? "text-emerald-600" : isTurun25 ? "text-red-500" : "text-slate-400")}>
+                          {isNaik25 ? <TrendingUp size={11} /> : isTurun25 ? <TrendingDown size={11} /> : <Minus size={11} />}{r25.delta || "—"}
+                        </span>
+                      ) : <span className="text-xs text-slate-300">—</span>}
+                    </td>
+                  </tr>
+                );
+              })}
+              {paged.length === 0 && (
+                <tr><td colSpan={5} className="py-10 text-center text-slate-400 text-sm">Tidak ada data</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-50">
+          <p className="text-xs text-slate-400">Hal. {page}/{totalPages}</p>
+          <div className="flex gap-1.5">
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-2 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 hover:bg-slate-100"><ChevronLeft size={15} /></button>
+            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="p-2 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 hover:bg-slate-100"><ChevronRight size={15} /></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 function KabBandungDashboard() {
   const params = useParams();
@@ -1519,15 +2493,76 @@ function KabBandungDashboard() {
   const [err25, setErr25] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load data based on slug
-    fetch(`/data/${slug}/dashboard_data_2024.json`)
-      .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-      .then(d => { setData24({ ...d, tahun: wilayahInfo.displayName }); setLoading24(false); })
-      .catch((e: Error) => { setErr24(e.message); setLoading24(false); });
-    fetch(`/data/${slug}/dashboard_data_2025.json`)
-      .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-      .then(d => { setData25({ ...d, tahun: wilayahInfo.displayName }); setLoading25(false); })
-      .catch((e: Error) => { setErr25(e.message); setLoading25(false); });
+    // Load dashboard data for 2024, merging in indikator prioritas
+    Promise.all([
+      fetch(`/data/${slug}/dashboard_data_2024.json`).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
+      fetch(`/indikatorPrioritasKabKota/2024/${slug}/dashboard_data_2024.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([d, ip]: [any, any]) => {
+      const ipRows: IndikatorPrioritasRow[] = ip?.indikator?.data ?? [];
+      const satdikTren = ip?.satdik ?? null;
+      setData24({ ...d, tahun: wilayahInfo.displayName, indikator_prioritas: ipRows, satdik_tren: satdikTren });
+      setLoading24(false);
+    }).catch((e: Error) => { setErr24(e.message); setLoading24(false); });
+
+    // Load dashboard data for 2025
+    // Format baru: file utama (/data/) sudah berisi 'indikator' + 'satdik' per sekolah
+    Promise.all([
+      fetch(`/data/${slug}/dashboard_data_2025.json`).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
+      fetch(`/indikatorPrioritasKabKota/2025/${slug}/dashboard_data_2025.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([d, ip]: [any, any]) => {
+      // Sumber indikator: prioritaskan ip, fallback ke d (file utama format baru)
+      const rawIndikator: any[] = (ip?.indikator?.data ?? d?.indikator?.data ?? []);
+      const ipRows: IndikatorPrioritasRow[] = rawIndikator.map((item: any) => ({
+        status: item.status ?? item.jenis ?? "",
+        jenis: item.jenis ?? "",
+        no: item.no ?? "",
+        nilai_25: item.nilai ?? "",
+        nilai_24: item.nilai_prev ?? "",
+        // delta: derive dari selisih nilai YoY (nilai 2025 - nilai 2024)
+        delta: (() => {
+          const v25 = parseFloat((item.nilai ?? "").replace(",", ".").replace("%", ""));
+          const v24 = parseFloat((item.nilai_prev ?? "").replace(",", ".").replace("%", ""));
+          if (!isNaN(v25) && !isNaN(v24)) {
+            const diff = v25 - v24;
+            if (diff > 0.005) return `Naik ${Math.abs(diff).toFixed(2)}`;
+            if (diff < -0.005) return `Turun ${Math.abs(diff).toFixed(2)}`;
+            return "Tidak Berubah";
+          }
+          return "";
+        })(),
+        label: item.label ?? "",
+        peringkat_prov: item.peringkat_prov ?? "",
+      }));
+
+      // Sumber satdik per sekolah: prioritaskan ip, fallback ke d
+      // CATATAN: delta di satdik 2025 = jarak ke benchmark (selalu positif), BUKAN YoY
+      // → tren per sekolah TIDAK bisa diturunkan dari delta, gunakan label distribution
+      const rawSatdikData: any[] = (ip?.satdik?.data ?? d?.satdik?.data ?? []);
+      const rawSatdikTotal: number = (ip?.satdik?.total ?? d?.satdik?.total ?? rawSatdikData.length);
+      const satdikTren = rawSatdikData.length > 0 ? {
+        total: rawSatdikTotal,
+        data: rawSatdikData.map((sekolah: any) => {
+          const transformed: any = {
+            npsn: sekolah.npsn,
+            nama: sekolah.nama,
+            jenis: sekolah.jenis,
+            status: sekolah.status,
+            kab_kota: sekolah.kab_kota,
+            kecamatan: sekolah.kecamatan,
+          };
+          // Salin semua field indikator (A.1, A.2, dst.) — tren di-set "-" (bukan YoY)
+          Object.keys(sekolah).forEach(k => {
+            if (/^[A-Z]\.\d+/.test(k)) {
+              transformed[k] = { ...sekolah[k], tren: "-" };
+            }
+          });
+          return transformed;
+        }),
+      } : null;
+
+      setData25({ ...d, tahun: wilayahInfo.displayName, indikator_prioritas: ipRows, satdik_tren: satdikTren });
+      setLoading25(false);
+    }).catch((e: Error) => { setErr25(e.message); setLoading25(false); });
   }, [slug, wilayahInfo.displayName]);
 
   const activeLabel = MENU.find(m => m.id === active)?.label ?? "";
@@ -1588,6 +2623,12 @@ function KabBandungDashboard() {
                 tahun === "banding"
                   ? (data24 && data25 ? <RingkasanBanding d24={data24} d25={data25} /> : <LoadingScreen />)
                   : (activeData ? <RingkasanSingle data={activeData} tahun={tahun} /> : <LoadingScreen />)
+              )}
+              {/* ── Indikator Prioritas ── */}
+              {active === "prioritas" && (
+                tahun === "banding"
+                  ? (data24 && data25 ? <IndikatorPrioritasBanding d24={data24.indikator_prioritas ?? []} d25={data25.indikator_prioritas ?? []} satdik24={data24.satdik_tren ?? null} satdik25={data25.satdik_tren ?? null} /> : <LoadingScreen />)
+                  : (activeData ? <IndikatorPrioritasSingle data={activeData.indikator_prioritas ?? []} tahun={tahun} satdikTren={activeData.satdik_tren ?? null} /> : <LoadingScreen />)
               )}
               {/* ── KabKot ── */}
               {active === "kabkot" && (

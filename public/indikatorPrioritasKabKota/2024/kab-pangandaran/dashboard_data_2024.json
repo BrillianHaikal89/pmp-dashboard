@@ -1,0 +1,5797 @@
+{
+  "meta": {
+    "sumber_file": "Bersih_kab_pangandaran.xlsx",
+    "tahun": "2024",
+    "dibuat": "2026-05-03 05:12"
+  },
+  "indikator": {
+    "total": 250,
+    "data": [
+      {
+        "jenis": "SMA Umum",
+        "status": "Semua",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "81,29%",
+        "delta": "Naik 5,64",
+        "nilai_24": "75,65%",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Semua",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "78,2%",
+        "delta": "Naik 11,83",
+        "nilai_24": "66,37%",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Semua",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "55,81",
+        "delta": "Naik 1,60",
+        "nilai_24": "54,21",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "62,88",
+        "delta": "Tidak berubah",
+        "nilai_24": "62,88",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "67,09",
+        "delta": "Naik 3,88",
+        "nilai_24": "63,21",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "74",
+        "delta": "Naik 1,08",
+        "nilai_24": "72,92",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Semua",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "74",
+        "delta": "Turun 0,28",
+        "nilai_24": "74,28",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Semua",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "59,88",
+        "delta": "Naik 3,04",
+        "nilai_24": "56,84",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Negeri",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "79,56%",
+        "delta": "Naik 0,89",
+        "nilai_24": "78,67%",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Negeri",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "75,1%",
+        "delta": "Naik 4,00",
+        "nilai_24": "71,1%",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Negeri",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "53,65",
+        "delta": "Turun 0,37",
+        "nilai_24": "54,02",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Negeri",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "61,39",
+        "delta": "Turun 1,64",
+        "nilai_24": "63,03",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Negeri",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "66,96",
+        "delta": "Naik 3,62",
+        "nilai_24": "63,34",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Negeri",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "73,59",
+        "delta": "Naik 0,81",
+        "nilai_24": "72,78",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Negeri",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "74,2",
+        "delta": "Turun 0,11",
+        "nilai_24": "74,31",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Negeri",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "58,2",
+        "delta": "Naik 0,81",
+        "nilai_24": "57,39",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Swasta",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "84,62%",
+        "delta": "Naik 14,62",
+        "nilai_24": "70%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Swasta",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "84,03%",
+        "delta": "Naik 26,53",
+        "nilai_24": "57,5%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Swasta",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "59,39",
+        "delta": "Naik 4,89",
+        "nilai_24": "54,5",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "65,32",
+        "delta": "Naik 2,72",
+        "nilai_24": "62,6",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "67,31",
+        "delta": "Naik 4,31",
+        "nilai_24": "63",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "74,67",
+        "delta": "Naik 1,50",
+        "nilai_24": "73,17",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Swasta",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "73,67",
+        "delta": "Turun 0,53",
+        "nilai_24": "74,2",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Umum",
+        "status": "Swasta",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "62,67",
+        "delta": "Naik 6,75",
+        "nilai_24": "55,92",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Semua",
+        "no": "A.1",
+        "label_25": "Sedang",
+        "nilai_25": "60%",
+        "delta": "Turun 20,00",
+        "nilai_24": "80%",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Semua",
+        "no": "A.2",
+        "label_25": "Sedang",
+        "nilai_25": "60%",
+        "delta": "Turun 40,00",
+        "nilai_24": "100%",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Semua",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "52,27",
+        "delta": "Turun 4,30",
+        "nilai_24": "56,57",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "60,25",
+        "delta": "Turun 6,06",
+        "nilai_24": "66,31",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "52,15",
+        "delta": "Naik 3,94",
+        "nilai_24": "48,21",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "62,5",
+        "delta": "Turun 9,75",
+        "nilai_24": "72,25",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Semua",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "68,75",
+        "delta": "Turun 0,46",
+        "nilai_24": "69,21",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Semua",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "61",
+        "delta": "Turun 2,64",
+        "nilai_24": "63,64",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Negeri",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak berubah",
+        "nilai_24": "100%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Negeri",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak berubah",
+        "nilai_24": "100%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Negeri",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "60",
+        "delta": "Turun 14,84",
+        "nilai_24": "74,84",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Negeri",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "70",
+        "delta": "Naik 1,91",
+        "nilai_24": "68,09",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Negeri",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "63,42",
+        "delta": "Naik 12,28",
+        "nilai_24": "51,14",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Negeri",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "77",
+        "delta": "Turun 1,65",
+        "nilai_24": "78,65",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Negeri",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "80",
+        "delta": "Naik 10,82",
+        "nilai_24": "69,18",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Negeri",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "74",
+        "delta": "Naik 2,60",
+        "nilai_24": "71,4",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Swasta",
+        "no": "A.1",
+        "label_25": "Sedang",
+        "nilai_25": "50%",
+        "delta": "Turun 25,00",
+        "nilai_24": "75%",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Swasta",
+        "no": "A.2",
+        "label_25": "Sedang",
+        "nilai_25": "50%",
+        "delta": "Turun 50,00",
+        "nilai_24": "100%",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Swasta",
+        "no": "A.3",
+        "label_25": "Sedang",
+        "nilai_25": "49,7",
+        "delta": "Turun 0,79",
+        "nilai_24": "50,49",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "57",
+        "delta": "Turun 8,73",
+        "nilai_24": "65,73",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "48,4",
+        "delta": "Naik 1,15",
+        "nilai_24": "47,25",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "57,67",
+        "delta": "Turun 12,43",
+        "nilai_24": "70,1",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Swasta",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "65",
+        "delta": "Turun 4,23",
+        "nilai_24": "69,23",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMA SLB",
+        "status": "Swasta",
+        "no": "D.10",
+        "label_25": "Sedang",
+        "nilai_25": "56,67",
+        "delta": "Turun 4,37",
+        "nilai_24": "61,04",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Semua",
+        "no": "A.1",
+        "label_25": "Sedang",
+        "nilai_25": "43,53%",
+        "delta": "Naik 8,03",
+        "nilai_24": "35,5%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Semua",
+        "no": "A.2",
+        "label_25": "Sedang",
+        "nilai_25": "54,6%",
+        "delta": "Naik 12,39",
+        "nilai_24": "42,21%",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Semua",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "52,53",
+        "delta": "Naik 0,89",
+        "nilai_24": "51,64",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "60,25",
+        "delta": "Naik 0,83",
+        "nilai_24": "59,42",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "42,67",
+        "delta": "Turun 6,19",
+        "nilai_24": "48,86",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "65,57",
+        "delta": "Turun 1,41",
+        "nilai_24": "66,98",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Semua",
+        "no": "D.8",
+        "label_25": "Sedang",
+        "nilai_25": "59,25",
+        "delta": "Turun 1,65",
+        "nilai_24": "60,9",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Semua",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "54,32",
+        "delta": "Naik 4,08",
+        "nilai_24": "50,24",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Swasta",
+        "no": "A.1",
+        "label_25": "Sedang",
+        "nilai_25": "43,53%",
+        "delta": "Naik 8,03",
+        "nilai_24": "35,5%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Swasta",
+        "no": "A.2",
+        "label_25": "Sedang",
+        "nilai_25": "54,6%",
+        "delta": "Naik 12,39",
+        "nilai_24": "42,21%",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Swasta",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "52,53",
+        "delta": "Naik 0,89",
+        "nilai_24": "51,64",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "60,25",
+        "delta": "Naik 0,83",
+        "nilai_24": "59,42",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "42,67",
+        "delta": "Turun 6,19",
+        "nilai_24": "48,86",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "65,57",
+        "delta": "Turun 1,41",
+        "nilai_24": "66,98",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Swasta",
+        "no": "D.8",
+        "label_25": "Sedang",
+        "nilai_25": "59,25",
+        "delta": "Turun 1,65",
+        "nilai_24": "60,9",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMA Kesetaraan",
+        "status": "Swasta",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "54,32",
+        "delta": "Naik 4,08",
+        "nilai_24": "50,24",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Semua",
+        "no": "A.1",
+        "label_25": "Sedang",
+        "nilai_25": "65,45%",
+        "delta": "Naik 0,50",
+        "nilai_24": "64,95%",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Semua",
+        "no": "A.2",
+        "label_25": "Sedang",
+        "nilai_25": "62,89%",
+        "delta": "Naik 5,50",
+        "nilai_24": "57,39%",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Semua",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "52,65",
+        "delta": "Naik 0,25",
+        "nilai_24": "52,4",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "58,4",
+        "delta": "Turun 1,52",
+        "nilai_24": "59,92",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "51,56",
+        "delta": "Turun 0,89",
+        "nilai_24": "52,45",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "67",
+        "delta": "Turun 1,73",
+        "nilai_24": "68,73",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Semua",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "64,62",
+        "delta": "Turun 4,14",
+        "nilai_24": "68,76",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Semua",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "53,89",
+        "delta": "Naik 0,14",
+        "nilai_24": "53,75",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Negeri",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "74,81%",
+        "delta": "Turun 1,12",
+        "nilai_24": "75,93%",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Negeri",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "74,06%",
+        "delta": "Naik 4,44",
+        "nilai_24": "69,62%",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Negeri",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "53,21",
+        "delta": "Naik 1,04",
+        "nilai_24": "52,17",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Negeri",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "59,17",
+        "delta": "Turun 1,86",
+        "nilai_24": "61,03",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Negeri",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "58,15",
+        "delta": "Naik 3,19",
+        "nilai_24": "54,96",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Negeri",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "70,82",
+        "delta": "Naik 1,17",
+        "nilai_24": "69,65",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Negeri",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "69,32",
+        "delta": "Turun 0,86",
+        "nilai_24": "70,18",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Negeri",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "57,5",
+        "delta": "Naik 2,61",
+        "nilai_24": "54,89",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Swasta",
+        "no": "A.1",
+        "label_25": "Sedang",
+        "nilai_25": "62,25%",
+        "delta": "Naik 0,79",
+        "nilai_24": "61,46%",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Swasta",
+        "no": "A.2",
+        "label_25": "Sedang",
+        "nilai_25": "59,09%",
+        "delta": "Naik 5,62",
+        "nilai_24": "53,47%",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Swasta",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "52,5",
+        "delta": "Naik 0,04",
+        "nilai_24": "52,46",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "58,21",
+        "delta": "Turun 1,43",
+        "nilai_24": "59,64",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "49,75",
+        "delta": "Turun 2,00",
+        "nilai_24": "51,75",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "66",
+        "delta": "Turun 2,51",
+        "nilai_24": "68,51",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Swasta",
+        "no": "D.8",
+        "label_25": "Sedang",
+        "nilai_25": "63,39",
+        "delta": "Turun 5,03",
+        "nilai_24": "68,42",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMK Umum",
+        "status": "Swasta",
+        "no": "D.10",
+        "label_25": "Sedang",
+        "nilai_25": "52,96",
+        "delta": "Turun 0,51",
+        "nilai_24": "53,47",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Semua",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "79,93%",
+        "delta": "Naik 4,20",
+        "nilai_24": "75,73%",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Semua",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "73,71%",
+        "delta": "Turun 1,13",
+        "nilai_24": "74,84%",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Semua",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "57,04",
+        "delta": "Turun 1,42",
+        "nilai_24": "58,46",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "65,68",
+        "delta": "Turun 2,63",
+        "nilai_24": "68,31",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "64,31",
+        "delta": "Turun 3,00",
+        "nilai_24": "67,31",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "72,84",
+        "delta": "Turun 2,06",
+        "nilai_24": "74,9",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Semua",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "73,75",
+        "delta": "Turun 3,20",
+        "nilai_24": "76,95",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Semua",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "60,57",
+        "delta": "Turun 0,78",
+        "nilai_24": "61,35",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "82,78%",
+        "delta": "Naik 5,30",
+        "nilai_24": "77,48%",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "77,29%",
+        "delta": "Turun 2,72",
+        "nilai_24": "80,01%",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "58,45",
+        "delta": "Turun 1,08",
+        "nilai_24": "59,53",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "67,85",
+        "delta": "Turun 2,49",
+        "nilai_24": "70,34",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "67,54",
+        "delta": "Turun 4,86",
+        "nilai_24": "72,4",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "75,56",
+        "delta": "Turun 1,26",
+        "nilai_24": "76,82",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "76,31",
+        "delta": "Turun 2,81",
+        "nilai_24": "79,12",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "62,61",
+        "delta": "Turun 0,67",
+        "nilai_24": "63,28",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "71,54%",
+        "delta": "Naik 1,56",
+        "nilai_24": "69,98%",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "no": "A.2",
+        "label_25": "Sedang",
+        "nilai_25": "63,1%",
+        "delta": "Naik 5,26",
+        "nilai_24": "57,84%",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "54,18",
+        "delta": "Turun 1,68",
+        "nilai_24": "55,86",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "61,21",
+        "delta": "Turun 2,10",
+        "nilai_24": "63,31",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "57,64",
+        "delta": "Naik 2,85",
+        "nilai_24": "54,79",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "67,21",
+        "delta": "Turun 2,97",
+        "nilai_24": "70,18",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "68,43",
+        "delta": "Turun 3,13",
+        "nilai_24": "71,56",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "56,39",
+        "delta": "Turun 0,24",
+        "nilai_24": "56,63",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Semua",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "75%",
+        "delta": "Turun 3,56",
+        "nilai_24": "78,56%",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Semua",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Naik 35,71",
+        "nilai_24": "64,29%",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Semua",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "63,17",
+        "delta": "Naik 10,57",
+        "nilai_24": "52,6",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "67,67",
+        "delta": "Turun 0,89",
+        "nilai_24": "68,56",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "59,53",
+        "delta": "Naik 6,78",
+        "nilai_24": "52,75",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "72,32",
+        "delta": "Turun 7,14",
+        "nilai_24": "79,46",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Semua",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "77",
+        "delta": "Naik 8,10",
+        "nilai_24": "68,9",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Semua",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "81,32",
+        "delta": "Naik 9,64",
+        "nilai_24": "71,68",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Negeri",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak berubah",
+        "nilai_24": "100%",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Negeri",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak berubah",
+        "nilai_24": "100%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Negeri",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "65,5",
+        "delta": "Naik 13,68",
+        "nilai_24": "51,82",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Negeri",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "65",
+        "delta": "Turun 1,92",
+        "nilai_24": "66,92",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Negeri",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "60,4",
+        "delta": "Naik 7,65",
+        "nilai_24": "52,75",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Negeri",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "71",
+        "delta": "Turun 10,82",
+        "nilai_24": "81,82",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Negeri",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "76",
+        "delta": "Naik 11,52",
+        "nilai_24": "64,48",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Negeri",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "78,5",
+        "delta": "Naik 3,41",
+        "nilai_24": "75,09",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Swasta",
+        "no": "A.1",
+        "label_25": "Sedang",
+        "nilai_25": "50%",
+        "delta": "Turun 25,00",
+        "nilai_24": "75%",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Swasta",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Naik 41,68",
+        "nilai_24": "58,32%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Swasta",
+        "no": "A.3",
+        "label_25": "Sedang",
+        "nilai_25": "58,5",
+        "delta": "Naik 5,72",
+        "nilai_24": "52,78",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "73",
+        "delta": "Naik 4,02",
+        "nilai_24": "68,98",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "57,75",
+        "delta": "Naik 4,98",
+        "nilai_24": "52,77",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "75",
+        "delta": "Turun 3,87",
+        "nilai_24": "78,87",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Swasta",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "79",
+        "delta": "Naik 9,00",
+        "nilai_24": "70",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP SLB",
+        "status": "Swasta",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "87",
+        "delta": "Naik 16,18",
+        "nilai_24": "70,82",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Semua",
+        "no": "A.1",
+        "label_25": "Sedang",
+        "nilai_25": "60,5%",
+        "delta": "Turun 4,34",
+        "nilai_24": "64,84%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Semua",
+        "no": "A.2",
+        "label_25": "Sedang",
+        "nilai_25": "64,7%",
+        "delta": "Naik 0,64",
+        "nilai_24": "64,06%",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Semua",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "52,6",
+        "delta": "Naik 0,22",
+        "nilai_24": "52,38",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "59,67",
+        "delta": "Turun 4,56",
+        "nilai_24": "64,23",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "46,43",
+        "delta": "Turun 5,71",
+        "nilai_24": "52,14",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "67,25",
+        "delta": "Turun 2,60",
+        "nilai_24": "69,85",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Semua",
+        "no": "D.8",
+        "label_25": "Sedang",
+        "nilai_25": "60,25",
+        "delta": "Naik 1,79",
+        "nilai_24": "58,46",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Semua",
+        "no": "D.10",
+        "label_25": "Sedang",
+        "nilai_25": "53",
+        "delta": "Turun 0,10",
+        "nilai_24": "53,1",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Swasta",
+        "no": "A.1",
+        "label_25": "Sedang",
+        "nilai_25": "60,5%",
+        "delta": "Turun 4,34",
+        "nilai_24": "64,84%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Swasta",
+        "no": "A.2",
+        "label_25": "Sedang",
+        "nilai_25": "64,7%",
+        "delta": "Naik 0,64",
+        "nilai_24": "64,06%",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Swasta",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "52,6",
+        "delta": "Naik 0,22",
+        "nilai_24": "52,38",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "59,67",
+        "delta": "Turun 4,56",
+        "nilai_24": "64,23",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "46,43",
+        "delta": "Turun 5,71",
+        "nilai_24": "52,14",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "67,25",
+        "delta": "Turun 2,60",
+        "nilai_24": "69,85",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Swasta",
+        "no": "D.8",
+        "label_25": "Sedang",
+        "nilai_25": "60,25",
+        "delta": "Naik 1,79",
+        "nilai_24": "58,46",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SMP Kesetaraan",
+        "status": "Swasta",
+        "no": "D.10",
+        "label_25": "Sedang",
+        "nilai_25": "53",
+        "delta": "Turun 0,10",
+        "nilai_24": "53,1",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Semua",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "80,37%",
+        "delta": "Naik 4,39",
+        "nilai_24": "75,98%",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Semua",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "81,26%",
+        "delta": "Naik 10,20",
+        "nilai_24": "71,06%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Semua",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "65,31",
+        "delta": "Naik 2,11",
+        "nilai_24": "63,2",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "71,06",
+        "delta": "Naik 0,55",
+        "nilai_24": "70,51",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "65,93",
+        "delta": "Naik 2,22",
+        "nilai_24": "63,71",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "81,48",
+        "delta": "Naik 2,63",
+        "nilai_24": "78,85",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Semua",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "76,71",
+        "delta": "Naik 1,06",
+        "nilai_24": "75,65",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Semua",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "65,75",
+        "delta": "Naik 3,72",
+        "nilai_24": "62,03",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Negeri",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "80,54%",
+        "delta": "Naik 4,36",
+        "nilai_24": "76,18%",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Negeri",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "81,54%",
+        "delta": "Naik 10,31",
+        "nilai_24": "71,23%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Negeri",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "65,51",
+        "delta": "Naik 2,19",
+        "nilai_24": "63,32",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Negeri",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "71,28",
+        "delta": "Naik 0,60",
+        "nilai_24": "70,68",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Negeri",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "66,09",
+        "delta": "Naik 2,27",
+        "nilai_24": "63,82",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Negeri",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "81,65",
+        "delta": "Naik 2,62",
+        "nilai_24": "79,03",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Negeri",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "76,9",
+        "delta": "Naik 1,14",
+        "nilai_24": "75,76",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Negeri",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "65,95",
+        "delta": "Naik 3,77",
+        "nilai_24": "62,18",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Swasta",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "72,81%",
+        "delta": "Naik 9,06",
+        "nilai_24": "63,75%",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Swasta",
+        "no": "A.2",
+        "label_25": "Sedang",
+        "nilai_25": "67,95%",
+        "delta": "Naik 7,95",
+        "nilai_24": "60%",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Swasta",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "54,43",
+        "delta": "Naik 0,84",
+        "nilai_24": "53,59",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "59,2",
+        "delta": "Naik 0,30",
+        "nilai_24": "58,9",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "56,24",
+        "delta": "Naik 0,42",
+        "nilai_24": "55,82",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "71,2",
+        "delta": "Naik 3,94",
+        "nilai_24": "67,26",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Swasta",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "66,2",
+        "delta": "Turun 2,86",
+        "nilai_24": "69,06",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Umum",
+        "status": "Swasta",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "53,6",
+        "delta": "Naik 2,71",
+        "nilai_24": "50,89",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Semua",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak berubah",
+        "nilai_24": "100%",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Semua",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak berubah",
+        "nilai_24": "100%",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Semua",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "88,2",
+        "delta": "Naik 25,42",
+        "nilai_24": "62,78",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "61",
+        "delta": "Turun 14,31",
+        "nilai_24": "75,31",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "50,42",
+        "delta": "Naik 4,96",
+        "nilai_24": "45,46",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "82",
+        "delta": "Naik 6,88",
+        "nilai_24": "75,12",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Semua",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "69",
+        "delta": "Turun 0,17",
+        "nilai_24": "69,17",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Semua",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "72",
+        "delta": "Naik 11,10",
+        "nilai_24": "60,9",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Negeri",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak berubah",
+        "nilai_24": "100%",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Negeri",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak berubah",
+        "nilai_24": "100%",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Negeri",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "88,2",
+        "delta": "Naik 9,27",
+        "nilai_24": "78,93",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Negeri",
+        "no": "D.1",
+        "label_25": "Baik",
+        "nilai_25": "61",
+        "delta": "Turun 16,21",
+        "nilai_24": "77,21",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Negeri",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "50,42",
+        "delta": "Naik 2,53",
+        "nilai_24": "47,89",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Negeri",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "82",
+        "delta": "Naik 11,57",
+        "nilai_24": "70,43",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Negeri",
+        "no": "D.8",
+        "label_25": "Baik",
+        "nilai_25": "69",
+        "delta": "Naik 0,08",
+        "nilai_24": "68,92",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "SD SLB",
+        "status": "Negeri",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "72",
+        "delta": "Naik 11,44",
+        "nilai_24": "60,56",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Semua",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)%",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Semua",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)%",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Semua",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "61,35",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "62,5",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "43,54",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "75",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Semua",
+        "no": "D.8",
+        "label_25": "Sedang",
+        "nilai_25": "52,5",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Semua",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "56,5",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Swasta",
+        "no": "A.1",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)%",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Swasta",
+        "no": "A.2",
+        "label_25": "Baik",
+        "nilai_25": "100%",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)%",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Swasta",
+        "no": "A.3",
+        "label_25": "Baik",
+        "nilai_25": "61,35",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "62,5",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "43,54",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "75",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Swasta",
+        "no": "D.8",
+        "label_25": "Sedang",
+        "nilai_25": "52,5",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "SD Kesetaraan",
+        "status": "Swasta",
+        "no": "D.10",
+        "label_25": "Baik",
+        "nilai_25": "56,5",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "58,89",
+        "delta": "Naik 1,92",
+        "nilai_24": "56,97",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "66,37",
+        "delta": "Turun 5,83",
+        "nilai_24": "72,2",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "63,31",
+        "delta": "Turun 5,39",
+        "nilai_24": "68,7",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Negeri",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "64,84",
+        "delta": "Turun 2,59",
+        "nilai_24": "67,43",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Negeri",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "73,2",
+        "delta": "Turun 5,84",
+        "nilai_24": "79,04",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Negeri",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "69,2",
+        "delta": "Turun 5,28",
+        "nilai_24": "74,48",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "58,79",
+        "delta": "Naik 1,90",
+        "nilai_24": "56,89",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "66,26",
+        "delta": "Turun 5,88",
+        "nilai_24": "72,14",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "63,2",
+        "delta": "Turun 5,45",
+        "nilai_24": "68,65",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD TK",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "60,82",
+        "delta": "Naik 2,51",
+        "nilai_24": "58,31",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "PAUD TK",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "68,65",
+        "delta": "Turun 5,69",
+        "nilai_24": "74,34",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "PAUD TK",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "65,67",
+        "delta": "Turun 4,70",
+        "nilai_24": "70,37",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "PAUD TK",
+        "status": "Negeri",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "64,84",
+        "delta": "Turun 2,59",
+        "nilai_24": "67,43",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD TK",
+        "status": "Negeri",
+        "no": "D.3",
+        "label_25": "Baik",
+        "nilai_25": "73,2",
+        "delta": "Turun 5,84",
+        "nilai_24": "79,04",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD TK",
+        "status": "Negeri",
+        "no": "D.4",
+        "label_25": "Baik",
+        "nilai_25": "69,2",
+        "delta": "Turun 5,28",
+        "nilai_24": "74,48",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD TK",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "60,61",
+        "delta": "Naik 2,54",
+        "nilai_24": "58,07",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "PAUD TK",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "68,4",
+        "delta": "Turun 5,81",
+        "nilai_24": "74,21",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "PAUD TK",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "65,48",
+        "delta": "Turun 4,78",
+        "nilai_24": "70,26",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "PAUD KB",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "57,35",
+        "delta": "Naik 2,03",
+        "nilai_24": "55,32",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "PAUD KB",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "65,85",
+        "delta": "Turun 5,79",
+        "nilai_24": "71,64",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD KB",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "62,89",
+        "delta": "Turun 4,98",
+        "nilai_24": "67,87",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "PAUD KB",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "57,35",
+        "delta": "Naik 2,03",
+        "nilai_24": "55,32",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "PAUD KB",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "65,85",
+        "delta": "Turun 5,79",
+        "nilai_24": "71,64",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD KB",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "62,89",
+        "delta": "Turun 4,98",
+        "nilai_24": "67,87",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "PAUD SPS",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "58,32",
+        "delta": "Naik 1,94",
+        "nilai_24": "56,38",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "PAUD SPS",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "68,51",
+        "delta": "Turun 3,13",
+        "nilai_24": "71,64",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "PAUD SPS",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "62,64",
+        "delta": "Turun 3,87",
+        "nilai_24": "66,51",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "PAUD SPS",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "58,32",
+        "delta": "Naik 1,94",
+        "nilai_24": "56,38",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "PAUD SPS",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "68,51",
+        "delta": "Turun 3,13",
+        "nilai_24": "71,64",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "PAUD SPS",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "62,64",
+        "delta": "Turun 3,87",
+        "nilai_24": "66,51",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "PAUD PKBM",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "63,17",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)"
+      },
+      {
+        "jenis": "PAUD PKBM",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "63,63",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "PAUD PKBM",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Kurang",
+        "nilai_25": "44,86",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "PAUD PKBM",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Sedang",
+        "nilai_25": "63,17",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat atas (1-20%)"
+      },
+      {
+        "jenis": "PAUD PKBM",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Sedang",
+        "nilai_25": "63,63",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat menengah (41-60%)"
+      },
+      {
+        "jenis": "PAUD PKBM",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Kurang",
+        "nilai_25": "44,86",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "PAUD SLB",
+        "status": "Semua",
+        "no": "D.1",
+        "label_25": "Kurang",
+        "nilai_25": "40,21",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "PAUD SLB",
+        "status": "Semua",
+        "no": "D.3",
+        "label_25": "Kurang",
+        "nilai_25": "57,24",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "PAUD SLB",
+        "status": "Semua",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "59,22",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      },
+      {
+        "jenis": "PAUD SLB",
+        "status": "Swasta",
+        "no": "D.1",
+        "label_25": "Kurang",
+        "nilai_25": "40,21",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "PAUD SLB",
+        "status": "Swasta",
+        "no": "D.3",
+        "label_25": "Kurang",
+        "nilai_25": "57,24",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat bawah (81-100%)"
+      },
+      {
+        "jenis": "PAUD SLB",
+        "status": "Swasta",
+        "no": "D.4",
+        "label_25": "Sedang",
+        "nilai_25": "59,22",
+        "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "nilai_24": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)"
+      }
+    ]
+  },
+  "aps": {
+    "total": 15,
+    "data": [
+      {
+        "jenis": "SMA/SMK Sederajat",
+        "status": "Semua",
+        "no": "B.10",
+        "indikator": "Angka Partisipasi Kasar (APK) SMA/K/MA/MAK/Paket C/SMALB\nJumlah peserta didik di jenjang SMA/sederajat dibagi jumlah penduduk usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun pada kab/kota yang bersangkutan",
+        "label_25": "Capaian Tidak Tersedia",
+        "nilai_25": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "definisi": "Tidak ada data untuk indikator ini",
+        "delta": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "nilai_24": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "peringkat_prov": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "sumber": "Data Pokok Pendidikan, Kemenag, (BPS/Dukcapil, TBC)"
+      },
+      {
+        "jenis": "SMA/SMK Sederajat",
+        "status": "Semua",
+        "no": "B.12",
+        "indikator": "Angka Partisipasi Murni (APM) SMA/K/MA/MAK/Paket C/SMALB\nJumlah anak usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun yang sedang belajar di satuan pendidikan jenjang SMA/sederajat dibagi dengan jumlah anak usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun pada wilayah yang bersangkutan",
+        "label_25": "Capaian Tidak Tersedia",
+        "nilai_25": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "definisi": "Tidak ada data untuk indikator ini",
+        "delta": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "nilai_24": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "peringkat_prov": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "sumber": "Data Pokok Pendidikan, Kemenag, (BPS/Dukcapil, TBC)"
+      },
+      {
+        "jenis": "SMA/SMK Sederajat",
+        "status": "Negeri",
+        "no": "B.10",
+        "indikator": "Angka Partisipasi Kasar (APK) SMA/K/MA/MAK/Paket C/SMALB\nJumlah peserta didik di jenjang SMA/sederajat dibagi jumlah penduduk usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun pada kab/kota yang bersangkutan",
+        "label_25": "Capaian Tidak Tersedia",
+        "nilai_25": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "definisi": "Tidak ada data untuk indikator ini",
+        "delta": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "nilai_24": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "peringkat_prov": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "sumber": "Data Pokok Pendidikan, Kemenag, (BPS/Dukcapil, TBC)"
+      },
+      {
+        "jenis": "SMA/SMK Sederajat",
+        "status": "Negeri",
+        "no": "B.12",
+        "indikator": "Angka Partisipasi Murni (APM) SMA/K/MA/MAK/Paket C/SMALB\nJumlah anak usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun yang sedang belajar di satuan pendidikan jenjang SMA/sederajat dibagi dengan jumlah anak usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun pada wilayah yang bersangkutan",
+        "label_25": "Capaian Tidak Tersedia",
+        "nilai_25": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "definisi": "Tidak ada data untuk indikator ini",
+        "delta": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "nilai_24": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "peringkat_prov": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "sumber": "Data Pokok Pendidikan, Kemenag, (BPS/Dukcapil, TBC)"
+      },
+      {
+        "jenis": "SMA/SMK Sederajat",
+        "status": "Swasta",
+        "no": "B.10",
+        "indikator": "Angka Partisipasi Kasar (APK) SMA/K/MA/MAK/Paket C/SMALB\nJumlah peserta didik di jenjang SMA/sederajat dibagi jumlah penduduk usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun pada kab/kota yang bersangkutan",
+        "label_25": "Capaian Tidak Tersedia",
+        "nilai_25": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "definisi": "Tidak ada data untuk indikator ini",
+        "delta": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "nilai_24": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "peringkat_prov": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "sumber": "Data Pokok Pendidikan, Kemenag, (BPS/Dukcapil, TBC)"
+      },
+      {
+        "jenis": "SMA/SMK Sederajat",
+        "status": "Swasta",
+        "no": "B.12",
+        "indikator": "Angka Partisipasi Murni (APM) SMA/K/MA/MAK/Paket C/SMALB\nJumlah anak usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun yang sedang belajar di satuan pendidikan jenjang SMA/sederajat dibagi dengan jumlah anak usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun pada wilayah yang bersangkutan",
+        "label_25": "Capaian Tidak Tersedia",
+        "nilai_25": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "definisi": "Tidak ada data untuk indikator ini",
+        "delta": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "nilai_24": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "peringkat_prov": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "sumber": "Data Pokok Pendidikan, Kemenag, (BPS/Dukcapil, TBC)"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Semua",
+        "no": "B.5",
+        "indikator": "Kesenjangan APS 5-6 tahun Berdasarkan Kuintil Status Sosial Ekonomi\nSelisih dari APS usia 5-6 tahun di daerah dengan status sosial ekonomi rendah dan APS 5-6 tahun di daerah dengan status sosial ekonomi tinggi",
+        "label_25": "Kurang",
+        "nilai_25": "-43,06",
+        "definisi": "Selisih antara APS 5-6 kuintil 5 dengan kuintil 1 tidak seimbang",
+        "delta": "Turun 68,31",
+        "nilai_24": "25,25",
+        "peringkat_prov": "Peringkat bawah (81-100%)",
+        "sumber": "Badan Pusat Statistik"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Negeri",
+        "no": "B.5",
+        "indikator": "Kesenjangan APS 5-6 tahun Berdasarkan Kuintil Status Sosial Ekonomi\nSelisih dari APS usia 5-6 tahun di daerah dengan status sosial ekonomi rendah dan APS 5-6 tahun di daerah dengan status sosial ekonomi tinggi",
+        "label_25": "Capaian Tidak Tersedia",
+        "nilai_25": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "definisi": "Tidak ada data untuk indikator ini",
+        "delta": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "nilai_24": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "peringkat_prov": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "sumber": "Badan Pusat Statistik"
+      },
+      {
+        "jenis": "PAUD",
+        "status": "Swasta",
+        "no": "B.5",
+        "indikator": "Kesenjangan APS 5-6 tahun Berdasarkan Kuintil Status Sosial Ekonomi\nSelisih dari APS usia 5-6 tahun di daerah dengan status sosial ekonomi rendah dan APS 5-6 tahun di daerah dengan status sosial ekonomi tinggi",
+        "label_25": "Capaian Tidak Tersedia",
+        "nilai_25": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "definisi": "Tidak ada data untuk indikator ini",
+        "delta": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "nilai_24": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "peringkat_prov": "Tidak Tersedia (Tidak ada data untuk indikator ini)",
+        "sumber": "Badan Pusat Statistik"
+      },
+      {
+        "jenis": "Angka Partisipasi Sekolah (5-6)",
+        "status": "Tidak Relevan",
+        "no": "B.10",
+        "indikator": "Angka Partisipasi Sekolah (5-6)\nJumlah anak usia 5 (lima) sampai dengan 6 (enam) tahun yang sedang belajar di satuan pendidikan dibagi dengan jumlah anak usia 5 (lima) sampai dengan 6 (enam) tahun pada Kab/Kota yang bersangkutan",
+        "label_25": "Kurang",
+        "nilai_25": "76,1",
+        "definisi": "Proporsi peserta didik usia 5-6 tahun terhadap penduduk kelompok usia 5-6 tahun di suatu wilayah kurang",
+        "delta": "Turun 5,76",
+        "nilai_24": "81,86",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)",
+        "sumber": "Badan Pusat Statistik"
+      },
+      {
+        "jenis": "Angka Partisipasi Sekolah (APS) 7-12",
+        "status": "Tidak Relevan",
+        "no": "B.5",
+        "indikator": "Angka Partisipasi Sekolah (APS) 7-12\nJumlah anak usia 7 (tujuh) sampai dengan 12 (dua belas) tahun yang sedang belajar di satuan pendidikan dibagi dengan jumlah anak usia 7 (tujuh) sampai dengan 12 (dua belas) tahun pada kab/kota yang bersangkutan",
+        "label_25": "Tinggi",
+        "nilai_25": "97,91",
+        "definisi": "proporsi peserta didik usia 7-12 tahun terhadap penduduk kelompok usia 7-12 tahun di suatu wilayah sangat tinggi",
+        "delta": "Turun 1,58",
+        "nilai_24": "99,49",
+        "peringkat_prov": "Peringkat bawah (81-100%)",
+        "sumber": "Data Pokok Pendidikan, Kemenag, (BPS/Dukcapil, TBC)"
+      },
+      {
+        "jenis": "Angka Partisipasi Sekolah (APS) 7 - 15",
+        "status": "Tidak Relevan",
+        "no": "B.13",
+        "indikator": "Angka Partisipasi Sekolah (APS) 7 - 15\nJumlah anak usia 7 (tujuh) sampai dengan 15 (lima belas) tahun yang sedang belajar di satuan pendidikan dibagi dengan jumlah anak usia 7 (tujuh) sampai dengan 15 (lima belas) tahun pada kab/kota yang bersangkutan",
+        "label_25": "Tinggi",
+        "nilai_25": "97,97",
+        "definisi": "proporsi peserta didik usia 7-15 tahun terhadap penduduk kelompok usia 7-15 tahun di suatu wilayah sangat tinggi",
+        "delta": "Naik 0,80",
+        "nilai_24": "97,17",
+        "peringkat_prov": "Peringkat menengah bawah (61-80%)",
+        "sumber": "Survei Sosial Ekonomi Nasional"
+      },
+      {
+        "jenis": "Angka Partisipasi Sekolah (APS) 16-18",
+        "status": "Tidak Relevan",
+        "no": "B.11",
+        "indikator": "Angka Partisipasi Sekolah (APS) 16-18\nJumlah anak usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun yang sedang belajar di satuan pendidikan dibagi dengan jumlah anak usia 16 (enam belas) sampai dengan 18 (delapan belas) tahun pada provinsi yang bersangkutan",
+        "label_25": "Rendah",
+        "nilai_25": "75,3",
+        "definisi": "proporsi peserta didik usia 16-18 tahun terhadap penduduk kelompok usia 16-18 tahun di suatu wilayah kurang",
+        "delta": "Naik 2,99",
+        "nilai_24": "72,31",
+        "peringkat_prov": "Peringkat menengah atas (21-40%)",
+        "sumber": "Data Pokok Pendidikan, Kemenag, (BPS/Dukcapil, TBC)"
+      },
+      {
+        "jenis": "Angka Partisipasi Sekolah (APS) 7 - 18 Kesetaraan",
+        "status": "Tidak Relevan",
+        "no": "B.15",
+        "indikator": "Angka Partisipasi Sekolah (APS) 7 - 18 Kesetaraan\nJumlah  Warga Negara  usia 7-18 tahun yang belum menyelesaikan pendidikan dasar dan atau menengah yang berpartisipasi dalam pendidikan kesetaraan",
+        "label_25": "Rendah",
+        "nilai_25": "19,97",
+        "definisi": "proporsi peserta didik kesetaraan usia 7-18 tahun terhadap penduduk kelompok usia 7-18 tahun yang belum bersekolah formal di suatu wilayah kurang",
+        "delta": "Naik 8,70",
+        "nilai_24": "11,27",
+        "peringkat_prov": "Peringkat menengah (41-60%)",
+        "sumber": "Data Pokok Pendidikan, Survei Sosial Ekonomi Nasional"
+      },
+      {
+        "jenis": "Angka Partisipasi Sekolah (APS) 4 - 18 Penyandang Disabilitas",
+        "status": "Tidak Relevan",
+        "no": "B.14",
+        "indikator": "Angka Partisipasi Sekolah (APS) 4 - 18 Penyandang Disabilitas\nJumlah anak disabilitas usia 4 (empat) sampai dengan 18 (delapan belas) tahun yang sedang belajar di satuan pendidikan dibagi dengan jumlah anak disabilitas usia 4 (empat) sampai dengan 18 (delapan belas) tahun pada kab/kota yang bersangkutan. Data Susenas (Badan Pusat Statistik) hanya dapat tersedia hingga tingkat Nasional karena keterbatasan sampel disabilitas, Sehingga Data Capaian 2024 disamakan dengan Capaian 2023",
+        "label_25": "Rendah",
+        "nilai_25": "76,97",
+        "definisi": "proporsi peserta didik disabilitas usia 4-18 tahun terhadap penduduk disabilitas kelompok usia 4-18 tahun di suatu wilayah kurang",
+        "delta": "Tidak berubah",
+        "nilai_24": "76,97",
+        "peringkat_prov": "Peringkat menengah (41-60%)",
+        "sumber": "Survei Sosial Ekonomi Nasional 2023"
+      }
+    ]
+  },
+  "satdik": {
+    "total": 55,
+    "data": [
+      {
+        "npsn": "20201615",
+        "nama": "SMP NEGERI 4 LANGKAPLANCAR",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Langkaplancar",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "11,11",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,67",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,59",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,64",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,98",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,79",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,54",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,47",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20211514",
+        "nama": "SMP MUHAMMADIYAH PANGANDARAN",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Pangandaran",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "7,50",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,67",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "0,60",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "0,18",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,88",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,89",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,00",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "3,96",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20211532",
+        "nama": "SMP NEGERI 1 CIGUGUR",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cigugur",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,44",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "26,67",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,84",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,56",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "17,65",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "11,45",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,19",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,87",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20211579",
+        "nama": "SMP NEGERI 2 MANGUNJAYA",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Mangunjaya",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "28,88",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "13,33",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "5,12",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "5,85",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "3,94",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "5,34",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,44",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,73",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20211581",
+        "nama": "SMP NEGERI 3 CIMERAK",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cimerak",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,44",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "11,11",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "12,35",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "10,28",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,96",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,09",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "13,50",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "13,64",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20211584",
+        "nama": "SMP NEGERI 3 LANGKAPLANCAR",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Langkaplancar",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "26,67",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "8,89",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "3,70",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,50",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "11,74",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,86",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,07",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "7,13",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20211585",
+        "nama": "SMP NEGERI 3 PADAHERANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Padaherang",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,74",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "20,00",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "2,69",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "1,02",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,60",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,52",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,27",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "6,76",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20211587",
+        "nama": "SMP NEGERI 3 PANGANDARAN",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Pangandaran",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "40,00",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "35,55",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,00",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "3,30",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,39",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "6,75",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,82",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "5,20",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20211593",
+        "nama": "SMP NEGERI 2 PANGANDARAN",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Pangandaran",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "20,00",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "28,89",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "0,50",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "5,08",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "16,81",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,47",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,41",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,63",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20211596",
+        "nama": "SMP NEGERI 2 PARIGI",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Parigi",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "31,11",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,45",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,29",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,95",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "5,07",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,51",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,88",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,37",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20211611",
+        "nama": "SMP NEGERI 5 PADAHERANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Padaherang",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "8,89",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "4,45",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "5,51",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "3,17",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,93",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,18",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,38",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,23",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20211616",
+        "nama": "SMP NEGERI 4 PADAHERANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Padaherang",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "20,00",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,44",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,46",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,16",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "11,47",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "5,96",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,46",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,57",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20211624",
+        "nama": "SMP NEGERI 1 LANGKAPLANCAR",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Langkaplancar",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "11,11",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "26,67",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "3,59",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "8,41",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,72",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,14",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,44",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,15",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20211625",
+        "nama": "SMP NEGERI 1 MANGUNJAYA",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Mangunjaya",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Tidak Berubah",
+          "delta": "0",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "8,89",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "5,88",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "7,23",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "12,21",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,57",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,67",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,76",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20211626",
+        "nama": "SMP NEGERI 1 PADAHERANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Padaherang",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "15,56",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "15,55",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "13,27",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,35",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,02",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,75",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "5,83",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,17",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20211629",
+        "nama": "SMP NEGERI 1 PANGANDARAN",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Pangandaran",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,22",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,23",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,59",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "0,34",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,88",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,65",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,92",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "5,63",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20211634",
+        "nama": "SMP NEGERI 1 KALIPUCANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Kalipucang",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "6,67",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "13,33",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "0,70",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "1,78",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "14,04",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "5,40",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,55",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "5,67",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20211636",
+        "nama": "SMP NEGERI 1 CIJULANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cijulang",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "6,67",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "11,11",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "7,95",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "7,60",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,02",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "11,45",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,07",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "14,58",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20211639",
+        "nama": "SMP NEGERI 1 CIMERAK",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cimerak",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "13,34",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "28,89",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "8,28",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "15,14",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "17,73",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,48",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "11,56",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "12,73",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20211643",
+        "nama": "SMP NEGERI 1 PARIGI",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Parigi",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "11,12",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Tidak Berubah",
+          "delta": "0",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,40",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,88",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,38",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,16",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,87",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,05",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20211646",
+        "nama": "SMP NEGERI 2 CIJULANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cijulang",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "22,01",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "20,57",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,49",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "1,74",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "8,62",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "9,50",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,13",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,48",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20211648",
+        "nama": "SMP NEGERI 2 CIMERAK",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cimerak",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,22",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "24,44",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "12,15",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "12,66",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "14,53",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,49",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,31",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,77",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20211651",
+        "nama": "SMP NEGERI 2 KALIPUCANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Kalipucang",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "14,71",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "21,42",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "7,38",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "5,91",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,43",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "3,19",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "5,02",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,52",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20211655",
+        "nama": "SMP NEGERI 2 CIGUGUR",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cigugur",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "43,26",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,78",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "8,33",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "10,40",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "11,81",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "8,14",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "14,55",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "14,88",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20211665",
+        "nama": "SMP NEGERI 2 LANGKAPLANCAR",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Langkaplancar",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "22,22",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "33,33",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "7,10",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,90",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,17",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,04",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,83",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "7,23",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20252596",
+        "nama": "SMPN SATU ATAP PARIGI",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Parigi",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "9,81",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "14,65",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "1,22",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "5,69",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "8,33",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,94",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.8": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "6,73",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,08",
+          "peringkat": "Peringkat bawah (81-100%)"
+        }
+      },
+      {
+        "npsn": "20252984",
+        "nama": "SMP NEGERI 2 SIDAMULIH",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Sidamulih",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "12,52",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,44",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,28",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "5,25",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "7,53",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,08",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,64",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,95",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20252996",
+        "nama": "SMP NEGERI SATU ATAP 1 LANGKAPLANCAR",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Langkaplancar",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,40",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,32",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "8,53",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,59",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "7,54",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,31",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,56",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,41",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20253044",
+        "nama": "SMP NEGERI 2 PADAHERANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Padaherang",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "8,89",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "11,11",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "5,67",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "0,81",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "8,50",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,39",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,01",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,59",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20253047",
+        "nama": "SMP TERPADU MAFATIHUL HUDA",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Padaherang",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Tidak Berubah",
+          "delta": "0",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "11,11",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "2,49",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "0,27",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,78",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,73",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,46",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,52",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        }
+      },
+      {
+        "npsn": "20253102",
+        "nama": "SMP NEGERI 1 SIDAMULIH",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Sidamulih",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "6,66",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Tidak Berubah",
+          "delta": "0",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,70",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,78",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,87",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,11",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,32",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,35",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20253103",
+        "nama": "SMP TERPADU JAMANIS",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Parigi",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,97",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "7,33",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "2,78",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "4,93",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.3": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "1,12",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,29",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.8": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "4,10",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,24",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        }
+      },
+      {
+        "npsn": "20253310",
+        "nama": "SMP NEGERI SATU ATAP I SIDAMULIH",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Sidamulih",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "8,89",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,22",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,06",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "3,52",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,70",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,31",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "5,27",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,84",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20253773",
+        "nama": "SMP NEGERI SATU ATAP CIGUGUR",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cigugur",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "17,86",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "13,99",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "4,78",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "13,02",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "13,88",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,77",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "7,73",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "21,93",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        }
+      },
+      {
+        "npsn": "20253905",
+        "nama": "SMP NEGERI SATU ATAP 1 CIMERAK",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cimerak",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "13,33",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "10,63",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,75",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,08",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,93",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,38",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,32",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,94",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20253912",
+        "nama": "SMP NEGERI SATU ATAP 1 KALIPUCANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Kalipucang",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "19,44",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "19,44",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,83",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,96",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,84",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,03",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,43",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,20",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "20263220",
+        "nama": "SMP NEGERI 6 PADAHERANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Padaherang",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "28,67",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "11,21",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "12,94",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "6,16",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,97",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,40",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,40",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,06",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20263225",
+        "nama": "SMPS PLUS MA ARIF NU PANGANDARAN",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Pangandaran",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "16,88",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "18,51",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "12,15",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,67",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "19,40",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,89",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,37",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "3,95",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "20268168",
+        "nama": "SMPS MIFTAHUL HUDA MUSRI PANGANDARAN",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Pangandaran",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "3,33",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.2": {
+          "label": "Kurang",
+          "tren": "Turun",
+          "delta": "33,33",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "1,97",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "4,99",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,10",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,55",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.8": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "6,31",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,16",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "20269391",
+        "nama": "SMPS PLUS MA ARIF NU LANGKAPLANCAR",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Langkaplancar",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "8,48",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "18,12",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "4,90",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "4,82",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "6,40",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "5,87",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "7,44",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "4,99",
+          "peringkat": "Peringkat bawah (81-100%)"
+        }
+      },
+      {
+        "npsn": "20270543",
+        "nama": "SMPS IT IBNU AHKAM KALIPUCANG",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Kalipucang",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "3,06",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "11,50",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "2,96",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.1": {
+          "label": "Kurang",
+          "tren": "Turun",
+          "delta": "3,60",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.3": {
+          "label": "Kurang",
+          "tren": "Turun",
+          "delta": "7,52",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.4": {
+          "label": "Kurang",
+          "tren": "Turun",
+          "delta": "8,85",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.8": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "7,78",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,71",
+          "peringkat": "Peringkat bawah (81-100%)"
+        }
+      },
+      {
+        "npsn": "20270892",
+        "nama": "SMPS PLUS MA ARIF NU PARIGI",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Parigi",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "5,10",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "12,50",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,47",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "1,82",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,80",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,97",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "7,56",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,10",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "69725887",
+        "nama": "SMP NEGERI 3 KALIPUCANG",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Kalipucang",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "11,67",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "15,83",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,46",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "8,11",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,43",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,51",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "3,56",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,58",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "69725889",
+        "nama": "SMPN 5 LANGKAPLANCAR",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Langkaplancar",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "19,27",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Tidak Berubah",
+          "delta": "0",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "7,70",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "5,69",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,23",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,97",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,95",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "10,82",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "69882397",
+        "nama": "SMP NU AL-ITQON CIMERAK",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cimerak",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "7,22",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "14,21",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "3,77",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "2,26",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.3": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "0,33",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,23",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.8": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "5,18",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,25",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        }
+      },
+      {
+        "npsn": "69929245",
+        "nama": "SMP  IT CIBENDA",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Parigi",
+        "A.1": {
+          "label": "Kurang",
+          "tren": "Turun",
+          "delta": "13,10",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "1,19",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "A.3": {
+          "label": "Kurang",
+          "tren": "Turun",
+          "delta": "2,95",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "0,14",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "7,17",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "8,73",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.8": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "4,12",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,17",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        }
+      },
+      {
+        "npsn": "69946310",
+        "nama": "SMP PLUS NURUL BAYAN CIMERAK",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cimerak",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,45",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "15,56",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,98",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,59",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "4,72",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,25",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,92",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,94",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "69946808",
+        "nama": "SMP MAARIF NU NURUL QURAN RANCAPASUNG",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Padaherang",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "23,36",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "41,12",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "3,49",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "2,96",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "10,60",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.4": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "1,97",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.8": {
+          "label": "Sedang",
+          "tren": "Naik",
+          "delta": "0,40",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "5,05",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        }
+      },
+      {
+        "npsn": "69947563",
+        "nama": "SMP NEGERI 6 LANGKAPLANCAR",
+        "jenis": "SMP Umum",
+        "status": "Negeri",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Langkaplancar",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,45",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "13,33",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "5,22",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "4,20",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,32",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,09",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,28",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,38",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "69948725",
+        "nama": "SMP MAARIF NU DARUSSAADAH",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Langkaplancar",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "10,18",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "13,89",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "5,37",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.1": {
+          "label": "Kurang",
+          "tren": "Turun",
+          "delta": "13,69",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "1,87",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.4": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "14,69",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "8,75",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,71",
+          "peringkat": "Peringkat bawah (81-100%)"
+        }
+      },
+      {
+        "npsn": "69950605",
+        "nama": "SMP DHARMA KSATRIA",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Padaherang",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,18",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "6,66",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "8,68",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,09",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "8,49",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "0,94",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "6,95",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "9,39",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        }
+      },
+      {
+        "npsn": "69973810",
+        "nama": "SMP AL AMIN PANGANDARAN",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Pangandaran",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,99",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "20,44",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "1,17",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,53",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "9,39",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "0,54",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.8": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "9,48",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "2,30",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "70009377",
+        "nama": "SMP TERPADU AL MUHAIMIN",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Mangunjaya",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "28,26",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.2": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "41,55",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "6,22",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.1": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "13,68",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "20,18",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "10,32",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.8": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "15,43",
+          "peringkat": "Peringkat atas (1-20%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "14,69",
+          "peringkat": "Peringkat atas (1-20%)"
+        }
+      },
+      {
+        "npsn": "70015116",
+        "nama": "SMP AL-FURQON BOARDING SCHOOL",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Cimerak",
+        "A.1": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,22",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "5,56",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "A.3": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "1,26",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "5,47",
+          "peringkat": "Peringkat bawah (81-100%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Naik",
+          "delta": "8,03",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "8,33",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.8": {
+          "label": "Sedang",
+          "tren": "Turun",
+          "delta": "4,74",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Turun",
+          "delta": "2,17",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      },
+      {
+        "npsn": "70045983",
+        "nama": "SMP PLUS ASSABAQ",
+        "jenis": "SMP Umum",
+        "status": "Swasta",
+        "kab_kota": "Kab. Pangandaran",
+        "kecamatan": "Kec. Mangunjaya",
+        "A.1": {
+          "label": "Sedang",
+          "tren": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.2": {
+          "label": "Sedang",
+          "tren": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "A.3": {
+          "label": "Baik",
+          "tren": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.1": {
+          "label": "Sedang",
+          "tren": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.3": {
+          "label": "Baik",
+          "tren": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "peringkat": "Peringkat menengah atas (21-40%)"
+        },
+        "D.4": {
+          "label": "Baik",
+          "tren": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "peringkat": "Peringkat menengah bawah (61-80%)"
+        },
+        "D.8": {
+          "label": "Sedang",
+          "tren": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "peringkat": "Peringkat menengah (41-60%)"
+        },
+        "D.10": {
+          "label": "Baik",
+          "tren": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "delta": "Tidak Tersedia (Satdik tidak mengikuti AN tahun lalu)",
+          "peringkat": "Peringkat menengah (41-60%)"
+        }
+      }
+    ]
+  }
+}
