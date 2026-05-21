@@ -34,7 +34,7 @@ export default function KabkotPaud2025(props: Record<string, any>) {
 <div>
                     <SectionHeader
                       icon={<Layers size={18} />}
-                      title="Capaian Kab/Kota â€” PAUD"
+                      title="Capaian Kab/Kota PAUD"
                       badge={`Tahun ${tahun}`}
                     />
                     <KabkotTable

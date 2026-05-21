@@ -34,7 +34,7 @@ export default function SatdikPaud2025(props: Record<string, any>) {
 <div>
                     <SectionHeader
                       icon={<GraduationCap size={18} />}
-                      title="Capaian Satuan Pendidikan â€” PAUD"
+                      title="Capaian Satuan Pendidikan PAUD"
                       badge={`Tahun ${tahun} Â· SATDIK keagamaan tidak ditampilkan`}
                     />
                     <SatdikTable

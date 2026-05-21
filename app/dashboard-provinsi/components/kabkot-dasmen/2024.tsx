@@ -34,7 +34,7 @@ export default function KabkotDasmen2024(props: Record<string, any>) {
 <div>
                     <SectionHeader
                       icon={<MapPin size={18} />}
-                      title="Capaian Kab/Kota â€” Dasmen & Vokasi"
+                      title="Capaian Kab/Kota Dasmen & Vokasi"
                       badge={`Tahun ${tahun}`}
                     />
                     <KabkotTable

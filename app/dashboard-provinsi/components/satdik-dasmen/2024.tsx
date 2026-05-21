@@ -34,7 +34,7 @@ export default function SatdikDasmen2024(props: Record<string, any>) {
 <div>
                     <SectionHeader
                       icon={<School size={18} />}
-                      title="Capaian Satuan Pendidikan â€” Dasmen & Vokasi"
+                      title="Capaian Satuan Pendidikan Dasmen & Vokasi"
                       badge={`Tahun ${tahun} Â· SATDIK keagamaan tidak ditampilkan`}
                     />
                     <SatdikTable
