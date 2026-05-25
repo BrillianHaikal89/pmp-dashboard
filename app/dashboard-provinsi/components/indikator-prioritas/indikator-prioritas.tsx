@@ -1321,7 +1321,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                     {donutData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
                     <LabelList dataKey="value" position="outside" formatter={(v: unknown) => `${v}%`} style={{ fontSize: 10, fontWeight: 700, fill: "#475569" }} />
                   </Pie>
-                  <Tooltip formatter={(v: number) => [`${v}%`, ""]} contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0", fontSize: 11 }} />
+                  <Tooltip formatter={(v: number | undefined) => [`${v ?? 0}%`, ""]} contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0", fontSize: 11 }} />
                   <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11, fontWeight: 600, paddingTop: 12 }} />
                 </RPieChart>
               </ResponsiveContainer>
