@@ -1549,18 +1549,6 @@ export default function DashboardProvinsiPage() {
             <SelectFilter value={jenisSel} onChange={onJenis} options={jenisList} className="w-44" />
           )}
           <SelectFilter value={statusSel} onChange={onStatus} options={statusList} className="w-36" />
-          {/* Sort by Skor */}
-          <div className="flex items-center gap-1 ml-auto">
-            <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wide mr-1">Urutkan:</span>
-            {(["default", "skor-desc", "skor-asc"] as const).map(s => (
-              <button key={s} onClick={() => setSortBy(s)}
-                className={`px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border transition-all ${
-                  sortBy === s ? "bg-purple-600 text-white border-purple-600" : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"
-                }`}>
-                {s === "default" ? "Default" : s === "skor-desc" ? "Skor ↓" : "Skor ↑"}
-              </button>
-            ))}
-          </div>
           <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
             <span className="text-xs font-black text-slate-700">{rows.length}</span>
             <span className="text-xs text-slate-500">wilayah</span>
