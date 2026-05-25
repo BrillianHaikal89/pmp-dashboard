@@ -1567,25 +1567,7 @@ export default function DashboardProvinsiPage() {
           </div>
         </div>
 
-        {/* Statistik Skor Ringkas */}
-        {skorAvg !== null && (
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { label: "Rata-rata Skor", val: skorAvg, icon: <Activity size={14} />, color: "text-blue-700 bg-blue-50 border-blue-200" },
-              { label: "Skor Tertinggi", val: skorMax!, icon: <TrendingUp size={14} />, color: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-              { label: "Skor Terendah", val: skorMin!, icon: <TrendingDown size={14} />, color: "text-red-700 bg-red-50 border-red-200" },
-            ].map(({ label, val, icon, color }) => (
-              <div key={label} className={`flex items-center gap-3 px-4 py-3 rounded-2xl border ${color}`}>
-                <div className="flex-shrink-0">{icon}</div>
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wide opacity-70">{label}</p>
-                  <p className="text-lg font-black leading-tight">{val.toFixed(2)}</p>
-                  <p className="text-[10px] opacity-60">skala 1–4</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        
 
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Distribusi Capaian</p>
@@ -1600,7 +1582,6 @@ export default function DashboardProvinsiPage() {
                   <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] sticky left-0 bg-slate-50 min-w-36">Kab/Kota</th>
                   <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-28">Jenis</th>
                   <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Status</th>
-                  <th className="px-3 py-3 text-center font-bold text-purple-600 uppercase tracking-wide text-[10px] min-w-20 bg-purple-50/40">Skor</th>
                   {hasTren && (
                     <th className="px-3 py-3 text-center font-bold text-indigo-600 uppercase tracking-wide text-[10px] min-w-20 bg-indigo-50/40">Tren</th>
                   )}
@@ -1625,7 +1606,6 @@ export default function DashboardProvinsiPage() {
                       <td className="px-4 py-3 font-semibold text-slate-800 sticky left-0 bg-white group-hover:bg-purple-50/20 z-[5]">{row["Kab/Kota"]}</td>
                       <td className="px-4 py-3 text-slate-500">{row["Jenis Satuan Pendidikan"]}</td>
                       <td className="px-4 py-3 text-slate-500">{row["Status Satuan Pendidikan"]}</td>
-                      <td className="px-3 py-3 text-center bg-purple-50/20"><SkorBadge skor={skor} /></td>
                       {hasTren && (
                         <td className="px-3 py-3 text-center bg-indigo-50/20"><TrenBadge tren={tren} /></td>
                       )}
