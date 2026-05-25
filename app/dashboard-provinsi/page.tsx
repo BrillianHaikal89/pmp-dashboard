@@ -1555,8 +1555,6 @@ export default function DashboardProvinsiPage() {
           </div>
         </div>
 
-        
-
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Distribusi Capaian</p>
           <DistribusiBar data={rows as unknown as Record<string, string>[]} />

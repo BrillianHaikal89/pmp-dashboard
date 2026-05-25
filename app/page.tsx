@@ -51,9 +51,6 @@ export default function BerandaPage() {
                   PMP <span className="text-amber-400">Jawa Barat</span>
                 </p>
               </div>
-              <h1 className="text-2xl font-black text-slate-900 leading-tight">
-                Balai Besar Penjaminan Mutu<br />Pendidikan Jawa Barat
-              </h1>
               <p className="text-slate-500 text-sm mt-2">Rapor Pendidikan · Tahun 2024 dan 2025</p>
             </div>
 
