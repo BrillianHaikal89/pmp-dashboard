@@ -1319,7 +1319,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                 <RPieChart>
                   <Pie data={donutData} cx="50%" cy="50%" innerRadius={60} outerRadius={95} paddingAngle={3} dataKey="value" stroke="none">
                     {donutData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
-                    <LabelList dataKey="value" position="outside" formatter={(v: number) => `${v}%`} style={{ fontSize: 10, fontWeight: 700, fill: "#475569" }} />
+                    <LabelList dataKey="value" position="outside" formatter={(v: unknown) => `${v}%`} style={{ fontSize: 10, fontWeight: 700, fill: "#475569" }} />
                   </Pie>
                   <Tooltip formatter={(v: number) => [`${v}%`, ""]} contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0", fontSize: 11 }} />
                   <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11, fontWeight: 600, paddingTop: 12 }} />
