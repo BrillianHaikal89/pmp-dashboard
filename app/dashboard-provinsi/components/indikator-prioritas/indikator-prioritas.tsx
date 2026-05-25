@@ -14,11 +14,15 @@ import {
 } from 'recharts';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+interface ChartDownloadData {
+  groups: { label: string; items: { name: string; color: string; pct: number }[] }[];
+}
+
 interface ChartCardProps {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
-  onDownload: () => void;
+  onDownload: () => Promise<void> | void;
   id: string;
 }
 
@@ -64,83 +68,381 @@ function exportToExcel(
   XLSX.writeFile(wb, `${filename}.xlsx`);
 }
 
-// Download helper (PNG)
-async function downloadChartAsPng(containerId: string, filename: string) {
+// ─── Download Chart as PNG ────────────────────────────────────────────────────
+async function downloadChartAsPng(
+  containerId: string,
+  filename: string,
+  chartData?: ChartDownloadData
+): Promise<void> {
   try {
     const el = document.getElementById(containerId);
     if (!el) return;
+
     const allSvgs = Array.from(el.querySelectorAll("svg")) as SVGSVGElement[];
     if (allSvgs.length === 0) return;
+
     const chartSvg = allSvgs.reduce<SVGSVGElement>((best, cur) => {
       const bRect = best.getBoundingClientRect();
       const cRect = cur.getBoundingClientRect();
       return cRect.width * cRect.height > bRect.width * bRect.height ? cur : best;
     }, allSvgs[0]);
-    const clone = chartSvg.cloneNode(true) as SVGSVGElement;
-    const rect  = chartSvg.getBoundingClientRect();
-    const W = rect.width  || 800;
-    const H = rect.height || 400;
-    clone.setAttribute("width",  String(W));
-    clone.setAttribute("height", String(H));
-    const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    bg.setAttribute("width",  String(W));
-    bg.setAttribute("height", String(H));
-    bg.setAttribute("fill",   "#ffffff");
-    clone.insertBefore(bg, clone.firstChild);
-    const svgData = new XMLSerializer().serializeToString(clone);
-    const canvas  = document.createElement("canvas");
-    const scale   = 2;
+
+    const cardEl       = el.closest?.(".bg-white") ?? el.parentElement;
+    const titleText    = (cardEl?.querySelector("h3")?.textContent ?? filename).trim();
+    const subtitleText = (cardEl?.querySelector("p.text-\\[10px\\]")?.textContent ?? "").trim();
+
+    const groupDataList = chartData?.groups ?? [];
+    const hasDetail     = groupDataList.length > 0;
+    const numGroups     = groupDataList.length;
+
+    // ── Hitung lebar minimal yang dibutuhkan tabel detail ─────────────
+    const MIN_COL_W   = 160;
+    const TABLE_PAD_H = 20;
+    const minTableW   = hasDetail ? numGroups * MIN_COL_W + TABLE_PAD_H * 2 : 0;
+
+    const svgRect   = chartSvg.getBoundingClientRect();
+    const CHART_RAW = Math.max(svgRect.width, 640);
+    const W         = Math.max(CHART_RAW, minTableW + 24);
+
+    const CHART_H  = svgRect.height || 300;
+    const HEADER_H = 64;
+
+    // ── Ukuran tabel ──────────────────────────────────────────────────
+    const maxRows    = hasDetail ? Math.max(...groupDataList.map(g => g.items.length)) : 0;
+    const COL_W      = hasDetail ? Math.floor((W - 24 - TABLE_PAD_H * 2) / numGroups) : 0;
+    const ROW_H      = 24;
+    const TABLE_HEAD = 36;
+    const FOOTER_PAD = 16;
+    const TABLE_H    = hasDetail ? TABLE_HEAD + (maxRows + 1) * ROW_H + FOOTER_PAD : 0;
+    const GAP_H      = hasDetail ? 16 : 0;
+    const TOTAL_H    = HEADER_H + CHART_H + GAP_H + TABLE_H + 16;
+
+    const scale  = 2;
+    const canvas = document.createElement("canvas");
     canvas.width  = W * scale;
-    canvas.height = H * scale;
+    canvas.height = TOTAL_H * scale;
     const ctx = canvas.getContext("2d")!;
     ctx.scale(scale, scale);
-    const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
-    const url  = URL.createObjectURL(blob);
-    const img  = new Image();
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0, W, H);
-      URL.revokeObjectURL(url);
-      const link = document.createElement("a");
-      link.download = `${filename}.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-    };
-    img.onerror = () => URL.revokeObjectURL(url);
-    img.src = url;
+
+    // Background putih
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, W, TOTAL_H);
+
+    // ── Header ────────────────────────────────────────────────────────
+    ctx.fillStyle = "#f8fafc";
+    ctx.fillRect(0, 0, W, HEADER_H);
+    ctx.strokeStyle = "#e2e8f0";
+    ctx.lineWidth   = 1;
+    ctx.beginPath(); ctx.moveTo(0, HEADER_H); ctx.lineTo(W, HEADER_H); ctx.stroke();
+
+    const grad = ctx.createRadialGradient(36, 32, 0, 36, 32, 20);
+    grad.addColorStop(0, "#8b5cf6"); grad.addColorStop(1, "#4f46e5");
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(36, 32, 18, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(28, 34, 4, 6); ctx.fillRect(33, 28, 4, 12); ctx.fillRect(38, 30, 4, 10);
+
+    ctx.fillStyle    = "#0f172a";
+    ctx.font         = "bold 15px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
+    ctx.textAlign    = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText(titleText, 62, 14);
+
+    if (subtitleText) {
+      ctx.fillStyle = "#94a3b8";
+      ctx.font      = "11px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
+      ctx.fillText(subtitleText, 62, 34);
+    }
+
+    // ── Render SVG Chart ──────────────────────────────────────────────
+    const clone = chartSvg.cloneNode(true) as SVGSVGElement;
+    clone.setAttribute("width",   String(W));
+    clone.setAttribute("height",  String(CHART_H));
+    clone.setAttribute("viewBox", `0 0 ${svgRect.width} ${svgRect.height}`);
+    const bgR = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    bgR.setAttribute("width", String(W));
+    bgR.setAttribute("height", String(CHART_H));
+    bgR.setAttribute("fill", "#ffffff");
+    clone.insertBefore(bgR, clone.firstChild);
+
+    const svgStr  = new XMLSerializer().serializeToString(clone);
+    const svgBlob = new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" });
+    const svgUrl  = URL.createObjectURL(svgBlob);
+
+    await new Promise<void>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        ctx.drawImage(img, 0, HEADER_H, W, CHART_H);
+        URL.revokeObjectURL(svgUrl);
+        resolve();
+      };
+      img.onerror = () => { URL.revokeObjectURL(svgUrl); reject(); };
+      img.src = svgUrl;
+    });
+
+    // ── Tabel Detail Persentase ───────────────────────────────────────
+    if (hasDetail) {
+      const tableY = HEADER_H + CHART_H + GAP_H;
+      const CARD_X = 12;
+      const CARD_W = W - 24;
+
+      // Card background
+      ctx.fillStyle   = "#f8fafc";
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth   = 1;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(CARD_X, tableY, CARD_W, TABLE_H, 10);
+      else               ctx.rect(CARD_X, tableY, CARD_W, TABLE_H);
+      ctx.fill();
+      ctx.stroke();
+
+      // Heading tabel
+      ctx.fillStyle    = "#1e293b";
+      ctx.font         = "bold 12px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
+      ctx.textAlign    = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText("Detail Persentase per Kategori", CARD_X + 12, tableY + TABLE_HEAD / 2);
+
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth   = 1;
+      ctx.beginPath();
+      ctx.moveTo(CARD_X, tableY + TABLE_HEAD);
+      ctx.lineTo(CARD_X + CARD_W, tableY + TABLE_HEAD);
+      ctx.stroke();
+
+      const startX     = CARD_X + TABLE_PAD_H;
+      const dataStartY = tableY + TABLE_HEAD + 8;
+
+      groupDataList.forEach((group, gIdx) => {
+        const colX = startX + gIdx * COL_W;
+
+        // Badge label kolom
+        const BADGE_H = 20;
+        const BADGE_W = Math.min(COL_W - 16, 80);
+        const badgeX  = colX + (COL_W - BADGE_W) / 2;
+        ctx.fillStyle = "#dbeafe";
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(badgeX, dataStartY, BADGE_W, BADGE_H, 5);
+        else               ctx.rect(badgeX, dataStartY, BADGE_W, BADGE_H);
+        ctx.fill();
+
+        ctx.fillStyle    = "#1d4ed8";
+        ctx.font         = "bold 10px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
+        ctx.textAlign    = "center";
+        ctx.textBaseline = "middle";
+        let labelTxt = group.label;
+        while (ctx.measureText(labelTxt).width > BADGE_W - 8 && labelTxt.length > 1) {
+          labelTxt = labelTxt.slice(0, -1);
+        }
+        if (labelTxt !== group.label) labelTxt += "…";
+        ctx.fillText(labelTxt, colX + COL_W / 2, dataStartY + BADGE_H / 2);
+
+        // Rows per item
+        const ITEM_START_Y = dataStartY + BADGE_H + 6;
+        const DOT_R        = 4.5;
+        const DOT_OFFSET_X = 10;
+        const TEXT_X       = colX + DOT_OFFSET_X * 2 + DOT_R;
+        const MAX_NAME_W   = COL_W - DOT_OFFSET_X * 2 - DOT_R - 52;
+
+        group.items.forEach((item, rIdx) => {
+          const rowY    = ITEM_START_Y + rIdx * ROW_H;
+          const centerY = rowY + ROW_H / 2;
+
+          // Dot
+          ctx.fillStyle = item.color;
+          ctx.beginPath();
+          ctx.arc(colX + DOT_OFFSET_X, centerY, DOT_R, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Nama kategori
+          ctx.fillStyle    = "#475569";
+          ctx.font         = "10px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
+          ctx.textAlign    = "left";
+          ctx.textBaseline = "middle";
+          let nm = item.name;
+          while (ctx.measureText(nm).width > MAX_NAME_W && nm.length > 1) {
+            nm = nm.slice(0, -1);
+          }
+          if (nm !== item.name) nm += "…";
+          ctx.fillText(nm, TEXT_X, centerY);
+
+          // Nilai persen
+          ctx.fillStyle    = "#0f172a";
+          ctx.font         = "bold 11px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
+          ctx.textAlign    = "right";
+          ctx.fillText(`${item.pct.toFixed(2)}%`, colX + COL_W - 8, centerY);
+        });
+
+        // Pemisah antar kolom
+        if (gIdx < groupDataList.length - 1) {
+          ctx.strokeStyle = "#e2e8f0";
+          ctx.lineWidth   = 1;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(colX + COL_W, tableY + TABLE_HEAD + 6);
+          ctx.lineTo(colX + COL_W, tableY + TABLE_H - 6);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      });
+    }
+
+    // ── Download ──────────────────────────────────────────────────────
+    const link = document.createElement("a");
+    link.download = `${filename}.png`;
+    link.href     = canvas.toDataURL("image/png");
+    link.click();
+
   } catch (e) {
-    console.error("Download failed", e);
+    console.error("Download chart failed", e);
   }
 }
 
-// ─── Chart wrapper card ───────────────────────────────────────────────────────
+// ─── Chart wrapper card dengan loading state ──────────────────────────────────
 function ChartCard({ title, subtitle, children, onDownload, id }: ChartCardProps) {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isDone, setIsDone]               = useState(false);
+
+  const handleClick = async () => {
+    if (isDownloading) return;
+    setIsDownloading(true);
+    setIsDone(false);
+    try {
+      await onDownload();
+      setIsDone(true);
+      setTimeout(() => {
+        setIsDone(false);
+        setIsDownloading(false);
+      }, 1800);
+    } catch {
+      setIsDownloading(false);
+    }
+  };
+
   return (
-    <div id={id} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden mb-6">
-      <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-sm">
-            <BarChart2 size={14} className="text-white" />
+    <>
+      <style>{`
+        @keyframes chart-shimmer {
+          0%   { transform: translateX(-100%); }
+          100% { transform: translateX(350%);  }
+        }
+        @keyframes chart-spin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes chart-done-pop {
+          0%   { transform: scale(0.7); opacity: 0; }
+          60%  { transform: scale(1.15); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes chart-progress {
+          0%   { width: 0%; }
+          60%  { width: 75%; }
+          100% { width: 100%; }
+        }
+      `}</style>
+
+      <div id={id} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden mb-6">
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-sm">
+              <BarChart2 size={14} className="text-white" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">{title}</h3>
+              {subtitle && <p className="text-[10px] text-slate-400 mt-0.5">{subtitle}</p>}
+            </div>
           </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-900">{title}</h3>
-            {subtitle && <p className="text-[10px] text-slate-400 mt-0.5">{subtitle}</p>}
-          </div>
+
+          {/* ── Download button ─────────────────────────────────── */}
+          <button
+            onClick={handleClick}
+            disabled={isDownloading}
+            title="Download grafik sebagai PNG"
+            className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all border overflow-hidden select-none"
+            style={{
+              minWidth: 110,
+              justifyContent: "center",
+              background: isDone
+                ? "#ecfdf5"
+                : isDownloading
+                  ? "#eef2ff"
+                  : "",
+              color: isDone
+                ? "#065f46"
+                : isDownloading
+                  ? "#4338ca"
+                  : "",
+              borderColor: isDone
+                ? "#a7f3d0"
+                : isDownloading
+                  ? "#c7d2fe"
+                  : "",
+              cursor: isDownloading ? "not-allowed" : "pointer",
+            }}
+            // Fallback classes when not in loading/done state
+            {...(!isDownloading && !isDone ? {
+              className: "relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all border overflow-hidden select-none bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border-slate-200 hover:border-slate-300 hover:shadow-sm"
+            } : {})}
+          >
+            {/* Shimmer sweep — hanya saat loading */}
+            {isDownloading && !isDone && (
+              <span
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%)",
+                  animation: "chart-shimmer 1.3s ease-in-out infinite",
+                }}
+              />
+            )}
+
+            {/* Progress bar di bawah tombol */}
+            {isDownloading && !isDone && (
+              <span
+                className="absolute bottom-0 left-0 h-[2px] rounded-full bg-indigo-400"
+                style={{ animation: "chart-progress 2s ease-out forwards" }}
+              />
+            )}
+
+            {/* ── Konten tombol ─────────────────────────────────── */}
+            {isDone ? (
+              /* State: selesai ✓ */
+              <span
+                className="flex items-center gap-1.5"
+                style={{ animation: "chart-done-pop 0.35s ease-out" }}
+              >
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <circle cx="6.5" cy="6.5" r="6.5" fill="#22c55e" />
+                  <path d="M3.5 6.5L5.5 8.5L9.5 4.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span className="relative font-bold">Tersimpan!</span>
+              </span>
+            ) : isDownloading ? (
+              /* State: sedang proses */
+              <span className="flex items-center gap-1.5 relative">
+                <span
+                  className="block w-3 h-3 rounded-full border-2 border-indigo-200 border-t-indigo-600 flex-shrink-0"
+                  style={{ animation: "chart-spin 0.75s linear infinite" }}
+                />
+                <span>Menyiapkan…</span>
+              </span>
+            ) : (
+              /* State: normal */
+              <>
+                <Download size={12} />
+                Unduh PNG
+              </>
+            )}
+          </button>
         </div>
-        <button
-          onClick={onDownload}
-          title="Download grafik sebagai PNG"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 text-[11px] font-semibold transition-all border border-slate-200 hover:border-slate-300 hover:shadow-sm"
-        >
-          <Download size={12} />
-          Unduh PNG
-        </button>
+
+        <div className="p-5">{children}</div>
       </div>
-      <div className="p-5">{children}</div>
-    </div>
+    </>
   );
 }
 
-// ─── Tooltip kustom ──────────────────────────────────────────────────────────
+// ─── Tooltip kustom ───────────────────────────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
@@ -230,7 +532,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     rekapCapaian, satdikDasmen, satdikPaud,
   } = props;
 
-  // ─── Local state ──────────────────────────────────────────────────────────
+  // ─── Local state ──────────────────────────────────────────────────────
   const [filterJenjangRekap, setFilterJenjangRekap] = useState<string>("Semua");
   const [filterIndikatorTT,  setFilterIndikatorTT]  = useState<string>("Semua");
   const [filterJenjangTT,    setFilterJenjangTT]    = useState<string>("Semua");
@@ -239,11 +541,11 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
   const [filterStatusMMT,    setFilterStatusMMT]    = useState<string>("Semua");
   const [pageMMT,            setPageMMT]            = useState<number>(1);
 
-  // ─── Internal School Modal (Capaian per Indikator) ────────────────────────
+  // ─── Internal School Modal ────────────────────────────────────────────
   const [schoolModal, setInternalSchoolModal] = useState<{
     indCode: string;
     indName: string;
-    labelGroup: string; // "Baik / Tinggi" | "Sedang" | "Kurang / Rendah" | "Tidak Tersedia"
+    labelGroup: string;
     filterJenjang: string;
   } | null>(null);
   const [schoolModalSearch,     setSchoolModalSearchLocal]     = useState("");
@@ -252,11 +554,10 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
   const [schoolModalPage,       setSchoolModalPageLocal]       = useState(1);
   const SCHOOL_MODAL_PAGE_SIZE = 50;
 
-  // ─── Detail modal (existing — kept for backward compat) ───────────────────
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [detailModal, setDetailModal] = useState<{ rows: Record<string, string>[]; title: string; label: string } | null>(null);
 
-  // ─── Rekap TT Modal state ─────────────────────────────────────────────────
+  // ─── Rekap TT Modal state ─────────────────────────────────────────────
   const [rekapTTModal, setRekapTTModal] = useState<{
     code: string;
     kategori: "Meningkat" | "Menurun" | "Tetap" | "Tidak Tersedia";
@@ -270,7 +571,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
   const PRIORITY_CODES_TT = ["A.1", "A.2", "A.3", "D.1", "D.3", "D.4", "D.8", "D.10"];
   const MMT_PAGE_SIZE     = 10;
 
-  // ─── Source rows (unified) ────────────────────────────────────────────────
+  // ─── Source rows ──────────────────────────────────────────────────────
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sourceRows: any[] = useMemo(() => {
     if (rekapCapaian?.length > 0) return rekapCapaian;
@@ -279,7 +580,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
 
   const useRekap = rekapCapaian?.length > 0;
 
-  // ─── Data processing ──────────────────────────────────────────────────────
+  // ─── Normalized jenjang stats ─────────────────────────────────────────
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const normalizedJenjangStats = useMemo<Record<string, any>>(() => {
     const result: Record<string, { baikTinggi: number; sedang: number; kurangRendah: number; tidakTersedia: number; total: number }> = {
@@ -360,7 +661,6 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
 
   const pct = (n: number) => (cardStats?.total || 0) > 0 ? ((n / cardStats.total) * 100).toFixed(2) : "0.00";
 
-  // ─── Helper: ambil label capaian sebuah row untuk kode indikator tertentu ─
   function getLabelForCode(row: Record<string, unknown>, code: string): string {
     if (useRekap) {
       return ((row[code] as string) ?? "").trim();
@@ -380,7 +680,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     return "Tidak Tersedia";
   }
 
-  // ─── School Modal: compute rows ───────────────────────────────────────────
+  // ─── School Modal rows ────────────────────────────────────────────────
   const schoolModalAllRows = useMemo(() => {
     if (!schoolModal) return [];
     return sourceRows.filter(row => {
@@ -388,9 +688,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) return false;
       const status = (row["Status Satuan Pendidikan"] || "").trim();
       if (!["Negeri", "Swasta"].includes(status)) return false;
-      // filter jenjang
       if (schoolModal.filterJenjang !== "Semua" && norm !== schoolModal.filterJenjang) return false;
-      // filter label group
       const label = getLabelForCode(row, schoolModal.indCode);
       return labelToGroup(label) === schoolModal.labelGroup;
     });
@@ -428,10 +726,8 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     schoolModalPage * SCHOOL_MODAL_PAGE_SIZE
   );
 
-  // ─── School Modal: helper untuk ambil nilai capaian ──────────────────────
   function getNilaiForCode(row: Record<string, unknown>, code: string): { nilaiIni: string; nilaiLalu: string; definisi: string } {
     if (useRekap) {
-      // Di rekapCapaian, kolom nilai mungkin dengan format berbeda
       const nilaiKey = Object.keys(row).find(k => {
         const ku = k.toUpperCase(), cu = code.toUpperCase();
         return ku.startsWith(cu) && ku.includes("NILAI") && !ku.includes("LALU");
@@ -450,7 +746,6 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         definisi: definisiKey ? String(row[definisiKey] ?? "") : "",
       };
     }
-    // Dari satdikDasmen/satdikPaud
     const nilaiKey = Object.keys(row).find(k => {
       const ku = k.toUpperCase(), cu = code.toUpperCase();
       return ku.startsWith(cu + "_") && ku.includes("NILAI CAPAIAN") && !ku.includes("LALU") && !ku.includes("2023") && !ku.includes("2022");
@@ -470,18 +765,10 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     };
   }
 
-  // ─── School Modal: Export Excel (filtered) ────────────────────────────────
   const handleExportSchoolModal = useCallback(() => {
     if (!schoolModal) return;
     const exportRows = schoolModalFiltered.map((row: Record<string, unknown>) => {
       const label = getLabelForCode(row, schoolModal.indCode);
-      const { nilaiIni, nilaiLalu, definisi } = getNilaiForCode(row, schoolModal.indCode);
-      const filterParts = [
-        schoolModal.filterJenjang !== "Semua" ? `Jenjang ${schoolModal.filterJenjang}` : null,
-        schoolModalKabkot     !== "Semua" ? schoolModalKabkot    : null,
-        schoolModalKecamatan  !== "Semua" ? `Kec. ${schoolModalKecamatan}` : null,
-      ].filter(Boolean);
-
       return {
         "Nama Satuan Pendidikan":  String(row["Nama Satuan Pendidikan"] ?? ""),
         "NPSN":                    String(row["NPSN"] ?? ""),
@@ -496,39 +783,29 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         "Label Capaian":           label,
       };
     });
-
-    const safeKabkot = schoolModalKabkot !== "Semua"
-      ? `-${schoolModalKabkot.replace(/[^a-zA-Z0-9]/g, "").substring(0, 15)}`
-      : "";
-    const safeKec = schoolModalKecamatan !== "Semua"
-      ? `-${schoolModalKecamatan.replace(/[^a-zA-Z0-9]/g, "").substring(0, 10)}`
-      : "";
-
+    const safeKabkot = schoolModalKabkot !== "Semua" ? `-${schoolModalKabkot.replace(/[^a-zA-Z0-9]/g, "").substring(0, 15)}` : "";
+    const safeKec    = schoolModalKecamatan !== "Semua" ? `-${schoolModalKecamatan.replace(/[^a-zA-Z0-9]/g, "").substring(0, 10)}` : "";
     exportToExcel(
       [{ name: `${schoolModal.indCode} - ${schoolModal.labelGroup.replace("/", "-")}`, data: exportRows }],
       `sekolah-${schoolModal.indCode}-${schoolModal.labelGroup.replace(/[\s/]/g, "-")}-${tahun}${safeKabkot}${safeKec}`
     );
   }, [schoolModal, schoolModalFiltered, schoolModalKabkot, schoolModalKecamatan, tahun]);
 
-  // ─── Close school modal ───────────────────────────────────────────────────
   function closeSchoolModal() {
     setInternalSchoolModal(null);
     setSchoolModalSearchLocal("");
     setSchoolModalPageLocal(1);
     setSchoolModalKabkotLocal("Semua");
     setSchoolModalKecamatanLocal("Semua");
-    // Juga panggil setter dari parent jika ada
     if (setSchoolModal) setSchoolModal(null);
   }
 
-  // ─── Open school modal handler (menggantikan setSchoolModal dari parent) ──
   function openSchoolModal(params: { indCode: string; indName: string; labelGroup: string; filterJenjang: string }) {
     setInternalSchoolModal(params);
     setSchoolModalSearchLocal("");
     setSchoolModalPageLocal(1);
     setSchoolModalKabkotLocal("Semua");
     setSchoolModalKecamatanLocal("Semua");
-    // Tetap panggil parent jika ada (untuk backward compat)
     if (setSchoolModal) {
       setSchoolModal(params);
       if (setSchoolModalSearch) setSchoolModalSearch("");
@@ -538,7 +815,6 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     }
   }
 
-  // ─── Color config untuk labelGroup ───────────────────────────────────────
   function getLabelGroupStyle(group: string) {
     if (group === "Baik / Tinggi")   return { grad: "from-emerald-500 to-emerald-600", badge: "bg-emerald-50 text-emerald-700 border-emerald-200", text: "text-emerald-700", bg: "#ecfdf5", dot: "#22c55e" };
     if (group === "Sedang")          return { grad: "from-amber-400 to-amber-500",    badge: "bg-amber-50 text-amber-700 border-amber-200",       text: "text-amber-700",   bg: "#fffbeb", dot: "#f59e0b" };
@@ -546,7 +822,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     return                                  { grad: "from-slate-400 to-slate-500",    badge: "bg-slate-100 text-slate-500 border-slate-200",      text: "text-slate-500",   bg: "#f8fafc", dot: "#94a3b8" };
   }
 
-  // ─── Chart data: distribusi per indikator ─────────────────────────────────
+  // ─── Chart data: distribusi per indikator ─────────────────────────────
   const indikatorChartData = useMemo(() => {
     if (!PRIORITY_INDICATORS) return [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -555,20 +831,20 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       if (!s) return null;
       const total = (s.baikTinggi || 0) + (s.sedang || 0) + (s.kurangRendah || 0) + (s.tidakTersedia || 0);
       return {
-        name:         p.code,
-        label:        p.fullName,
-        baikTinggi:   total > 0 ? +((s.baikTinggi     / total) * 100).toFixed(2) : 0,
-        sedang:       total > 0 ? +((s.sedang          / total) * 100).toFixed(2) : 0,
-        kurang:       total > 0 ? +((s.kurangRendah    / total) * 100).toFixed(2) : 0,
-        tidakTersedia: total > 0 ? +((s.tidakTersedia  / total) * 100).toFixed(2) : 0,
+        name:          p.code,
+        label:         p.fullName,
+        baikTinggi:    total > 0 ? +((s.baikTinggi     / total) * 100).toFixed(2) : 0,
+        sedang:        total > 0 ? +((s.sedang          / total) * 100).toFixed(2) : 0,
+        kurang:        total > 0 ? +((s.kurangRendah    / total) * 100).toFixed(2) : 0,
+        tidakTersedia: total > 0 ? +((s.tidakTersedia   / total) * 100).toFixed(2) : 0,
       };
     }).filter(Boolean);
   }, [PRIORITY_INDICATORS, normalizedIndikatorStats, filterJenjangRekap]);
 
-  // ─── Donut data ───────────────────────────────────────────────────────────
+  // ─── Donut data ───────────────────────────────────────────────────────
   const donutData = useMemo(() => {
-    const total    = cardStats?.total || 0;
-    const calcPct  = (n: number) => total > 0 ? +((n / total) * 100).toFixed(2) : 0;
+    const total   = cardStats?.total || 0;
+    const calcPct = (n: number) => total > 0 ? +((n / total) * 100).toFixed(2) : 0;
     return [
       { name: "Baik/Tinggi",    value: calcPct(cardStats?.baikTinggi    || 0), fill: "#22c55e" },
       { name: "Sedang",         value: calcPct(cardStats?.sedang         || 0), fill: "#f59e0b" },
@@ -577,7 +853,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     ];
   }, [cardStats]);
 
-  // ─── MMT data ─────────────────────────────────────────────────────────────
+  // ─── MMT data ─────────────────────────────────────────────────────────
   const mmtData: Record<string, string>[] = useMemo(
     () => (Array.isArray(indikatorMenurunMeningkat) ? indikatorMenurunMeningkat : []),
     [indikatorMenurunMeningkat]
@@ -629,15 +905,14 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     let naik = 0, turun = 0, tetap = 0, tidakTersedia = 0;
     for (const row of mmtFiltered) {
       const cls = classifyPerubahan(row[perubahanKey] || "");
-      if (cls === "Naik")            naik++;
-      else if (cls === "Turun")      turun++;
+      if (cls === "Naik")               naik++;
+      else if (cls === "Turun")         turun++;
       else if (cls === "Tidak Berubah") tetap++;
-      else                           tidakTersedia++;
+      else                              tidakTersedia++;
     }
     return { naik, turun, tetap, tidakTersedia, total: naik + turun + tetap + tidakTersedia };
   }, [mmtFiltered, perubahanKey]);
 
-  // ─── Chart data: MMT bar (per jenjang) ───────────────────────────────────
   const mmtChartData = useMemo(() => {
     const groups: Record<string, { naik: number; turun: number; tetap: number; total: number }> = {};
     for (const row of mmtFiltered) {
@@ -657,7 +932,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     }));
   }, [mmtFiltered, perubahanKey]);
 
-  // ─── TT data ──────────────────────────────────────────────────────────────
+  // ─── TT data ──────────────────────────────────────────────────────────
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ttData: any[] = useMemo(
     () => (Array.isArray(indikatorTertinggiTerendah) ? indikatorTertinggiTerendah : []),
@@ -743,10 +1018,9 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     return result;
   }, [ttData, filterJenjangTT, filterStatusTT]);
 
-  // Chart data: rekap meningkat/menurun per indikator TT
   const ttRekapChartData = useMemo(() =>
     PRIORITY_CODES_TT.map(code => {
-      const s     = ttSummaryPerInd[code];
+      const s = ttSummaryPerInd[code];
       if (!s || s.total === 0) return null;
       return {
         name:      code,
@@ -757,12 +1031,11 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     }).filter(Boolean)
   , [ttSummaryPerInd]);
 
-  // ─── Rekap TT Modal computed data ─────────────────────────────────────────
+  // ─── Rekap TT Modal ───────────────────────────────────────────────────
   const rekapTTRows = useMemo(() => {
     if (!rekapTTModal) return [] as Record<string, string>[];
     const { code, kategori } = rekapTTModal;
     const arahKey = `${code} - Perubahan dari Tahun Lalu`;
-
     return ttData.filter(row => {
       const norm   = normalizeJenjang(row["Jenis Satuan Pendidikan"] || "");
       if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) return false;
@@ -770,17 +1043,12 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       if (!["Negeri", "Swasta"].includes(status)) return false;
       if (filterJenjangTT !== "Semua" && norm   !== filterJenjangTT) return false;
       if (filterStatusTT  !== "Semua" && status !== filterStatusTT ) return false;
-
       let arah = "";
-      if (arahKey in row) {
-        arah = ((row[arahKey] as string) ?? "").toLowerCase();
-      } else {
+      if (arahKey in row) { arah = ((row[arahKey] as string) ?? "").toLowerCase(); }
+      else {
         const ind = row[code];
-        if (ind && typeof ind === "object") {
-          arah = ((ind["Perubahan dari Tahun Lalu"] as string) ?? "").toLowerCase();
-        }
+        if (ind && typeof ind === "object") { arah = ((ind["Perubahan dari Tahun Lalu"] as string) ?? "").toLowerCase(); }
       }
-
       if (kategori === "Meningkat")      return arah === "naik";
       if (kategori === "Menurun")        return arah === "turun";
       if (kategori === "Tetap")          return arah === "tidak berubah" || arah === "tetap";
@@ -795,9 +1063,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
   }, [rekapTTRows]);
 
   const rekapTTKecamatanOptions = useMemo(() => {
-    const base = rekapTTKabkot !== "Semua"
-      ? rekapTTRows.filter(r => r["Kabupaten/Kota"] === rekapTTKabkot)
-      : rekapTTRows;
+    const base = rekapTTKabkot !== "Semua" ? rekapTTRows.filter(r => r["Kabupaten/Kota"] === rekapTTKabkot) : rekapTTRows;
     const opts = [...new Set(base.map(r => r["Kecamatan"]).filter(Boolean))].sort();
     return ["Semua", ...opts];
   }, [rekapTTRows, rekapTTKabkot]);
@@ -825,10 +1091,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     const flatArahKey  = `${code} - Perubahan dari Tahun Lalu`;
     const flatNilaiKey = `${code} - Perubahan Nilai`;
     if (flatArahKey in row) {
-      return {
-        arah:  ((row[flatArahKey] as string) ?? ""),
-        nilai: ((row[flatNilaiKey] as string) ?? "–"),
-      };
+      return { arah: ((row[flatArahKey] as string) ?? ""), nilai: ((row[flatNilaiKey] as string) ?? "–") };
     }
     const ind = row[code];
     if (ind && typeof ind === "object") {
@@ -840,31 +1103,25 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     return { arah: "", nilai: "–" };
   }
 
-  // ─── Download handlers ────────────────────────────────────────────────────
-  const handleDownload = useCallback((id: string, name: string) => {
-    downloadChartAsPng(id, name);
+  // ─── Download handler ─────────────────────────────────────────────────
+  const handleDownload = useCallback((id: string, name: string, data?: ChartDownloadData): Promise<void> => {
+    return downloadChartAsPng(id, name, data);
   }, []);
 
-  // ─── Excel Export: Capaian per Indikator Prioritas (dengan detail sekolah) ─
+  // ─── Excel exports ────────────────────────────────────────────────────
   const handleExportCapaianIndikator = useCallback(() => {
     if (!PRIORITY_INDICATORS) return;
     const filterLabel = filterJenjangRekap !== "Semua" ? `Jenjang ${filterJenjangRekap}` : "Semua Jenjang";
-
-    // Sheet 1: Ringkasan per Indikator
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const summaryData = (PRIORITY_INDICATORS as any[]).map((p: any) => {
       const s = getStats(p.code);
       if (!s) return null;
       const total = (s.baikTinggi || 0) + (s.sedang || 0) + (s.kurangRendah || 0) + (s.tidakTersedia || 0);
       return {
-        "Kode Indikator": p.code,
-        "Nama Indikator": p.fullName,
-        "Deskripsi": p.description || "",
+        "Kode Indikator": p.code, "Nama Indikator": p.fullName, "Deskripsi": p.description || "",
         "Filter Jenjang": filterLabel,
-        "Jumlah Baik/Tinggi": s.baikTinggi || 0,
-        "Jumlah Sedang": s.sedang || 0,
-        "Jumlah Kurang/Rendah": s.kurangRendah || 0,
-        "Jumlah Tidak Tersedia": s.tidakTersedia || 0,
+        "Jumlah Baik/Tinggi": s.baikTinggi || 0, "Jumlah Sedang": s.sedang || 0,
+        "Jumlah Kurang/Rendah": s.kurangRendah || 0, "Jumlah Tidak Tersedia": s.tidakTersedia || 0,
         "Total Sekolah": total,
         "% Baik/Tinggi": total > 0 ? parseFloat(((s.baikTinggi / total) * 100).toFixed(2)) : 0,
         "% Sedang": total > 0 ? parseFloat(((s.sedang / total) * 100).toFixed(2)) : 0,
@@ -873,16 +1130,13 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       };
     }).filter(Boolean) as Record<string, unknown>[];
 
-    // Sheet 2: Ringkasan per Jenjang
     const jenjangData = ["PAUD", "SD", "SMP", "SMA"].map(jj => {
       const js = normalizedJenjangStats[jj] || { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 };
       const total = js.total || 0;
       return {
         "Jenjang": jj,
-        "Jumlah Baik/Tinggi": js.baikTinggi || 0,
-        "Jumlah Sedang": js.sedang || 0,
-        "Jumlah Kurang/Rendah": js.kurangRendah || 0,
-        "Jumlah Tidak Tersedia": js.tidakTersedia || 0,
+        "Jumlah Baik/Tinggi": js.baikTinggi || 0, "Jumlah Sedang": js.sedang || 0,
+        "Jumlah Kurang/Rendah": js.kurangRendah || 0, "Jumlah Tidak Tersedia": js.tidakTersedia || 0,
         "Total Sekolah": total,
         "% Baik/Tinggi": total > 0 ? parseFloat(((js.baikTinggi / total) * 100).toFixed(2)) : 0,
         "% Sedang": total > 0 ? parseFloat(((js.sedang / total) * 100).toFixed(2)) : 0,
@@ -891,7 +1145,6 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       };
     });
 
-    // Sheet 3..N: Detail sekolah per indikator — satu sheet per indikator
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const detailSheets: { name: string; data: Record<string, unknown>[] }[] = (PRIORITY_INDICATORS as any[]).map((p: any) => {
       const rows = sourceRows
@@ -904,9 +1157,8 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
           return true;
         })
         .map(row => {
-          const label    = getLabelForCode(row, p.code);
-          const group    = labelToGroup(label);
-          const { nilaiIni, nilaiLalu } = getNilaiForCode(row, p.code);
+          const label = getLabelForCode(row, p.code);
+          const group = labelToGroup(label);
           return {
             "Nama Satuan Pendidikan":   String(row["Nama Satuan Pendidikan"] ?? ""),
             "NPSN":                     String(row["NPSN"] ?? ""),
@@ -923,21 +1175,14 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     });
 
     exportToExcel(
-      [
-        { name: `Capaian Indikator (${filterLabel})`, data: summaryData },
-        { name: "Ringkasan per Jenjang", data: jenjangData },
-        ...detailSheets,
-      ],
+      [{ name: `Capaian Indikator (${filterLabel})`, data: summaryData }, { name: "Ringkasan per Jenjang", data: jenjangData }, ...detailSheets],
       `capaian-indikator-prioritas-${tahun}${filterJenjangRekap !== "Semua" ? `-${filterJenjangRekap}` : ""}`
     );
   }, [PRIORITY_INDICATORS, filterJenjangRekap, normalizedIndikatorStats, normalizedJenjangStats, sourceRows, tahun]);
 
-  // ─── Excel Export: Rekap Meningkat/Menurun per Indikator TT (dengan detail sekolah) ─
   const handleExportRekapTT = useCallback(() => {
     const filterLabelJenjang = filterJenjangTT !== "Semua" ? `Jenjang ${filterJenjangTT}` : "Semua Jenjang";
     const filterLabelStatus  = filterStatusTT  !== "Semua" ? filterStatusTT : "Semua Status";
-
-    // Sheet 1: Rekap ringkasan per indikator
     const summaryData = PRIORITY_CODES_TT.map(code => {
       const s = ttSummaryPerInd[code];
       if (!s) return null;
@@ -945,15 +1190,9 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       const indInfo = (PRIORITY_INDICATORS as any[])?.find((p: any) => p.code === code);
       const total = s.total;
       return {
-        "Kode Indikator": code,
-        "Nama Indikator": indInfo?.fullName || code,
-        "Filter Jenjang": filterLabelJenjang,
-        "Filter Status": filterLabelStatus,
-        "Jumlah Meningkat": s.meningkat,
-        "Jumlah Menurun": s.menurun,
-        "Jumlah Tetap": s.tetap,
-        "Jumlah Tidak Tersedia": s.tidakTersedia,
-        "Total": total,
+        "Kode Indikator": code, "Nama Indikator": indInfo?.fullName || code,
+        "Filter Jenjang": filterLabelJenjang, "Filter Status": filterLabelStatus,
+        "Jumlah Meningkat": s.meningkat, "Jumlah Menurun": s.menurun, "Jumlah Tetap": s.tetap, "Jumlah Tidak Tersedia": s.tidakTersedia, "Total": total,
         "% Meningkat": total > 0 ? parseFloat(((s.meningkat / total) * 100).toFixed(2)) : 0,
         "% Menurun": total > 0 ? parseFloat(((s.menurun / total) * 100).toFixed(2)) : 0,
         "% Tetap": total > 0 ? parseFloat(((s.tetap / total) * 100).toFixed(2)) : 0,
@@ -961,7 +1200,6 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       };
     }).filter(Boolean) as Record<string, unknown>[];
 
-    // Sheet 2..N: Detail sekolah per indikator — satu sheet per kode
     const detailSheets: { name: string; data: Record<string, unknown>[] }[] = PRIORITY_CODES_TT.map(code => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const indInfo = (PRIORITY_INDICATORS as any[])?.find((p: any) => p.code === code);
@@ -973,44 +1211,31 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         if (!["Negeri", "Swasta"].includes(status)) continue;
         if (filterJenjangTT !== "Semua" && norm   !== filterJenjangTT) continue;
         if (filterStatusTT  !== "Semua" && status !== filterStatusTT ) continue;
-
         const { arah, nilai } = getArahNilai(rawRow as Record<string, unknown>, code);
         let kategori = "Tidak Tersedia";
         if (arah.toLowerCase() === "naik")  kategori = "Meningkat";
         else if (arah.toLowerCase() === "turun") kategori = "Menurun";
         else if (arah.toLowerCase() === "tidak berubah" || arah.toLowerCase() === "tetap") kategori = "Tetap";
-
         rows.push({
-          "Nama Satuan Pendidikan":   String(rawRow["Nama Satuan Pendidikan"] ?? ""),
-          "NPSN":                     String(rawRow["NPSN"] ?? ""),
-          "Jenis Satuan Pendidikan":  String(rawRow["Jenis Satuan Pendidikan"] ?? ""),
-          "Jenjang (Normalisasi)":    norm,
-          "Status Satuan Pendidikan": status,
-          "Kabupaten/Kota":           String(rawRow["Kabupaten/Kota"] ?? ""),
-          "Kecamatan":                String(rawRow["Kecamatan"] ?? ""),
-          "Nama Indikator":           indInfo?.fullName || code,
-          "Arah Perubahan":           arah || "Tidak Tersedia",
-          "Kategori":                 kategori,
-          "Nilai Perubahan":          nilai !== "–" ? nilai : "",
+          "Nama Satuan Pendidikan": String(rawRow["Nama Satuan Pendidikan"] ?? ""), "NPSN": String(rawRow["NPSN"] ?? ""),
+          "Jenis Satuan Pendidikan": String(rawRow["Jenis Satuan Pendidikan"] ?? ""), "Jenjang (Normalisasi)": norm,
+          "Status Satuan Pendidikan": status, "Kabupaten/Kota": String(rawRow["Kabupaten/Kota"] ?? ""),
+          "Kecamatan": String(rawRow["Kecamatan"] ?? ""), "Nama Indikator": indInfo?.fullName || code,
+          "Arah Perubahan": arah || "Tidak Tersedia", "Kategori": kategori, "Nilai Perubahan": nilai !== "–" ? nilai : "",
         });
       }
       return { name: `${code} Detail`, data: rows };
     });
 
     exportToExcel(
-      [
-        { name: `Rekap per Indikator`, data: summaryData },
-        ...detailSheets,
-      ],
+      [{ name: `Rekap per Indikator`, data: summaryData }, ...detailSheets],
       `rekap-meningkat-menurun-${tahun}${filterJenjangTT !== "Semua" ? `-${filterJenjangTT}` : ""}${filterStatusTT !== "Semua" ? `-${filterStatusTT}` : ""}`
     );
   }, [ttSummaryPerInd, ttData, filterJenjangTT, filterStatusTT, PRIORITY_INDICATORS, PRIORITY_CODES_TT, tahun]);
 
-  // ─── Excel Export: Data MMT (Indikator Menurun Meningkat) ────────────────
   const handleExportMMT = useCallback(() => {
     const filterLabelJenjang = filterJenjangMMT !== "Semua" ? `Jenjang ${filterJenjangMMT}` : "Semua Jenjang";
     const filterLabelStatus  = filterStatusMMT  !== "Semua" ? filterStatusMMT : "Semua Status";
-
     const exportData = mmtFiltered.map(row => ({
       "No / Kode Indikator": row["No"] || "",
       "Jenis Satuan Pendidikan": row["Jenis Satuan Pendidikan"] || "",
@@ -1019,34 +1244,27 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       [`Nilai Capaian ${labelTahunIni}`]: row[nilaiCapaianKeyTahunIni] || "",
       "Perubahan": row[perubahanKey] || "",
       "Kategori Perubahan": classifyPerubahan(row[perubahanKey] || ""),
-      "Filter Jenjang": filterLabelJenjang,
-      "Filter Status": filterLabelStatus,
+      "Filter Jenjang": filterLabelJenjang, "Filter Status": filterLabelStatus,
     }));
-
     exportToExcel(
       [{ name: `Perubahan Capaian (${filterLabelJenjang})`, data: exportData }],
       `indikator-menurun-meningkat-${tahun}${filterJenjangMMT !== "Semua" ? `-${filterJenjangMMT}` : ""}${filterStatusMMT !== "Semua" ? `-${filterStatusMMT}` : ""}`
     );
   }, [mmtFiltered, filterJenjangMMT, filterStatusMMT, labelTahunIni, labelTahunLalu, nilaiCapaianKeyTahunIni, nilaiCapaianKeyTahunLalu, perubahanKey, tahun]);
 
-  // ─── Helper: close rekap TT modal ────────────────────────────────────────
   function closeRekapTTModal() {
-    setRekapTTModal(null);
-    setRekapTTSearch("");
-    setRekapTTPage(1);
-    setRekapTTKabkot("Semua");
-    setRekapTTKecamatan("Semua");
+    setRekapTTModal(null); setRekapTTSearch(""); setRekapTTPage(1);
+    setRekapTTKabkot("Semua"); setRekapTTKecamatan("Semua");
   }
 
-  // ─── Kategori badge colour map ────────────────────────────────────────────
   const kategoriStyle = (kategori: string) => {
-    if (kategori === "Meningkat")      return { bg: "#dcfce7", text: "#166534", border: "#bbf7d0", dot: "#22c55e" };
-    if (kategori === "Menurun")        return { bg: "#fee2e2", text: "#991b1b", border: "#fecaca", dot: "#ef4444" };
-    if (kategori === "Tetap")          return { bg: "#fef9c3", text: "#854d0e", border: "#fef08a", dot: "#f59e0b" };
-    return                               { bg: "#f1f5f9",  text: "#475569", border: "#e2e8f0", dot: "#94a3b8" };
+    if (kategori === "Meningkat") return { bg: "#dcfce7", text: "#166534", border: "#bbf7d0", dot: "#22c55e" };
+    if (kategori === "Menurun")   return { bg: "#fee2e2", text: "#991b1b", border: "#fecaca", dot: "#ef4444" };
+    if (kategori === "Tetap")     return { bg: "#fef9c3", text: "#854d0e", border: "#fef08a", dot: "#f59e0b" };
+    return                               { bg: "#f1f5f9", text: "#475569", border: "#e2e8f0", dot: "#94a3b8" };
   };
 
-  // ─── Render ───────────────────────────────────────────────────────────────
+  // ─── Render ───────────────────────────────────────────────────────────
   return (
     <>
       {/* ═══ SECTION 1: Rekap Capaian ═══════════════════════════════════════ */}
@@ -1059,8 +1277,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
           />
           <div className="flex items-center gap-2 flex-shrink-0">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              <Filter size={11} />
-              Jenjang
+              <Filter size={11} /> Jenjang
             </span>
             <div className="flex items-center bg-slate-100 rounded-xl p-0.5 gap-0.5">
               {JENJANG_OPTIONS.map(opt => (
@@ -1082,19 +1299,31 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
 
         {/* Dashboard Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <DashboardCard title="BAIK / TINGGI"    value={<span>{pct(cardStats?.baikTinggi    || 0)}%</span>} icon={<CheckCircle2 size={20} className="text-white" />} color="bg-gradient-to-br from-emerald-500 to-emerald-600" trend="none" trendValue="" subtitle="" />
-          <DashboardCard title="SEDANG"            value={<span>{pct(cardStats?.sedang         || 0)}%</span>} icon={<Info          size={20} className="text-white" />} color="bg-gradient-to-br from-yellow-500 to-yellow-600"  trend="none" trendValue="" subtitle="" />
-          <DashboardCard title="KURANG / RENDAH"   value={<span>{pct(cardStats?.kurangRendah  || 0)}%</span>} icon={<AlertCircle   size={20} className="text-white" />} color="bg-gradient-to-br from-red-500 to-red-600"       trend="none" trendValue="" subtitle="" />
-          <DashboardCard title="TIDAK TERSEDIA"    value={<span>{pct(cardStats?.tidakTersedia || 0)}%</span>} icon={<HelpCircle    size={20} className="text-white" />} color="bg-gradient-to-br from-slate-400 to-slate-500"   trend="none" trendValue="" subtitle="" />
+          <DashboardCard title="BAIK / TINGGI"   value={<span>{pct(cardStats?.baikTinggi    || 0)}%</span>} icon={<CheckCircle2 size={20} className="text-white" />} color="bg-gradient-to-br from-emerald-500 to-emerald-600" trend="none" trendValue="" subtitle="" />
+          <DashboardCard title="SEDANG"           value={<span>{pct(cardStats?.sedang         || 0)}%</span>} icon={<Info          size={20} className="text-white" />} color="bg-gradient-to-br from-yellow-500 to-yellow-600"  trend="none" trendValue="" subtitle="" />
+          <DashboardCard title="KURANG / RENDAH"  value={<span>{pct(cardStats?.kurangRendah  || 0)}%</span>} icon={<AlertCircle   size={20} className="text-white" />} color="bg-gradient-to-br from-red-500 to-red-600"       trend="none" trendValue="" subtitle="" />
+          <DashboardCard title="TIDAK TERSEDIA"   value={<span>{pct(cardStats?.tidakTersedia || 0)}%</span>} icon={<HelpCircle    size={20} className="text-white" />} color="bg-gradient-to-br from-slate-400 to-slate-500"   trend="none" trendValue="" subtitle="" />
         </div>
 
-        {/* ── GRAFIK 1: Donut + Stacked Bar ── */}
+        {/* Grafik Donut + Stacked Bar */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Donut */}
           <ChartCard
             id="chart-donut-ringkasan"
             title="Distribusi Capaian Keseluruhan"
             subtitle={`Ringkasan semua indikator${filterJenjangRekap !== "Semua" ? ` — Jenjang ${filterJenjangRekap}` : ""}`}
-            onDownload={() => handleDownload("chart-donut-ringkasan", `donut-capaian-${tahun}`)}
+            onDownload={() => handleDownload(
+              "chart-donut-ringkasan",
+              `donut-capaian-${tahun}`,
+              {
+                groups: [{
+                  label: "Semua",
+                  items: (donutData as { name: string; value: number; fill: string }[])
+                    .filter(d => d.value > 0)
+                    .map(d => ({ name: d.name, color: d.fill, pct: d.value })),
+                }],
+              }
+            )}
           >
             <div style={{ height: 260 }}>
               <ResponsiveContainer width="100%" height="100%">
@@ -1110,25 +1339,42 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
             </div>
           </ChartCard>
 
+          {/* Stacked Bar per Indikator */}
           <div className="lg:col-span-2">
             <ChartCard
               id="chart-stacked-indikator"
               title="Distribusi Capaian per Indikator"
               subtitle={`Persentase Baik/Tinggi · Sedang · Kurang${filterJenjangRekap !== "Semua" ? ` — Jenjang ${filterJenjangRekap}` : ""}`}
-              onDownload={() => handleDownload("chart-stacked-indikator", `stacked-indikator-${tahun}`)}
+              onDownload={() => handleDownload(
+                "chart-stacked-indikator",
+                `stacked-indikator-${tahun}`,
+                {
+                  groups: (indikatorChartData as {
+                    name: string; baikTinggi: number; sedang: number; kurang: number; tidakTersedia: number;
+                  }[]).map(d => ({
+                    label: d.name,
+                    items: [
+                      { name: "Baik/Tinggi",   color: "#22c55e", pct: d.baikTinggi    },
+                      { name: "Sedang",         color: "#f59e0b", pct: d.sedang        },
+                      { name: "Kurang/Rendah",  color: "#ef4444", pct: d.kurang        },
+                      { name: "Tidak Tersedia", color: "#cbd5e1", pct: d.tidakTersedia },
+                    ].filter(i => i.pct > 0),
+                  })),
+                }
+              )}
             >
               <div style={{ height: 260 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={indikatorChartData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }} barSize={20}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
                     <XAxis dataKey="name" tick={{ fontSize: 10, fontWeight: 700, fill: "#64748b" }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={v => `${v}%`} domain={[0, 100]} />
+                    <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={v => `${Math.min(v, 100)}%`} domain={[0, 100]} ticks={[0, 30, 60, 100]} />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10, fontWeight: 600 }} />
-                    <Bar dataKey="baikTinggi"    name="Baik/Tinggi"    stackId="a" fill="#22c55e" radius={[0, 0, 0, 0]} />
-                    <Bar dataKey="sedang"        name="Sedang"          stackId="a" fill="#f59e0b" />
-                    <Bar dataKey="kurang"        name="Kurang/Rendah"   stackId="a" fill="#ef4444" />
-                    <Bar dataKey="tidakTersedia" name="Tidak Tersedia"  stackId="a" fill="#cbd5e1" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="baikTinggi"    name="Baik/Tinggi"   stackId="a" fill="#22c55e" radius={[0, 0, 0, 0]} />
+                    <Bar dataKey="sedang"        name="Sedang"         stackId="a" fill="#f59e0b" />
+                    <Bar dataKey="kurang"        name="Kurang/Rendah"  stackId="a" fill="#ef4444" />
+                    <Bar dataKey="tidakTersedia" name="Tidak Tersedia" stackId="a" fill="#cbd5e1" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -1151,23 +1397,18 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                 </p>
               </div>
             </div>
-            {/* TOMBOL UNDUH EXCEL (Capaian Indikator + Detail Sekolah) */}
             <button
               onClick={handleExportCapaianIndikator}
-              title={`Unduh data + detail sekolah sebagai Excel${filterJenjangRekap !== "Semua" ? ` (Filter: ${filterJenjangRekap})` : ""}`}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 hover:text-emerald-800 text-[11px] font-semibold transition-all border border-emerald-200 hover:border-emerald-300 hover:shadow-sm flex-shrink-0"
             >
               <FileSpreadsheet size={13} />
               Unduh Excel + Detail Sekolah
               {filterJenjangRekap !== "Semua" && (
-                <span className="ml-0.5 px-1.5 py-0.5 rounded-md bg-emerald-200 text-emerald-800 text-[9px] font-bold">
-                  {filterJenjangRekap}
-                </span>
+                <span className="ml-0.5 px-1.5 py-0.5 rounded-md bg-emerald-200 text-emerald-800 text-[9px] font-bold">{filterJenjangRekap}</span>
               )}
             </button>
           </div>
 
-          {/* Info hint untuk klik */}
           <div className="px-5 py-3 border-b border-slate-100 bg-blue-50/60 flex items-center gap-2">
             <Info size={13} className="text-blue-500 flex-shrink-0" />
             <p className="text-[11px] text-blue-700 font-medium">
@@ -1204,10 +1445,10 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                   const tidakNum  = total > 0 ? (s.tidakTersedia || 0) / total * 100 : 0;
 
                   const cellConfigs = [
-                    { pct: baikPct,   count: s.baikTinggi   || 0, labelGroup: "Baik / Tinggi"   as const, bg: "emerald", tColor: "text-emerald-700", bColor: "border-emerald-100", hb: "hover:bg-emerald-100", hBorder: "hover:border-emerald-300" },
-                    { pct: sedangPct, count: s.sedang        || 0, labelGroup: "Sedang"           as const, bg: "amber",   tColor: "text-amber-600",   bColor: "border-amber-100",   hb: "hover:bg-amber-100",   hBorder: "hover:border-amber-300"   },
-                    { pct: kurangPct, count: s.kurangRendah  || 0, labelGroup: "Kurang / Rendah"  as const, bg: "red",     tColor: "text-red-600",     bColor: "border-red-100",     hb: "hover:bg-red-100",     hBorder: "hover:border-red-300"     },
-                    { pct: tidakPct,  count: s.tidakTersedia || 0, labelGroup: "Tidak Tersedia"   as const, bg: "slate",   tColor: "text-slate-400",   bColor: "border-slate-200",   hb: "hover:bg-slate-100",   hBorder: "hover:border-slate-300"   },
+                    { pct: baikPct,   count: s.baikTinggi   || 0, labelGroup: "Baik / Tinggi"  as const, bg: "emerald", tColor: "text-emerald-700", bColor: "border-emerald-100", hb: "hover:bg-emerald-100", hBorder: "hover:border-emerald-300" },
+                    { pct: sedangPct, count: s.sedang        || 0, labelGroup: "Sedang"          as const, bg: "amber",   tColor: "text-amber-600",   bColor: "border-amber-100",   hb: "hover:bg-amber-100",   hBorder: "hover:border-amber-300"   },
+                    { pct: kurangPct, count: s.kurangRendah  || 0, labelGroup: "Kurang / Rendah" as const, bg: "red",     tColor: "text-red-600",     bColor: "border-red-100",     hb: "hover:bg-red-100",     hBorder: "hover:border-red-300"     },
+                    { pct: tidakPct,  count: s.tidakTersedia || 0, labelGroup: "Tidak Tersedia"  as const, bg: "slate",   tColor: "text-slate-400",   bColor: "border-slate-200",   hb: "hover:bg-slate-100",   hBorder: "hover:border-slate-300"   },
                   ];
 
                   return (
@@ -1268,10 +1509,10 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         {mmtData.length > 0 && (
           <div className="grid grid-cols-4 gap-3 mb-5">
             {[
-              { label: "Meningkat",     val: mmtSummary.naik,           color: "emerald", Icon: TrendingUp   },
-              { label: "Menurun",       val: mmtSummary.turun,          color: "red",     Icon: TrendingDown },
-              { label: "Tidak Berubah", val: mmtSummary.tetap,          color: "slate",   Icon: Minus        },
-              { label: "Tdk Tersedia",  val: mmtSummary.tidakTersedia,  color: "blue",    Icon: Info         },
+              { label: "Meningkat",     val: mmtSummary.naik,          color: "emerald", Icon: TrendingUp   },
+              { label: "Menurun",       val: mmtSummary.turun,         color: "red",     Icon: TrendingDown },
+              { label: "Tidak Berubah", val: mmtSummary.tetap,         color: "slate",   Icon: Minus        },
+              { label: "Tdk Tersedia",  val: mmtSummary.tidakTersedia, color: "blue",    Icon: Info         },
             ].map(({ label, val, color, Icon }) => (
               <div key={label} className={`bg-white rounded-xl border border-${color}-200 shadow-sm px-4 py-3 flex items-center gap-3`}>
                 <div className={`w-9 h-9 rounded-xl bg-gradient-to-br from-${color}-500 to-${color}-600 flex items-center justify-center shadow-sm flex-shrink-0`}>
@@ -1299,14 +1540,27 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
             id="chart-mmt-jenjang"
             title="Perubahan Capaian per Jenis Satuan Pendidikan"
             subtitle="Persentase meningkat, menurun, dan tetap per jenjang"
-            onDownload={() => handleDownload("chart-mmt-jenjang", `perubahan-jenjang-${tahun}`)}
+            onDownload={() => handleDownload(
+              "chart-mmt-jenjang",
+              `perubahan-jenjang-${tahun}`,
+              {
+                groups: (mmtChartData as { name: string; Meningkat: number; Menurun: number; Tetap: number }[]).map(d => ({
+                  label: d.name,
+                  items: [
+                    { name: "Meningkat", color: "#22c55e", pct: d.Meningkat },
+                    { name: "Menurun",   color: "#ef4444", pct: d.Menurun   },
+                    { name: "Tetap",     color: "#f59e0b", pct: d.Tetap     },
+                  ].filter(i => i.pct > 0),
+                })),
+              }
+            )}
           >
             <div style={{ height: 280 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={mmtChartData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }} barSize={36}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
                   <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: 700, fill: "#475569" }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={v => `${v}%`} domain={[0, 100]} />
+                  <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={v => `${Math.min(v, 100)}%`} domain={[0, 100]} ticks={[0, 30, 60, 100]} />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11, fontWeight: 600 }} />
                   <Bar dataKey="Meningkat" stackId="a" fill="#22c55e" radius={[0, 0, 0, 0]} />
@@ -1318,7 +1572,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
           </ChartCard>
         )}
 
-        {/* Filter bar */}
+        {/* Filter bar MMT */}
         <div className="flex flex-wrap gap-4 items-center mb-4 p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1 whitespace-nowrap">
@@ -1342,13 +1596,9 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
               <span className="text-xs text-slate-500">data</span>
             </div>
             {mmtFiltered.length > 0 && (
-              <button
-                onClick={handleExportMMT}
-                title={`Unduh data perubahan capaian sebagai Excel`}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 hover:text-emerald-800 text-[11px] font-semibold transition-all border border-emerald-200 hover:border-emerald-300 hover:shadow-sm"
-              >
-                <FileSpreadsheet size={13} />
-                Unduh Excel
+              <button onClick={handleExportMMT}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 hover:text-emerald-800 text-[11px] font-semibold transition-all border border-emerald-200 hover:border-emerald-300 hover:shadow-sm">
+                <FileSpreadsheet size={13} /> Unduh Excel
                 {(filterJenjangMMT !== "Semua" || filterStatusMMT !== "Semua") && (
                   <span className="ml-0.5 px-1.5 py-0.5 rounded-md bg-emerald-200 text-emerald-800 text-[9px] font-bold">
                     {[filterJenjangMMT !== "Semua" && filterJenjangMMT, filterStatusMMT !== "Semua" && filterStatusMMT].filter(Boolean).join(" · ")}
@@ -1446,10 +1696,10 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                 </span>
                 <div className="flex items-center gap-1">
                   {[
-                    { label: "«", action: () => setPageMMT(1),                                                                              disabled: pageMMT === 1 },
-                    { label: "‹", action: () => setPageMMT(p => Math.max(1, p - 1)),                                                        disabled: pageMMT === 1 },
-                    { label: "›", action: () => setPageMMT(p => Math.min(Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE), p + 1)),             disabled: pageMMT === Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE) },
-                    { label: "»", action: () => setPageMMT(Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE)),                                  disabled: pageMMT === Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE) },
+                    { label: "«", action: () => setPageMMT(1), disabled: pageMMT === 1 },
+                    { label: "‹", action: () => setPageMMT(p => Math.max(1, p - 1)), disabled: pageMMT === 1 },
+                    { label: "›", action: () => setPageMMT(p => Math.min(Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE), p + 1)), disabled: pageMMT === Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE) },
+                    { label: "»", action: () => setPageMMT(Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE)), disabled: pageMMT === Math.ceil(mmtFiltered.length / MMT_PAGE_SIZE) },
                   ].map(({ label, action, disabled }, i) => (
                     <button key={i} onClick={action} disabled={disabled}
                       className="w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-200 text-slate-600">
@@ -1473,7 +1723,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
           />
         </div>
 
-        {/* Filter bar */}
+        {/* Filter bar TT */}
         <div className="flex flex-wrap gap-4 items-center mb-5 p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
           {[
             { label: "Indikator",    state: filterIndikatorTT, setter: setFilterIndikatorTT, options: [{ v: "Semua", l: "Semua Indikator" }, ...PRIORITY_CODES_TT.map(c => ({ v: c, l: c }))] },
@@ -1509,7 +1759,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         ) : (
           <>
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-              {/* ── 10 Tertinggi ── */}
+              {/* 10 Tertinggi */}
               <div className="bg-white rounded-2xl border border-emerald-200 shadow-sm overflow-hidden">
                 <div className="px-5 py-4 border-b border-emerald-100 flex items-center gap-3" style={{ background: "linear-gradient(135deg,#ecfdf5 0%,#d1fae5 100%)" }}>
                   <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-sm flex-shrink-0">
@@ -1589,7 +1839,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                 </div>
               </div>
 
-              {/* ── 10 Terendah ── */}
+              {/* 10 Terendah */}
               <div className="bg-white rounded-2xl border border-red-200 shadow-sm overflow-hidden">
                 <div className="px-5 py-4 border-b border-red-100 flex items-center gap-3" style={{ background: "linear-gradient(135deg,#fff1f2 0%,#ffe4e6 100%)" }}>
                   <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-sm flex-shrink-0">
@@ -1665,7 +1915,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
               </div>
             </div>
 
-            {/* ═══ SECTION: Rekap Perubahan per Indikator + GRAFIK ═════════ */}
+            {/* Rekap Perubahan per Indikator + Grafik */}
             <div className="mt-8">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
                 <SectionHeader
@@ -1680,14 +1930,29 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                   id="chart-rekap-tt-indikator"
                   title="Grafik Rekap Meningkat / Menurun per Indikator Prioritas"
                   subtitle="Persentase satdik meningkat, menurun, dan tetap per kode indikator"
-                  onDownload={() => handleDownload("chart-rekap-tt-indikator", `rekap-indikator-tt-${tahun}`)}
+                  onDownload={() => handleDownload(
+                    "chart-rekap-tt-indikator",
+                    `rekap-indikator-tt-${tahun}`,
+                    {
+                      groups: (ttRekapChartData as { name: string; Meningkat: number; Menurun: number; Tetap: number }[])
+                        .filter(Boolean)
+                        .map(d => ({
+                          label: d.name,
+                          items: [
+                            { name: "Meningkat", color: "#22c55e", pct: d.Meningkat },
+                            { name: "Menurun",   color: "#ef4444", pct: d.Menurun   },
+                            { name: "Tetap",     color: "#f59e0b", pct: d.Tetap     },
+                          ].filter(i => i.pct > 0),
+                        })),
+                    }
+                  )}
                 >
                   <div style={{ height: 300 }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={ttRekapChartData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }} barSize={28}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
                         <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: 700, fill: "#475569" }} axisLine={false} tickLine={false} />
-                        <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={v => `${v}%`} domain={[0, 100]} />
+                        <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={v => `${Math.min(v, 100)}%`} domain={[0, 100]} ticks={[0, 30, 60, 100]} />
                         <Tooltip content={<CustomTooltip />} />
                         <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11, fontWeight: 600 }} />
                         <Bar dataKey="Meningkat" stackId="a" fill="#22c55e" />
@@ -1699,7 +1964,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                 </ChartCard>
               )}
 
-              {/* Tabel Rekap (dengan sel yang bisa diklik) */}
+              {/* Tabel Rekap TT */}
               <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
                 <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
@@ -1716,14 +1981,9 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                       </p>
                     </div>
                   </div>
-                  {/* TOMBOL UNDUH EXCEL (Rekap TT + Detail Sekolah per Indikator) */}
-                  <button
-                    onClick={handleExportRekapTT}
-                    title="Unduh rekap + detail sekolah per indikator sebagai Excel"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 hover:text-emerald-800 text-[11px] font-semibold transition-all border border-emerald-200 hover:border-emerald-300 hover:shadow-sm flex-shrink-0"
-                  >
-                    <FileSpreadsheet size={13} />
-                    Unduh Excel + Detail Sekolah
+                  <button onClick={handleExportRekapTT}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 hover:text-emerald-800 text-[11px] font-semibold transition-all border border-emerald-200 hover:border-emerald-300 hover:shadow-sm flex-shrink-0">
+                    <FileSpreadsheet size={13} /> Unduh Excel + Detail Sekolah
                     {(filterJenjangTT !== "Semua" || filterStatusTT !== "Semua") && (
                       <span className="ml-0.5 px-1.5 py-0.5 rounded-md bg-emerald-200 text-emerald-800 text-[9px] font-bold">
                         {[filterJenjangTT !== "Semua" && filterJenjangTT, filterStatusTT !== "Semua" && filterStatusTT].filter(Boolean).join(" · ")}
@@ -1732,11 +1992,10 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                   </button>
                 </div>
 
-                {/* Info hint */}
                 <div className="px-5 py-3 border-b border-slate-100 bg-blue-50/60 flex items-center gap-2">
                   <Info size={13} className="text-blue-500 flex-shrink-0" />
                   <p className="text-[11px] text-blue-700 font-medium">
-                    Klik pada persentase untuk melihat &amp; mengunduh daftar sekolah (dengan filter kab/kota dan kecamatan) berdasarkan indikator dan kategori perubahan.
+                    Klik pada persentase untuk melihat &amp; mengunduh daftar sekolah berdasarkan indikator dan kategori perubahan.
                   </p>
                 </div>
 
@@ -1757,18 +2016,18 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                         const s = ttSummaryPerInd[code];
                         if (!s) return null;
                         const total        = s.total;
-                        const meningkatPct = total > 0 ? ((s.meningkat        / total) * 100).toFixed(2) : "0.00";
-                        const menurunPct   = total > 0 ? ((s.menurun          / total) * 100).toFixed(2) : "0.00";
-                        const tetapPct     = total > 0 ? ((s.tetap            / total) * 100).toFixed(2) : "0.00";
-                        const tidakPct     = total > 0 ? ((s.tidakTersedia    / total) * 100).toFixed(2) : "0.00";
+                        const meningkatPct = total > 0 ? ((s.meningkat     / total) * 100).toFixed(2) : "0.00";
+                        const menurunPct   = total > 0 ? ((s.menurun       / total) * 100).toFixed(2) : "0.00";
+                        const tetapPct     = total > 0 ? ((s.tetap         / total) * 100).toFixed(2) : "0.00";
+                        const tidakPct     = total > 0 ? ((s.tidakTersedia / total) * 100).toFixed(2) : "0.00";
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         const indInfo = (PRIORITY_INDICATORS as any[])?.find((p: any) => p.code === code);
 
                         const cells = [
-                          { pct: meningkatPct, count: s.meningkat,     bg: "emerald", tColor: "text-emerald-600", bColor: "border-emerald-100", hBg: "hover:bg-emerald-100", hBorder: "hover:border-emerald-300", kategori: "Meningkat"      as const },
-                          { pct: menurunPct,   count: s.menurun,        bg: "red",     tColor: "text-red-600",     bColor: "border-red-100",     hBg: "hover:bg-red-100",     hBorder: "hover:border-red-300",     kategori: "Menurun"        as const },
-                          { pct: tetapPct,     count: s.tetap,          bg: "amber",   tColor: "text-amber-600",   bColor: "border-amber-100",   hBg: "hover:bg-amber-100",   hBorder: "hover:border-amber-300",   kategori: "Tetap"          as const },
-                          { pct: tidakPct,     count: s.tidakTersedia,  bg: "slate",   tColor: "text-slate-400",   bColor: "border-slate-200",   hBg: "hover:bg-slate-100",   hBorder: "hover:border-slate-300",   kategori: "Tidak Tersedia" as const },
+                          { pct: meningkatPct, count: s.meningkat,    bg: "emerald", tColor: "text-emerald-600", bColor: "border-emerald-100", hBg: "hover:bg-emerald-100", hBorder: "hover:border-emerald-300", kategori: "Meningkat"      as const },
+                          { pct: menurunPct,   count: s.menurun,       bg: "red",     tColor: "text-red-600",     bColor: "border-red-100",     hBg: "hover:bg-red-100",     hBorder: "hover:border-red-300",     kategori: "Menurun"        as const },
+                          { pct: tetapPct,     count: s.tetap,         bg: "amber",   tColor: "text-amber-600",   bColor: "border-amber-100",   hBg: "hover:bg-amber-100",   hBorder: "hover:border-amber-300",   kategori: "Tetap"          as const },
+                          { pct: tidakPct,     count: s.tidakTersedia, bg: "slate",   tColor: "text-slate-400",   bColor: "border-slate-200",   hBg: "hover:bg-slate-100",   hBorder: "hover:border-slate-300",   kategori: "Tidak Tersedia" as const },
                         ];
 
                         return (
@@ -1788,13 +2047,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                               <td key={kategori} className="px-5 py-3.5 text-center">
                                 {total > 0 ? (
                                   <button
-                                    onClick={() => {
-                                      setRekapTTModal({ code, kategori });
-                                      setRekapTTSearch("");
-                                      setRekapTTPage(1);
-                                      setRekapTTKabkot("Semua");
-                                      setRekapTTKecamatan("Semua");
-                                    }}
+                                    onClick={() => { setRekapTTModal({ code, kategori }); setRekapTTSearch(""); setRekapTTPage(1); setRekapTTKabkot("Semua"); setRekapTTKecamatan("Semua"); }}
                                     className={`inline-flex flex-col items-center justify-center gap-0.5 bg-${bg}-50/60 ${hBg} rounded-xl px-2 py-2 min-w-[5rem] border ${bColor} ${hBorder} transition-all hover:shadow-md cursor-pointer group/rekap relative overflow-hidden`}
                                   >
                                     <div className={`absolute inset-0 bg-${bg}-400/10 translate-y-full group-hover/rekap:translate-y-0 transition-transform duration-300 ease-out`} />
@@ -1816,30 +2069,21 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         )}
       </div>
 
-      {/* ═══ MODAL: Daftar Sekolah per Indikator & Kategori Capaian ══════════ */}
+      {/* ═══ MODAL: Daftar Sekolah per Indikator & Kategori ═════════════════ */}
       {schoolModal && (() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const indInfo = (PRIORITY_INDICATORS as any[]).find((p: any) => p.code === schoolModal.indCode);
         const style   = getLabelGroupStyle(schoolModal.labelGroup);
-
         return (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
             style={{ background: "rgba(15,23,42,0.6)", backdropFilter: "blur(6px)" }}
-            onClick={e => { if (e.target === e.currentTarget) closeSchoolModal(); }}
-          >
+            onClick={e => { if (e.target === e.currentTarget) closeSchoolModal(); }}>
             <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-200/80">
-
               {/* Header */}
-              <div
-                className="flex items-center justify-between px-6 py-5 border-b border-slate-100 flex-shrink-0"
-                style={{ background: `linear-gradient(135deg, ${style.bg} 0%, white 100%)` }}
-              >
+              <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 flex-shrink-0"
+                style={{ background: `linear-gradient(135deg, ${style.bg} 0%, white 100%)` }}>
                 <div className="flex items-center gap-4">
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-sm shadow-md flex-shrink-0"
-                    style={{ background: style.dot }}
-                  >
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-sm shadow-md flex-shrink-0" style={{ background: style.dot }}>
                     {schoolModal.indCode}
                   </div>
                   <div>
@@ -1847,41 +2091,23 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                       <h3 className="text-base font-black text-slate-900 leading-tight">
                         {indInfo ? `${indInfo.code} – ${indInfo.fullName}` : schoolModal.indCode}
                       </h3>
-                      <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${style.badge}`}>
-                        {schoolModal.labelGroup}
-                      </span>
+                      <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${style.badge}`}>{schoolModal.labelGroup}</span>
                       {schoolModal.filterJenjang !== "Semua" && (
-                        <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">
-                          Jenjang {schoolModal.filterJenjang}
-                        </span>
+                        <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">Jenjang {schoolModal.filterJenjang}</span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-400 mt-1">
-                      <span className="font-bold text-slate-600">{schoolModalFiltered.length.toLocaleString("id-ID")}</span> sekolah ditemukan
-                    </p>
+                    <p className="text-xs text-slate-400 mt-1"><span className="font-bold text-slate-600">{schoolModalFiltered.length.toLocaleString("id-ID")}</span> sekolah ditemukan</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {/* TOMBOL UNDUH EXCEL di modal (mengikuti filter aktif) */}
                   {schoolModalFiltered.length > 0 && (
-                    <button
-                      onClick={handleExportSchoolModal}
-                      title="Unduh daftar sekolah yang sedang ditampilkan sebagai Excel"
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-semibold transition-all border border-emerald-200 hover:border-emerald-300 hover:shadow-sm"
-                    >
-                      <FileSpreadsheet size={13} />
-                      Unduh Excel
-                      <span className="px-1.5 py-0.5 rounded-md bg-emerald-200 text-emerald-800 text-[9px] font-bold">
-                        {schoolModalFiltered.length.toLocaleString("id-ID")}
-                      </span>
+                    <button onClick={handleExportSchoolModal}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-semibold transition-all border border-emerald-200 hover:border-emerald-300 hover:shadow-sm">
+                      <FileSpreadsheet size={13} /> Unduh Excel
+                      <span className="px-1.5 py-0.5 rounded-md bg-emerald-200 text-emerald-800 text-[9px] font-bold">{schoolModalFiltered.length.toLocaleString("id-ID")}</span>
                     </button>
                   )}
-                  <button
-                    onClick={closeSchoolModal}
-                    className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition text-lg font-bold flex-shrink-0"
-                  >
-                    ×
-                  </button>
+                  <button onClick={closeSchoolModal} className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition text-lg font-bold flex-shrink-0">×</button>
                 </div>
               </div>
 
@@ -1889,64 +2115,42 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
               <div className="px-6 py-4 border-b border-slate-100 flex-shrink-0 space-y-3">
                 <div className="relative">
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  <input className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Cari nama sekolah, NPSN, atau kab/kota…"
                     value={schoolModalSearch}
-                    onChange={e => { setSchoolModalSearchLocal(e.target.value); setSchoolModalPageLocal(1); }}
-                  />
+                    onChange={e => { setSchoolModalSearchLocal(e.target.value); setSchoolModalPageLocal(1); }} />
                 </div>
                 <div className="flex gap-3 flex-wrap">
                   <div className="flex-1 min-w-40 relative">
                     <MapPin size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                    <select
-                      className="w-full pl-8 pr-8 py-2 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
+                    <select className="w-full pl-8 pr-8 py-2 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
                       value={schoolModalKabkot}
-                      onChange={e => { setSchoolModalKabkotLocal(e.target.value); setSchoolModalKecamatanLocal("Semua"); setSchoolModalPageLocal(1); }}
-                    >
-                      {schoolModalKabkotOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt === "Semua" ? "Semua Kab/Kota" : opt}</option>
-                      ))}
+                      onChange={e => { setSchoolModalKabkotLocal(e.target.value); setSchoolModalKecamatanLocal("Semua"); setSchoolModalPageLocal(1); }}>
+                      {schoolModalKabkotOptions.map(opt => <option key={opt} value={opt}>{opt === "Semua" ? "Semua Kab/Kota" : opt}</option>)}
                     </select>
                     <ChevronDown size={12} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   </div>
                   <div className="flex-1 min-w-40 relative">
                     <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                    <select
-                      className="w-full pl-8 pr-8 py-2 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer disabled:opacity-50"
+                    <select className="w-full pl-8 pr-8 py-2 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer disabled:opacity-50"
                       value={schoolModalKecamatan}
                       onChange={e => { setSchoolModalKecamatanLocal(e.target.value); setSchoolModalPageLocal(1); }}
-                      disabled={schoolModalKecamatanOptions.length <= 1}
-                    >
-                      {schoolModalKecamatanOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt === "Semua" ? "Semua Kecamatan" : opt}</option>
-                      ))}
+                      disabled={schoolModalKecamatanOptions.length <= 1}>
+                      {schoolModalKecamatanOptions.map(opt => <option key={opt} value={opt}>{opt === "Semua" ? "Semua Kecamatan" : opt}</option>)}
                     </select>
                     <ChevronDown size={12} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   </div>
                   {(schoolModalKabkot !== "Semua" || schoolModalKecamatan !== "Semua" || schoolModalSearch) && (
-                    <button
-                      onClick={() => { setSchoolModalKabkotLocal("Semua"); setSchoolModalKecamatanLocal("Semua"); setSchoolModalSearchLocal(""); setSchoolModalPageLocal(1); }}
-                      className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-red-50 hover:border-red-200 text-slate-500 hover:text-red-500 text-xs font-medium transition flex items-center gap-1.5 whitespace-nowrap"
-                    >
+                    <button onClick={() => { setSchoolModalKabkotLocal("Semua"); setSchoolModalKecamatanLocal("Semua"); setSchoolModalSearchLocal(""); setSchoolModalPageLocal(1); }}
+                      className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-red-50 hover:border-red-200 text-slate-500 hover:text-red-500 text-xs font-medium transition flex items-center gap-1.5 whitespace-nowrap">
                       <XCircle size={12} /> Reset Filter
                     </button>
                   )}
                 </div>
-
-                {/* Filter aktif badges + info jumlah */}
                 {(schoolModalKabkot !== "Semua" || schoolModalKecamatan !== "Semua") && (
                   <div className="flex items-center gap-2 flex-wrap">
-                    {schoolModalKabkot !== "Semua" && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 text-[11px] font-semibold">
-                        <MapPin size={10} /> {schoolModalKabkot}
-                      </span>
-                    )}
-                    {schoolModalKecamatan !== "Semua" && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 text-[11px] font-semibold">
-                        <Filter size={10} /> Kec. {schoolModalKecamatan}
-                      </span>
-                    )}
+                    {schoolModalKabkot !== "Semua" && <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 text-[11px] font-semibold"><MapPin size={10} /> {schoolModalKabkot}</span>}
+                    {schoolModalKecamatan !== "Semua" && <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 text-[11px] font-semibold"><Filter size={10} /> Kec. {schoolModalKecamatan}</span>}
                     <span className="text-[11px] text-slate-400">{schoolModalFiltered.length.toLocaleString("id-ID")} sekolah</span>
                   </div>
                 )}
@@ -1968,16 +2172,12 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {schoolModalPaged.length === 0 ? (
-                      <tr>
-                        <td colSpan={9} className="text-center py-16 text-slate-400">
-                          <Search size={22} className="mx-auto mb-2 opacity-30" />
-                          <p className="text-xs font-medium">Tidak ada sekolah ditemukan</p>
-                          {schoolModalSearch && <p className="text-[11px] text-slate-300 mt-0.5">Coba ubah kata kunci pencarian</p>}
-                        </td>
-                      </tr>
+                      <tr><td colSpan={7} className="text-center py-16 text-slate-400">
+                        <Search size={22} className="mx-auto mb-2 opacity-30" />
+                        <p className="text-xs font-medium">Tidak ada sekolah ditemukan</p>
+                      </td></tr>
                     ) : schoolModalPaged.map((row: Record<string, unknown>, i: number) => {
                       const label = getLabelForCode(row, schoolModal.indCode);
-                      const { nilaiIni, nilaiLalu } = getNilaiForCode(row, schoolModal.indCode);
                       return (
                         <tr key={String(row["NPSN"] ?? i)} className="hover:bg-slate-50/60 transition-colors">
                           <td className="px-4 py-3 font-semibold text-slate-800 leading-snug">{String(row["Nama Satuan Pendidikan"] ?? "–")}</td>
@@ -1985,38 +2185,23 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                           <td className="px-4 py-3 text-slate-600 text-[11px]">{String(row["Kabupaten/Kota"] ?? "–")}</td>
                           <td className="px-4 py-3 text-slate-400 text-[11px]">{String(row["Kecamatan"] ?? "–")}</td>
                           <td className="px-4 py-3">
-                            <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md border border-slate-200">
-                              {normalizeJenjang(String(row["Jenis Satuan Pendidikan"] ?? ""))}
-                            </span>
+                            <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md border border-slate-200">{normalizeJenjang(String(row["Jenis Satuan Pendidikan"] ?? ""))}</span>
                           </td>
                           <td className="px-4 py-3">
-                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${
-                              row["Status Satuan Pendidikan"] === "Negeri"
-                                ? "bg-blue-50 text-blue-700 border-blue-200"
-                                : "bg-purple-50 text-purple-700 border-purple-200"
-                            }`}>
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${row["Status Satuan Pendidikan"] === "Negeri" ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-purple-50 text-purple-700 border-purple-200"}`}>
                               {String(row["Status Satuan Pendidikan"] ?? "–")}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-center">
-                            <CapaianBadge label={label} />
-                          </td>
-                          
+                          <td className="px-4 py-3 text-center"><CapaianBadge label={label} /></td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
               </div>
-
-              {/* Pagination */}
               {schoolModalTotalPages > 1 && (
                 <div className="flex-shrink-0">
-                  <PaginationBar
-                    page={schoolModalPage}
-                    total={schoolModalTotalPages}
-                    onChange={p => setSchoolModalPageLocal(p)}
-                  />
+                  <PaginationBar page={schoolModalPage} total={schoolModalTotalPages} onChange={p => setSchoolModalPageLocal(p)} />
                 </div>
               )}
             </div>
@@ -2024,83 +2209,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         );
       })()}
 
-      {/* ─── Detail Modal (existing — kept for backward compat) ─────────────── */}
-      {detailModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6" onClick={() => setDetailModal(null)}>
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col border border-slate-200" onClick={e => e.stopPropagation()}>
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between gap-3 flex-shrink-0">
-              <div className="flex items-center gap-3">
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-sm flex-shrink-0 ${
-                  detailModal.label === "Baik / Tinggi" ? "bg-gradient-to-br from-emerald-500 to-emerald-600"
-                  : detailModal.label === "Sedang" ? "bg-gradient-to-br from-amber-400 to-amber-500"
-                  : detailModal.label === "Kurang / Rendah" ? "bg-gradient-to-br from-red-500 to-red-600"
-                  : "bg-gradient-to-br from-slate-400 to-slate-500"}`}>
-                  <ListChecks size={15} className="text-white" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">Detail Capaian — {detailModal.label}</h3>
-                  <p className="text-[10px] text-slate-400 mt-0.5">{detailModal.title} · {detailModal.rows.length} data</p>
-                </div>
-              </div>
-              <button onClick={() => setDetailModal(null)}
-                className="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors flex-shrink-0 shadow-sm">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-              </button>
-            </div>
-            <div className="overflow-y-auto flex-1">
-              {detailModal.rows.length === 0 ? (
-                <div className="p-12 text-center text-slate-400 text-xs">Tidak ada data</div>
-              ) : (
-                <table className="w-full text-sm table-fixed">
-                  <colgroup>
-                    <col style={{ width: "7%" }} />
-                    <col style={{ width: "16%" }} />
-                    <col style={{ width: "10%" }} />
-                    <col style={{ width: "12%" }} />
-                    <col style={{ width: "12%" }} />
-                    <col style={{ width: "11%" }} />
-                    <col style={{ width: "32%" }} />
-                  </colgroup>
-                  <thead className="sticky top-0 z-10">
-                    <tr className="bg-slate-50 border-b border-slate-200">
-                      {["No", "Jenis Satdik", "Status", "Label Capaian", "Nilai Capaian", `Thn. ${tahun ? Number(tahun) - 1 : "Lalu"}`, "Definisi"].map(h => (
-                        <th key={h} className="px-3 py-2.5 text-left font-bold text-slate-500 uppercase tracking-wider text-[9px]">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {(() => {
-                      const firstRow    = detailModal.rows[0] || {};
-                      const modalKeys   = Object.keys(firstRow);
-                      const modalLabelKey   = modalKeys.find(k => k.toLowerCase().includes("label capaian 20")) ?? "Label Capaian 2025";
-                      const modalNilaiKey   = modalKeys.find(k => k.toLowerCase().includes("nilai capaian 20") && !k.toLowerCase().includes("2024") && !k.toLowerCase().includes("2023")) ?? "Nilai Capaian 2025";
-                      const modalThnLaluKey = modalKeys.find(k => k.toLowerCase().includes("nilai capaian 20") && k !== modalNilaiKey) ?? "Nilai Capaian 2024";
-                      return detailModal.rows.map((row, i) => (
-                        <tr key={`detail-${i}`} className="hover:bg-slate-50/70 transition-colors">
-                          <td className="px-3 py-2.5"><span className="font-mono text-[11px] font-black text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-100">{row["No"] || "–"}</span></td>
-                          <td className="px-3 py-2.5"><p className="text-xs font-semibold text-slate-800 break-words">{row["Jenis Satuan Pendidikan"] || "–"}</p></td>
-                          <td className="px-3 py-2.5">
-                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-semibold border ${row["Status Satuan Pendidikan"] === "Negeri" ? "bg-blue-50 text-blue-700 border-blue-200" : row["Status Satuan Pendidikan"] === "Swasta" ? "bg-purple-50 text-purple-700 border-purple-200" : "bg-slate-50 text-slate-600 border-slate-200"}`}>
-                              {row["Status Satuan Pendidikan"] || "–"}
-                            </span>
-                          </td>
-                          <td className="px-3 py-2.5 text-center"><LabelBadge label={row[modalLabelKey] || ""} /></td>
-                          <td className="px-3 py-2.5 text-center"><span className="font-bold text-slate-800 text-sm">{row[modalNilaiKey] || "–"}</span></td>
-                          <td className="px-3 py-2.5 text-center"><span className="text-slate-500 text-xs font-medium">{row[modalThnLaluKey] || "–"}</span></td>
-                          <td className="px-3 py-2.5"><p className="text-[10px] text-slate-500 leading-relaxed break-words">{row["Definisi Capaian"] || "–"}</p></td>
-                        </tr>
-                      ));
-                    })()}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ═══ MODAL: Rekap TT — Daftar Sekolah per Indikator & Kategori ══════ */}
+      {/* ═══ MODAL: Rekap TT ════════════════════════════════════════════════ */}
       {rekapTTModal && (() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const indInfo = (PRIORITY_INDICATORS as any[]).find((p: any) => p.code === rekapTTModal.code);
@@ -2110,20 +2219,14 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
           const exportRows = rekapTTFiltered.map(row => {
             const { arah, nilai } = getArahNilai(row as Record<string, unknown>, rekapTTModal.code);
             return {
-              "Nama Satuan Pendidikan": row["Nama Satuan Pendidikan"] || "",
-              "NPSN": row["NPSN"] || "",
-              "Kabupaten/Kota": row["Kabupaten/Kota"] || "",
-              "Kecamatan": row["Kecamatan"] || "",
+              "Nama Satuan Pendidikan": row["Nama Satuan Pendidikan"] || "", "NPSN": row["NPSN"] || "",
+              "Kabupaten/Kota": row["Kabupaten/Kota"] || "", "Kecamatan": row["Kecamatan"] || "",
               "Jenis Satuan Pendidikan": row["Jenis Satuan Pendidikan"] || "",
               "Jenjang (Normalisasi)": normalizeJenjang(row["Jenis Satuan Pendidikan"] || ""),
               "Status Satuan Pendidikan": row["Status Satuan Pendidikan"] || "",
-              "Kode Indikator": rekapTTModal.code,
-              "Nama Indikator": indInfo?.fullName || rekapTTModal.code,
-              "Kategori Perubahan": rekapTTModal.kategori,
-              "Arah Perubahan": arah || "",
+              "Kode Indikator": rekapTTModal.code, "Nama Indikator": indInfo?.fullName || rekapTTModal.code,
+              "Kategori Perubahan": rekapTTModal.kategori, "Arah Perubahan": arah || "",
               "Nilai Perubahan": nilai !== "–" ? nilai : "",
-              "Filter Kab/Kota": rekapTTKabkot !== "Semua" ? rekapTTKabkot : "Semua",
-              "Filter Kecamatan": rekapTTKecamatan !== "Semua" ? rekapTTKecamatan : "Semua",
             };
           });
           const safeKabkot = rekapTTKabkot !== "Semua" ? `-${rekapTTKabkot.replace(/[^a-zA-Z0-9]/g, "").substring(0, 15)}` : "";
@@ -2135,21 +2238,15 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         };
 
         return (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
             style={{ background: "rgba(15,23,42,0.6)", backdropFilter: "blur(6px)" }}
-            onClick={e => { if (e.target === e.currentTarget) closeRekapTTModal(); }}
-          >
+            onClick={e => { if (e.target === e.currentTarget) closeRekapTTModal(); }}>
             <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-200/80">
-
-              {/* Modal Header */}
+              {/* Header */}
               <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 flex-shrink-0"
                 style={{ background: `linear-gradient(135deg, ${ks.bg} 0%, white 100%)` }}>
                 <div className="flex items-center gap-4">
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-sm shadow-md flex-shrink-0"
-                    style={{ background: ks.dot }}
-                  >
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-sm shadow-md flex-shrink-0" style={{ background: ks.dot }}>
                     {rekapTTModal.code}
                   </div>
                   <div>
@@ -2157,10 +2254,8 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                       <h3 className="text-base font-black text-slate-900 leading-tight">
                         {indInfo ? `${indInfo.code} – ${indInfo.fullName}` : rekapTTModal.code}
                       </h3>
-                      <span
-                        className="text-xs font-bold px-2.5 py-0.5 rounded-full border"
-                        style={{ background: ks.bg, color: ks.text, borderColor: ks.border }}
-                      >
+                      <span className="text-xs font-bold px-2.5 py-0.5 rounded-full border"
+                        style={{ background: ks.bg, color: ks.text, borderColor: ks.border }}>
                         {rekapTTModal.kategori === "Meningkat" && "↑ "}
                         {rekapTTModal.kategori === "Menurun"   && "↓ "}
                         {rekapTTModal.kategori === "Tetap"     && "→ "}
@@ -2169,39 +2264,18 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                     </div>
                     <p className="text-xs text-slate-400 mt-1 flex items-center gap-2">
                       <span className="font-bold text-slate-600">{rekapTTFiltered.length.toLocaleString("id-ID")}</span> sekolah ditemukan
-                      {filterJenjangTT !== "Semua" && (
-                        <span className="px-1.5 py-0.5 rounded-md bg-blue-100 text-blue-700 font-semibold text-[10px]">
-                          Jenjang {filterJenjangTT}
-                        </span>
-                      )}
-                      {filterStatusTT !== "Semua" && (
-                        <span className="px-1.5 py-0.5 rounded-md bg-purple-100 text-purple-700 font-semibold text-[10px]">
-                          {filterStatusTT}
-                        </span>
-                      )}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   {rekapTTFiltered.length > 0 && (
-                    <button
-                      onClick={handleExportModalTT}
-                      title="Unduh daftar sekolah ini sebagai Excel (mengikuti filter kab/kota & kecamatan)"
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-semibold transition-all border border-emerald-200 hover:border-emerald-300 hover:shadow-sm"
-                    >
-                      <FileSpreadsheet size={13} />
-                      Unduh Excel
-                      <span className="px-1.5 py-0.5 rounded-md bg-emerald-200 text-emerald-800 text-[9px] font-bold">
-                        {rekapTTFiltered.length.toLocaleString("id-ID")}
-                      </span>
+                    <button onClick={handleExportModalTT}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-semibold transition-all border border-emerald-200 hover:border-emerald-300 hover:shadow-sm">
+                      <FileSpreadsheet size={13} /> Unduh Excel
+                      <span className="px-1.5 py-0.5 rounded-md bg-emerald-200 text-emerald-800 text-[9px] font-bold">{rekapTTFiltered.length.toLocaleString("id-ID")}</span>
                     </button>
                   )}
-                  <button
-                    onClick={closeRekapTTModal}
-                    className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition text-lg font-bold flex-shrink-0"
-                  >
-                    ×
-                  </button>
+                  <button onClick={closeRekapTTModal} className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition text-lg font-bold flex-shrink-0">×</button>
                 </div>
               </div>
 
@@ -2209,69 +2283,38 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
               <div className="px-6 py-4 border-b border-slate-100 flex-shrink-0 space-y-3">
                 <div className="relative">
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  <input className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Cari nama sekolah, NPSN, atau kab/kota…"
                     value={rekapTTSearch}
-                    onChange={e => { setRekapTTSearch(e.target.value); setRekapTTPage(1); }}
-                  />
+                    onChange={e => { setRekapTTSearch(e.target.value); setRekapTTPage(1); }} />
                 </div>
-
                 <div className="flex gap-3 flex-wrap">
                   <div className="flex-1 min-w-40 relative">
                     <MapPin size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                    <select
-                      className="w-full pl-8 pr-8 py-2 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
+                    <select className="w-full pl-8 pr-8 py-2 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
                       value={rekapTTKabkot}
-                      onChange={e => { setRekapTTKabkot(e.target.value); setRekapTTKecamatan("Semua"); setRekapTTPage(1); }}
-                    >
-                      {rekapTTKabkotOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt === "Semua" ? "Semua Kab/Kota" : opt}</option>
-                      ))}
+                      onChange={e => { setRekapTTKabkot(e.target.value); setRekapTTKecamatan("Semua"); setRekapTTPage(1); }}>
+                      {rekapTTKabkotOptions.map(opt => <option key={opt} value={opt}>{opt === "Semua" ? "Semua Kab/Kota" : opt}</option>)}
                     </select>
                     <ChevronDown size={12} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   </div>
-
                   <div className="flex-1 min-w-40 relative">
                     <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                    <select
-                      className="w-full pl-8 pr-8 py-2 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer disabled:opacity-50"
+                    <select className="w-full pl-8 pr-8 py-2 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer disabled:opacity-50"
                       value={rekapTTKecamatan}
                       onChange={e => { setRekapTTKecamatan(e.target.value); setRekapTTPage(1); }}
-                      disabled={rekapTTKecamatanOptions.length <= 1}
-                    >
-                      {rekapTTKecamatanOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt === "Semua" ? "Semua Kecamatan" : opt}</option>
-                      ))}
+                      disabled={rekapTTKecamatanOptions.length <= 1}>
+                      {rekapTTKecamatanOptions.map(opt => <option key={opt} value={opt}>{opt === "Semua" ? "Semua Kecamatan" : opt}</option>)}
                     </select>
                     <ChevronDown size={12} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   </div>
-
                   {(rekapTTKabkot !== "Semua" || rekapTTKecamatan !== "Semua") && (
-                    <button
-                      onClick={() => { setRekapTTKabkot("Semua"); setRekapTTKecamatan("Semua"); setRekapTTPage(1); }}
-                      className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-red-50 hover:border-red-200 text-slate-500 hover:text-red-500 text-xs font-medium transition flex items-center gap-1.5 whitespace-nowrap"
-                    >
+                    <button onClick={() => { setRekapTTKabkot("Semua"); setRekapTTKecamatan("Semua"); setRekapTTPage(1); }}
+                      className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-red-50 hover:border-red-200 text-slate-500 hover:text-red-500 text-xs font-medium transition flex items-center gap-1.5 whitespace-nowrap">
                       <XCircle size={12} /> Reset Filter
                     </button>
                   )}
                 </div>
-
-                {(rekapTTKabkot !== "Semua" || rekapTTKecamatan !== "Semua") && (
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {rekapTTKabkot !== "Semua" && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 text-[11px] font-semibold">
-                        <MapPin size={10} /> {rekapTTKabkot}
-                      </span>
-                    )}
-                    {rekapTTKecamatan !== "Semua" && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 text-[11px] font-semibold">
-                        <Filter size={10} /> Kec. {rekapTTKecamatan}
-                      </span>
-                    )}
-                    <span className="text-[11px] text-slate-400">{rekapTTFiltered.length.toLocaleString("id-ID")} sekolah</span>
-                  </div>
-                )}
               </div>
 
               {/* Table */}
@@ -2286,50 +2329,37 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                       <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Jenis</th>
                       <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Status</th>
                       <th className="px-4 py-3 text-center font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-24">Tren</th>
-                      <th className="px-4 py-3 text-center font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Nilai Perubahan</th>
+                      <th className="px-4 py-3 text-center font-bold text-slate-500 uppercase tracking-wide text-[10px] min-w-20">Nilai</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {rekapTTPaged.length === 0 ? (
-                      <tr>
-                        <td colSpan={8} className="text-center py-16 text-slate-400">
-                          <Search size={22} className="mx-auto mb-2 opacity-30" />
-                          <p className="text-xs font-medium">Tidak ada sekolah ditemukan</p>
-                          {rekapTTSearch && <p className="text-[11px] text-slate-300 mt-0.5">Coba ubah kata kunci pencarian</p>}
-                        </td>
-                      </tr>
+                      <tr><td colSpan={8} className="text-center py-16 text-slate-400">
+                        <Search size={22} className="mx-auto mb-2 opacity-30" />
+                        <p className="text-xs font-medium">Tidak ada sekolah ditemukan</p>
+                      </td></tr>
                     ) : rekapTTPaged.map((row, i) => {
                       const { arah, nilai } = getArahNilai(row as Record<string, unknown>, rekapTTModal.code);
                       const isNaik  = arah.toLowerCase() === "naik";
                       const isTurun = arah.toLowerCase() === "turun";
                       const nilaiNum = parseFloat(nilai.replace(",", "."));
                       return (
-                        <tr key={(row["NPSN"] as string) || i} className="hover:bg-slate-50/60 transition-colors group">
+                        <tr key={(row["NPSN"] as string) || i} className="hover:bg-slate-50/60 transition-colors">
                           <td className="px-4 py-3 font-semibold text-slate-800 leading-snug">{row["Nama Satuan Pendidikan"]}</td>
                           <td className="px-4 py-3 font-mono text-slate-400 text-[11px]">{row["NPSN"]}</td>
                           <td className="px-4 py-3 text-slate-600 text-[11px]">{row["Kabupaten/Kota"]}</td>
                           <td className="px-4 py-3 text-slate-400 text-[11px]">{row["Kecamatan"] || "–"}</td>
                           <td className="px-4 py-3">
-                            <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md border border-slate-200">
-                              {normalizeJenjang(row["Jenis Satuan Pendidikan"] || "")}
-                            </span>
+                            <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md border border-slate-200">{normalizeJenjang(row["Jenis Satuan Pendidikan"] || "")}</span>
                           </td>
                           <td className="px-4 py-3">
-                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${
-                              row["Status Satuan Pendidikan"] === "Negeri"
-                                ? "bg-blue-50 text-blue-700 border-blue-200"
-                                : "bg-purple-50 text-purple-700 border-purple-200"
-                            }`}>
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${row["Status Satuan Pendidikan"] === "Negeri" ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-purple-50 text-purple-700 border-purple-200"}`}>
                               {row["Status Satuan Pendidikan"] || "–"}
                             </span>
                           </td>
                           <td className="px-4 py-3 text-center">
-                            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-                              isNaik  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                              : isTurun ? "bg-red-50 text-red-700 border-red-200"
-                              : "bg-slate-100 text-slate-500 border-slate-200"
-                            }`}>
-                              {isNaik  && <TrendingUp  size={9} />}
+                            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${isNaik ? "bg-emerald-50 text-emerald-700 border-emerald-200" : isTurun ? "bg-red-50 text-red-700 border-red-200" : "bg-slate-100 text-slate-500 border-slate-200"}`}>
+                              {isNaik && <TrendingUp size={9} />}
                               {isTurun && <TrendingDown size={9} />}
                               {!isNaik && !isTurun && <Minus size={9} />}
                               {arah || "–"}
@@ -2340,9 +2370,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                               <span className={`text-sm font-black ${isNaik ? "text-emerald-600" : isTurun ? "text-red-600" : "text-slate-500"}`}>
                                 {isNaik ? "+" : isTurun ? "-" : ""}{nilai}
                               </span>
-                            ) : (
-                              <span className="text-slate-300 text-xs">–</span>
-                            )}
+                            ) : <span className="text-slate-300 text-xs">–</span>}
                           </td>
                         </tr>
                       );
@@ -2350,15 +2378,9 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
                   </tbody>
                 </table>
               </div>
-
-              {/* Pagination */}
               {rekapTTTotalPages > 1 && (
                 <div className="flex-shrink-0">
-                  <PaginationBar
-                    page={rekapTTPage}
-                    total={rekapTTTotalPages}
-                    onChange={p => setRekapTTPage(p)}
-                  />
+                  <PaginationBar page={rekapTTPage} total={rekapTTTotalPages} onChange={p => setRekapTTPage(p)} />
                 </div>
               )}
             </div>
