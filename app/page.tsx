@@ -40,18 +40,17 @@ export default function BerandaPage() {
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12">
         <div className="w-full max-w-4xl">
 
-          <div className="flex items-start justify-between gap-8 mb-10">
-            <div className="flex-1">
-              <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center justify-between gap-8 mb-10">
+            <div className="flex-1 flex flex-col items-center text-center">
+              <div className="flex items-center justify-center mb-6">
                 <Image src="/LOGO_BBPMP_KEMENDIKDASMEN.png" alt="Logo BBPMP" width={600} height={600} className="object-contain" />
               </div>
-              <div className="bg-slate-900 rounded-2xl px-7 py-5 inline-block mb-6">
+              <div className="bg-slate-900 rounded-2xl px-7 py-5 mb-6">
                 <p className="text-white text-lg font-bold leading-snug">Selamat Datang di Dashboard</p>
                 <p className="text-white text-lg font-bold leading-snug">
                   PMP <span className="text-amber-400">Jawa Barat</span>
                 </p>
               </div>
-              <p className="text-slate-500 text-sm mt-2">Rapor Pendidikan · Tahun 2024 dan 2025</p>
             </div>
 
             <div className="hidden md:flex w-85 h-85 items-center justify-center">
@@ -74,7 +73,7 @@ export default function BerandaPage() {
             ].map((s, i) => (
               <Link
                 key={i}
-                href="/dashboard-provinsi"
+                href="/pilih-wilayah"
                 className={"border rounded-xl p-4 text-center transition hover:scale-105 hover:shadow-md block " + s.color}
               >
                 <p className="text-2xl font-black">{s.value}</p>
@@ -87,6 +86,7 @@ export default function BerandaPage() {
 
       {/* Footer */}
       <div className="relative z-10 border-t border-slate-100/60 bg-white/20 backdrop-blur-[2px] px-8 py-3 flex items-center justify-between">
+        <p className="text-xs text-slate-400">Sumber: Rapor Pendidikan</p>
         <p className="text-xs text-slate-400">© 2026 BBPMP Jawa Barat</p>
       </div>
     </div>
