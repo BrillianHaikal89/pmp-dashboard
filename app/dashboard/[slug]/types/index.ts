@@ -14,6 +14,23 @@ export interface KabkotRow {
   capaian_status?: string;
 }
 
+export interface SatdikIndikatorSub {
+  kode?: string;
+  nama?: string;
+  perubahan_nilai?: string;
+  [key: string]: any;
+}
+
+export interface SatdikIndikatorPrioritas {
+  kode: string;
+  nama?: string;
+  perubahan?: string;
+  nilai?: string;
+  label_capaian?: string;
+  peringkat?: string;
+  sub_indikator?: SatdikIndikatorSub[];
+}
+
 export interface SatdikRow {
   npsn: string;
   nama: string;
@@ -24,6 +41,7 @@ export interface SatdikRow {
   label_literasi: string;
   label_numerasi: string;
   label_karakter: string;
+  indikator_prioritas?: SatdikIndikatorPrioritas[];
   tahun?: string;
 }
 

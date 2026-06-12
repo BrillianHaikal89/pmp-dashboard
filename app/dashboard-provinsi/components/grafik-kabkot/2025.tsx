@@ -48,8 +48,6 @@ const NILAI_SCORE: Record<string, number> = {
   "Tidak Berlaku": 0,
 };
 
-
-
 const INDIKATOR_MAP: Record<string, string> = {
   "A.1": "A.1 Kemampuan Literasi",
   "A.2": "A.2 Kemampuan Numerasi",
@@ -133,18 +131,20 @@ function CustomTooltip({ active, payload, label }: any) {
       {payload.map((entry: any) => {
         const score = entry.value;
         if (score === null || score === undefined) return null;
-        const info = SCORE_LABELS[score as number] ?? { label: `Skor ${score}`, color: "#94a3b8" };
+        const info = SCORE_LABELS[score as number] ?? {
+          label: `Skor ${score}`,
+          color: "#94a3b8",
+        };
         return (
           <div key={entry.dataKey} className="flex items-center gap-2 mb-1.5">
             <div
               className="w-2.5 h-2.5 rounded-full flex-shrink-0"
               style={{ background: info.color }}
             />
-            <span className="text-xs text-slate-600 flex-1">{entry.dataKey}</span>
-            <span
-              className="text-xs font-black"
-              style={{ color: info.color }}
-            >
+            <span className="text-xs text-slate-600 flex-1">
+              {entry.dataKey}
+            </span>
+            <span className="text-xs font-black" style={{ color: info.color }}>
               {info.label}
             </span>
           </div>
@@ -154,12 +154,11 @@ function CustomTooltip({ active, payload, label }: any) {
   );
 }
 
-
-// ── Trend Indikator 2025 (Khusus) ────────────────────────────────────────────────────────────
+// ── Trend Indikator 2025 (Khusus) ──
 function TrendIndikator2025() {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  
+
   // Filter options
   const [jenjangList, setJenjangList] = useState<string[]>([]);
   const [kabkotList, setKabkotList] = useState<string[]>([]);
@@ -167,41 +166,53 @@ function TrendIndikator2025() {
 
   const [activeJenjang, setActiveJenjang] = useState<string>("SMA Umum");
   const [activeKabkot, setActiveKabkot] = useState<string>("");
-  const [activeStatus, setActiveStatus] = useState<string>("Negeri");
+  const [activeStatus, setActiveStatus] = useState<string>("");
   const [applied, setApplied] = useState(false);
-  const [viewMode, setViewMode] = useState<"table" | "chart">("table");
 
   useEffect(() => {
     setLoading(true);
-    // Note: space before .json to match the actual file name
     fetch("/dataProvinsi/2025/indikator_prioritas_menurun_meningkat .json")
-      .then(r => r.json())
-      .then(d => {
+      .then((r) => r.json())
+      .then((d) => {
         setData(d);
-        
-        const jList = Array.from(new Set(d.map((x:any) => x.jenjang))).sort() as string[];
-        const kList = Array.from(new Set(d.map((x:any) => x.kab_kota))).sort() as string[];
-        const sList = Array.from(new Set(d.map((x:any) => x.status))).sort() as string[];
-        
+
+        const jList = Array.from(
+          new Set(d.map((x: any) => x.jenjang)),
+        ).sort() as string[];
+        const kList = Array.from(
+          new Set(d.map((x: any) => x.kab_kota)),
+        ).sort() as string[];
+        const sList = Array.from(
+          new Set(d.map((x: any) => x.status)),
+        ).sort() as string[];
+
         if (jList.length > 0 && !jList.includes(activeJenjang)) {
-          setActiveJenjang(jList.find((x: string) => x.includes("SMA")) || jList[0]);
+          setActiveJenjang(
+            jList.find((x: string) => x.includes("SMA")) || jList[0],
+          );
         }
-        
-        setJenjangList(["Semua", ...jList]);
+
+        setJenjangList(jList);
         setKabkotList(kList);
-        if (kList.length > 0 && (!activeKabkot || !kList.includes(activeKabkot))) {
+        setStatusList(sList);
+
+        if (
+          kList.length > 0 &&
+          (!activeKabkot || !kList.includes(activeKabkot))
+        ) {
           setActiveKabkot(kList[0]);
         }
-        
-        const filteredSList = sList.filter((s: string) => s !== "Semua");
-        setStatusList(filteredSList);
-        if (filteredSList.length > 0 && !filteredSList.includes(activeStatus)) {
-          setActiveStatus(filteredSList[0]);
+
+        if (
+          sList.length > 0 &&
+          (!activeStatus || !sList.includes(activeStatus))
+        ) {
+          setActiveStatus(sList[0]);
         }
-        
+
         setLoading(false);
       })
-      .catch(e => {
+      .catch((e) => {
         console.error("Gagal memuat data trend", e);
         setLoading(false);
       });
@@ -209,10 +220,11 @@ function TrendIndikator2025() {
 
   const tableData = useMemo(() => {
     if (!applied) return [];
-    return data.filter((d: any) => 
-      (activeJenjang === "Semua" || d.jenjang === activeJenjang) &&
-      (d.kab_kota === activeKabkot) &&
-      (d.status === activeStatus)
+    return data.filter(
+      (d: any) =>
+        d.jenjang === activeJenjang &&
+        d.kab_kota === activeKabkot &&
+        d.status === activeStatus,
     );
   }, [data, activeJenjang, activeKabkot, activeStatus, applied]);
 
@@ -230,58 +242,51 @@ function TrendIndikator2025() {
         <div className="flex items-center gap-2 mb-4">
           <Filter size={13} className="text-blue-500" />
           <span className="text-xs font-black text-slate-700 uppercase tracking-wider">
-            Filter Tren Indikator
+            Filter Tren Indikator 2025
           </span>
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <SelectBox
             label="Kabupaten / Kota"
             icon={<MapPin size={10} />}
             value={activeKabkot}
-            onChange={(v) => { setActiveKabkot(v); setApplied(false); }}
+            onChange={(v) => {
+              setActiveKabkot(v);
+              setApplied(false);
+            }}
             options={kabkotList}
           />
           <SelectBox
             label="Jenjang"
             icon={<School size={10} />}
             value={activeJenjang}
-            onChange={(v) => { setActiveJenjang(v); setApplied(false); }}
+            onChange={(v) => {
+              setActiveJenjang(v);
+              setApplied(false);
+            }}
             options={jenjangList}
           />
           <SelectBox
             label="Status Sekolah"
             icon={<Building2 size={10} />}
             value={activeStatus}
-            onChange={(v) => { setActiveStatus(v); setApplied(false); }}
+            onChange={(v) => {
+              setActiveStatus(v);
+              setApplied(false);
+            }}
             options={statusList}
           />
         </div>
 
         <div className="flex gap-3">
           <button
-            onClick={() => { setViewMode("table"); setApplied(true); }}
+            onClick={handleApply}
             disabled={loading}
-            className={`flex items-center gap-2 px-5 py-2.5 text-white text-xs font-bold rounded-xl transition-all shadow-sm ${
-              viewMode === "table" && applied
-                ? "bg-gradient-to-r from-blue-600 to-indigo-600 shadow-blue-100"
-                : "bg-slate-400 hover:bg-slate-500"
-            }`}
+            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold rounded-xl transition-all shadow-sm shadow-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <BarChart3 size={13} />
             Tampilkan Data
-          </button>
-          <button
-            onClick={() => { setViewMode("chart"); setApplied(true); }}
-            disabled={loading}
-            className={`flex items-center gap-2 px-5 py-2.5 text-white text-xs font-bold rounded-xl transition-all shadow-sm ${
-              viewMode === "chart" && applied
-                ? "bg-gradient-to-r from-emerald-500 to-teal-600 shadow-emerald-100"
-                : "bg-slate-400 hover:bg-slate-500"
-            }`}
-          >
-            <TrendingUp size={13} />
-            Tampilkan Grafik
           </button>
           <button
             onClick={handleReset}
@@ -292,7 +297,7 @@ function TrendIndikator2025() {
           </button>
         </div>
       </div>
-      
+
       <div className="p-0">
         {loading ? (
           <div className="flex items-center justify-center py-12 gap-3 text-slate-400">
@@ -304,84 +309,55 @@ function TrendIndikator2025() {
             Atur filter lalu klik <strong>Tampilkan Data</strong>
           </div>
         ) : tableData.length === 0 ? (
-          <div className="text-center py-12 text-slate-400 text-sm">Tidak ada data untuk kombinasi filter ini.</div>
-        ) : viewMode === "chart" ? (
-          <div className="overflow-x-auto p-6">
-            <div style={{ minWidth: Math.max(700, tableData.length * 80) }}>
-              <ResponsiveContainer width="100%" height={380}>
-                <ComposedChart 
-                  data={tableData.map((d: any) => ({
-                    ...d,
-                    name: d.indikator,
-                    nilaiNum: parseFloat((d.nilai || "0").replace(",", "."))
-                  }))} 
-                  margin={{ top: 20, right: 30, left: 0, bottom: 80 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                  <XAxis 
-                    dataKey="name" 
-                    tick={{ fontSize: 9, fill: "#64748b", fontWeight: 600 }} 
-                    angle={-45} 
-                    textAnchor="end" 
-                    interval={0} 
-                    height={80} 
-                  />
-                  <YAxis tick={{ fontSize: 9, fill: "#94a3b8" }} />
-                  <Tooltip 
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                    labelStyle={{ fontWeight: 'bold', color: '#1e293b', marginBottom: '8px' }}
-                    formatter={(value: any, name: any, props: any) => {
-                      const { payload } = props;
-                      return [value, `Nilai (${payload.perubahan})`];
-                    }}
-                  />
-                  <Bar dataKey="nilaiNum" barSize={6} radius={[4, 4, 4, 4]}>
-                    {tableData.map((d: any, index: number) => {
-                      const fill = d.perubahan === "Turun" ? "#ef4444" : d.perubahan === "Naik" ? "#10b981" : "#94a3b8";
-                      return <Cell key={`cell-${index}`} fill={fill} />;
-                    })}
-                  </Bar>
-                  <Line 
-                    type="monotone" 
-                    dataKey="nilaiNum" 
-                    stroke="#cbd5e1" 
-                    strokeWidth={2}
-                    dot={(props: any) => {
-                      const { cx, cy, payload } = props;
-                      const fill = payload.perubahan === "Turun" ? "#ef4444" : payload.perubahan === "Naik" ? "#10b981" : "#94a3b8";
-                      return <circle key={`dot-${props.index}`} cx={cx} cy={cy} r={4} fill={fill} stroke="white" strokeWidth={1} />;
-                    }}
-                    activeDot={(props: any) => {
-                      const { cx, cy, payload } = props;
-                      const fill = payload.perubahan === "Turun" ? "#ef4444" : payload.perubahan === "Naik" ? "#10b981" : "#94a3b8";
-                      return <circle key={`activedot-${props.index}`} cx={cx} cy={cy} r={6} fill={fill} stroke="white" strokeWidth={2} />;
-                    }}
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
+          <div className="text-center py-12 text-slate-400 text-sm">
+            Tidak ada data untuk kombinasi filter ini.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200">
-                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">Kab/Kota</th>
-                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">Jenjang</th>
-                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">Indikator</th>
-                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">Label Capaian</th>
-                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">Perubahan Nilai</th>
-                  <th className="px-4 py-3 text-center font-bold text-slate-500 uppercase tracking-wider text-[11px]">Perubahan pada tahun 2024</th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">
+                    Kab/Kota
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">
+                    Jenjang
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">
+                    Indikator
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">
+                    Label Capaian
+                  </th>
+                  <th className="px-4 py-3 text-left font-bold text-slate-500 uppercase tracking-wider text-[11px]">
+                    Perubahan Nilai
+                  </th>
+                  <th className="px-4 py-3 text-center font-bold text-slate-500 uppercase tracking-wider text-[11px]">
+                    Perubahan pada tahun 2024
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {tableData.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="px-4 py-3 font-semibold text-slate-700 text-xs">{row.kab_kota}</td>
-                    <td className="px-4 py-3 text-slate-600 text-xs">{row.jenjang}</td>
-                    <td className="px-4 py-3 font-semibold text-slate-700 text-xs">{INDIKATOR_MAP[row.indikator] || row.indikator}</td>
-                    <td className="px-4 py-3 text-slate-600 text-xs">{row.label}</td>
-                    <td className="px-4 py-3 text-slate-600 font-medium text-xs">{row.nilai}</td>
+                  <tr
+                    key={idx}
+                    className="hover:bg-slate-50/80 transition-colors"
+                  >
+                    <td className="px-4 py-3 font-semibold text-slate-700 text-xs">
+                      {row.kab_kota}
+                    </td>
+                    <td className="px-4 py-3 text-slate-600 text-xs">
+                      {row.jenjang}
+                    </td>
+                    <td className="px-4 py-3 font-semibold text-slate-700 text-xs">
+                      {INDIKATOR_MAP[row.indikator] || row.indikator}
+                    </td>
+                    <td className="px-4 py-3 text-slate-600 text-xs">
+                      {row.label}
+                    </td>
+                    <td className="px-4 py-3 text-slate-600 font-medium text-xs">
+                      {row.nilai}
+                    </td>
                     <td className="px-4 py-3 text-center">
                       {row.perubahan === "Naik" ? (
                         <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[11px] font-bold border border-emerald-100">
@@ -414,11 +390,27 @@ function TrendIndikator2025() {
 // Main Component
 export default function GrafikKabkot2025(props: any) {
   const {
-    tahun, chartApxKeysDasmen, kabkotDasmen, chartJenjangDasmen, chartApxJenjang,
-    setChartApxJenjang, getApxColor, chartApxKeysPaud, kabkotPaud, chartJenjangPaud,
-    allKabkotData, chartJenjangAll, chartTrendIndJenjang, setChartTrendIndJenjang,
-    allChartIndKeys, chartIndKeys, getIndColor, chartTrendApxJenjang, setChartTrendApxJenjang,
-    StackedBarChart, TrendChart
+    tahun,
+    chartApxKeysDasmen,
+    kabkotDasmen,
+    chartJenjangDasmen,
+    chartApxJenjang,
+    setChartApxJenjang,
+    getApxColor,
+    chartApxKeysPaud,
+    kabkotPaud,
+    chartJenjangPaud,
+    allKabkotData,
+    chartJenjangAll,
+    chartTrendIndJenjang,
+    setChartTrendIndJenjang,
+    allChartIndKeys,
+    chartIndKeys,
+    getIndColor,
+    chartTrendApxJenjang,
+    setChartTrendApxJenjang,
+    StackedBarChart,
+    TrendChart,
   } = props;
 
   const [rawData, setRawData] = useState<IndikatorRow[]>([]);
@@ -453,17 +445,32 @@ export default function GrafikKabkot2025(props: any) {
   // Unique options from data
   const jenjangOptions = useMemo(() => {
     const set = new Set(rawData.map((d) => d.jenjang));
-    return ["Semua jenjang", ...Array.from(set).filter((v) => v !== "Semua jenjang").sort()];
+    return [
+      "Semua jenjang",
+      ...Array.from(set)
+        .filter((v) => v !== "Semua jenjang")
+        .sort(),
+    ];
   }, [rawData]);
 
   const kabkotOptions = useMemo(() => {
     const set = new Set(rawData.map((d) => d.kab_kota));
-    return ["Semua", ...Array.from(set).filter((v) => v !== "Semua").sort()];
+    return [
+      "Semua",
+      ...Array.from(set)
+        .filter((v) => v !== "Semua")
+        .sort(),
+    ];
   }, [rawData]);
 
   const statusOptions = useMemo(() => {
     const opts = new Set(rawData.map((d) => d.status));
-    return ["Semua", ...Array.from(opts).filter((s) => s !== "Semua" && s !== "Tidak Berlaku").sort()];
+    return [
+      "Semua",
+      ...Array.from(opts)
+        .filter((s) => s !== "Semua" && s !== "Tidak Berlaku")
+        .sort(),
+    ];
   }, [rawData]);
 
   // Chart data â€” only computed after Apply
@@ -472,14 +479,17 @@ export default function GrafikKabkot2025(props: any) {
 
     // Filter rows
     let filtered = rawData.filter((d) => {
-      if (filterJenjang !== "Semua jenjang" && d.jenjang !== filterJenjang) return false;
+      if (filterJenjang !== "Semua jenjang" && d.jenjang !== filterJenjang)
+        return false;
       if (filterKabkot !== "Semua" && d.kab_kota !== filterKabkot) return false;
       if (d.status !== filterStatus) return false;
       return true;
     });
 
     // Filter all indikator
-    filtered = filtered.filter((d) => Object.keys(INDIKATOR_MAP).includes(d.indikator));
+    filtered = filtered.filter((d) =>
+      Object.keys(INDIKATOR_MAP).includes(d.indikator),
+    );
 
     // Group by kab_kota â†’ indikator â†’ string nilai (simpan nilai asli, bukan score)
     const kabMap: Record<string, Record<string, string>> = {};
@@ -493,10 +503,13 @@ export default function GrafikKabkot2025(props: any) {
     }
 
     // Build chart rows
-    const allKab = filterKabkot !== "Semua" ? [filterKabkot] : kabkotOptions.slice(1);
+    const allKab =
+      filterKabkot !== "Semua" ? [filterKabkot] : kabkotOptions.slice(1);
 
     return allKab.map((kab) => {
-      const row: Record<string, any> = { kab_kota: kab.replace("Kab. ", "").replace("Kota ", "Kota ") };
+      const row: Record<string, any> = {
+        kab_kota: kab.replace("Kab. ", "").replace("Kota ", "Kota "),
+      };
       for (const ind of INDIKATOR_LIST) {
         const nilaiStr = kabMap[kab]?.[ind];
         if (nilaiStr === undefined) {
@@ -507,8 +520,14 @@ export default function GrafikKabkot2025(props: any) {
       }
       return row;
     });
-  }, [applied, rawData, filterJenjang, filterKabkot, filterStatus, kabkotOptions]);
-
+  }, [
+    applied,
+    rawData,
+    filterJenjang,
+    filterKabkot,
+    filterStatus,
+    kabkotOptions,
+  ]);
 
   const handleApply = () => setApplied(true);
   const handleReset = () => {
@@ -549,21 +568,30 @@ export default function GrafikKabkot2025(props: any) {
             label="Jenjang"
             icon={<School size={10} />}
             value={filterJenjang}
-            onChange={(v) => { setFilterJenjang(v); setApplied(false); }}
+            onChange={(v) => {
+              setFilterJenjang(v);
+              setApplied(false);
+            }}
             options={jenjangOptions}
           />
           <SelectBox
             label="Kabupaten / Kota"
             icon={<MapPin size={10} />}
             value={filterKabkot}
-            onChange={(v) => { setFilterKabkot(v); setApplied(false); }}
+            onChange={(v) => {
+              setFilterKabkot(v);
+              setApplied(false);
+            }}
             options={kabkotOptions}
           />
           <SelectBox
             label="Status Sekolah"
             icon={<Building2 size={10} />}
             value={filterStatus}
-            onChange={(v) => { setFilterStatus(v); setApplied(false); }}
+            onChange={(v) => {
+              setFilterStatus(v);
+              setApplied(false);
+            }}
             options={statusOptions}
           />
         </div>
@@ -599,7 +627,9 @@ export default function GrafikKabkot2025(props: any) {
           <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-2xl px-5 py-4">
             <AlertCircle size={18} className="text-red-500 flex-shrink-0" />
             <div>
-              <p className="text-sm font-bold text-red-700">Gagal memuat data</p>
+              <p className="text-sm font-bold text-red-700">
+                Gagal memuat data
+              </p>
               <p className="text-xs text-red-500 mt-0.5">{error}</p>
             </div>
           </div>
@@ -646,7 +676,9 @@ export default function GrafikKabkot2025(props: any) {
                 Jenjang: {filterJenjang}
               </span>
               <span className="text-[11px] bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-lg">
-                {filterKabkot === "Semua" ? `${chartData.length} Kab/Kota` : filterKabkot}
+                {filterKabkot === "Semua"
+                  ? `${chartData.length} Kab/Kota`
+                  : filterKabkot}
               </span>
               <span className="text-[11px] bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-lg">
                 Status: {filterStatus}
@@ -663,7 +695,11 @@ export default function GrafikKabkot2025(props: any) {
                     barCategoryGap="20%"
                     barGap={1}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="#f1f5f9"
+                      vertical={false}
+                    />
                     <XAxis
                       dataKey="kab_kota"
                       tick={{ fontSize: 9, fill: "#64748b", fontWeight: 600 }}
@@ -683,7 +719,9 @@ export default function GrafikKabkot2025(props: any) {
                     <Legend
                       wrapperStyle={{ fontSize: 11, paddingTop: 8 }}
                       formatter={(value) => (
-                        <span className="text-slate-600 font-semibold">{value}</span>
+                        <span className="text-slate-600 font-semibold">
+                          {value}
+                        </span>
                       )}
                     />
                     {INDIKATOR_LIST.map((ind: string) => (
@@ -722,13 +760,17 @@ export default function GrafikKabkot2025(props: any) {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {chartData.map((row) => (
-                    <tr key={row.kab_kota} className="hover:bg-slate-50/80 transition-colors">
+                    <tr
+                      key={row.kab_kota}
+                      className="hover:bg-slate-50/80 transition-colors"
+                    >
                       <td className="px-3 py-2.5 font-semibold text-slate-700 sticky left-0 bg-white">
                         {row.kab_kota}
                       </td>
                       {INDIKATOR_LIST.map((ind: string) => {
                         const score = row[ind];
-                        const info = score !== null ? SCORE_LABELS[score] : null;
+                        const info =
+                          score !== null ? SCORE_LABELS[score] : null;
                         return (
                           <td key={ind} className="px-3 py-2.5 text-center">
                             {info ? (
@@ -739,7 +781,9 @@ export default function GrafikKabkot2025(props: any) {
                                 {score === 0 ? "Tdk Tersedia" : info.label}
                               </span>
                             ) : (
-                              <span className="text-slate-300 text-[10px]">â€”</span>
+                              <span className="text-slate-300 text-[10px]">
+                                â€”
+                              </span>
                             )}
                           </td>
                         );
@@ -757,10 +801,13 @@ export default function GrafikKabkot2025(props: any) {
       <div className="mt-8 px-6 pb-6 border-t border-slate-100 pt-8">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-5 rounded-full bg-emerald-500" />
-          <h3 className="text-base font-black text-slate-800">2. Capaian APK, APM, dan APS per Kab/Kota</h3>
+          <h3 className="text-base font-black text-slate-800">
+            2. Capaian APK, APM, dan APS per Kab/Kota
+          </h3>
         </div>
         <p className="text-xs text-slate-500 mb-4 ml-3">
-          Angka Partisipasi Kasar (APK), Murni (APM), dan Sekolah (APS) — skor rata-rata per kab/kota
+          Angka Partisipasi Kasar (APK), Murni (APM), dan Sekolah (APS) — skor
+          rata-rata per kab/kota
         </p>
         {chartApxKeysDasmen && chartApxKeysDasmen.length > 0 ? (
           <StackedBarChart
@@ -777,7 +824,10 @@ export default function GrafikKabkot2025(props: any) {
         ) : (
           <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center mb-6">
             <AlertCircle size={24} className="mx-auto text-slate-300 mb-2" />
-            <p className="text-sm font-medium text-slate-500">Data APK/APM/APS tidak tersedia untuk jenjang Dasmen di tahun {tahun}</p>
+            <p className="text-sm font-medium text-slate-500">
+              Data APK/APM/APS tidak tersedia untuk jenjang Dasmen di tahun{" "}
+              {tahun}
+            </p>
           </div>
         )}
 
@@ -796,57 +846,58 @@ export default function GrafikKabkot2025(props: any) {
         ) : (
           <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
             <AlertCircle size={24} className="mx-auto text-slate-300 mb-2" />
-            <p className="text-sm font-medium text-slate-500">Data APK/APM/APS tidak tersedia untuk jenjang PAUD di tahun {tahun}</p>
+            <p className="text-sm font-medium text-slate-500">
+              Data APK/APM/APS tidak tersedia untuk jenjang PAUD di tahun{" "}
+              {tahun}
+            </p>
           </div>
         )}
       </div>
 
-            {/* 📊 Grafik 3: Trend Indikator Prioritas (Custom) 📊 */}
+      {/* 📊 Grafik 3: Trend Indikator Prioritas (Custom) 📊 */}
       <div className="mt-8 px-6 pb-6 border-t border-slate-100 pt-8">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-5 rounded-full bg-blue-500" />
-          <h3 className="text-base font-black text-slate-800">3. Tren Indikator Prioritas — Naik & Turun per Kab/Kota</h3>
+          <h3 className="text-base font-black text-slate-800">
+            3. Tren Indikator Prioritas — Naik & Turun per Kab/Kota
+          </h3>
         </div>
         <p className="text-xs text-slate-500 mb-4 ml-3">
-          Detail perubahan capaian indikator prioritas (Naik/Turun) dibandingkan tahun sebelumnya
+          Detail perubahan capaian indikator prioritas (Naik/Turun) dibandingkan
+          tahun sebelumnya
         </p>
         <TrendIndikator2025 />
       </div>
-
 
       {/* 📊 Grafik 4: Trend APK/APM/APS 📊 */}
       <div className="mt-8 px-6 pb-6 border-t border-slate-100 pt-8">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-5 rounded-full bg-orange-500" />
-          <h3 className="text-base font-black text-slate-800">4. Tren APK, APM, APS — Naik & Turun per Kab/Kota</h3>
+          <h3 className="text-base font-black text-slate-800">
+            4. Tren APK, APM, APS — Naik & Turun per Kab/Kota
+          </h3>
         </div>
         <p className="text-xs text-slate-500 mb-4 ml-3">
-          Perubahan capaian APK/APM/APS dibandingkan tahun sebelumnya per kab/kota
+          Perubahan capaian APK/APM/APS dibandingkan tahun sebelumnya per
+          kab/kota
         </p>
         {TrendChart && (
           <TrendChart
-            title={`Tren APK/APM/APS (${tahun === '2024' ? '2023 ➔ 2024' : '2024 ➔ 2025'})`}
+            title={`Tren APK/APM/APS (${tahun === "2024" ? "2023 ➔ 2024" : "2024 ➔ 2025"})`}
             data={allKabkotData}
             jenjangList={chartJenjangAll}
             activeJenjang={chartTrendApxJenjang}
             onJenjangChange={setChartTrendApxJenjang}
             tahun={tahun}
-            indikatorKeys={chartApxKeysDasmen && chartApxKeysPaud ? chartApxKeysDasmen.concat(chartApxKeysPaud) : []}
+            indikatorKeys={
+              chartApxKeysDasmen && chartApxKeysPaud
+                ? chartApxKeysDasmen.concat(chartApxKeysPaud)
+                : []
+            }
             colorFn={getApxColor}
           />
         )}
       </div>
-
-      {/* Info Tambahan */}
-      <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-start gap-3 mt-8 mx-6 mb-6">
-        <Info size={18} className="text-blue-500 flex-shrink-0 mt-0.5" />
-        <ul className="text-xs text-blue-800 font-medium space-y-1">
-          <li>💡 Jika satu kab/kota memiliki data Negeri dan Swasta, nilai dirata-rata</li>
-          <li>💡 Data tren memerlukan kolom tahun ganda (<code>_Label Capaian 2024</code> & <code>_Label Capaian 2025</code>) di file JSON</li>
-          <li>💡 APK/APM/APS akan muncul otomatis jika kolom tersedia di data JSON</li>
-        </ul>
-      </div>
-
     </div>
   );
 }
