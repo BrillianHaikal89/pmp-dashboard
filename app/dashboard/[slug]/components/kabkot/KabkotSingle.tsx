@@ -40,8 +40,14 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
 
   const tahunSebelumnya = String(+tahun - 1);
 
+  const JENJANG_ALLOWED = ["SD", "SMP", "SMA", "SMK"];
+  const isJenjangAllowed = (jenis: string | undefined) =>
+    JENJANG_ALLOWED.some((j) => jenis?.toUpperCase().includes(j));
+
   const jenisOptions = useMemo(
-    () => ["Semua", ...Array.from(new Set(data.map((d) => d.jenis_satdik))).filter(Boolean)],
+    () => ["Semua", ...Array.from(new Set(data.map((d) => d.jenis_satdik))).filter(
+      (j) => Boolean(j) && JENJANG_ALLOWED.some((k) => j?.toUpperCase().includes(k))
+    )],
     [data]
   );
 
@@ -59,7 +65,7 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
   ];
 
   const filtered = useMemo(() => {
-    let rows = data;
+    let rows = data.filter((d) => isJenjangAllowed(d.jenis_satdik));
     if (filterJenis !== "Semua") rows = rows.filter((d) => d.jenis_satdik === filterJenis);
     if (filterLabel !== "Semua") rows = rows.filter((d) => d.label_2024 === filterLabel);
     if (search) {
@@ -80,14 +86,14 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  const withVal = data.filter((d) => d.nilai_2024_num != null);
+  const withVal = data.filter((d) => d.nilai_2024_num != null && isJenjangAllowed(d.jenis_satdik));
   const vals = withVal.map((d) => d.nilai_2024_num as number);
   const avg = vals.length ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2) : "-";
   const max = vals.length ? Math.max(...vals).toFixed(2) : "-";
   const min = vals.length ? Math.min(...vals).toFixed(2) : "-";
 
   // Filter chart berdasarkan jenjang (SD/SMP/SMA match substring pada jenis_satdik)
-  const chartJenjangOptions = ["Semua", "SD", "SMP", "SMA"];
+  const chartJenjangOptions = ["Semua", "SD", "SMP", "SMA", "SMK"];
   const filterChartRows = (rows: typeof withVal) => {
     if (filterJenisChart === "Semua") return rows;
     return rows.filter((d) =>
@@ -95,15 +101,23 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
     );
   };
 
-  // Transform data chart agar tooltip tidak menampilkan nama field mentah
+  // Transform data chart — key unik untuk deduplikasi, no hanya kode untuk tampilan Y-axis
+  const makeKey = (d: (typeof withVal)[0]) => {
+    const jenjangParts = d.jenis_satdik?.split(" ") ?? [];
+    const jenjangSuffix = jenjangParts.length > 1 ? jenjangParts[jenjangParts.length - 1] : null;
+    const statusPart = d.status && d.status !== "Semua" ? d.status : null;
+    const suffix = [jenjangSuffix, statusPart].filter(Boolean).join(" · ");
+    return suffix ? `${d.no} | ${suffix}` : d.no;
+  };
+
   const top10 = [...filterChartRows(withVal)]
     .sort((a, b) => (b.nilai_2024_num ?? 0) - (a.nilai_2024_num ?? 0))
     .slice(0, 10)
-    .map((d) => ({ no: d.no, nilai: d.nilai_2024_num, indikator: d.indikator_short, jenjang: d.jenis_satdik }));
+    .map((d) => ({ no: d.no, key: makeKey(d), nilai: d.nilai_2024_num, indikator: d.indikator_short, jenjang: d.jenis_satdik, status: d.status }));
   const bottom10 = [...filterChartRows(withVal)]
     .sort((a, b) => (a.nilai_2024_num ?? 0) - (b.nilai_2024_num ?? 0))
     .slice(0, 10)
-    .map((d) => ({ no: d.no, nilai: d.nilai_2024_num, indikator: d.indikator_short, jenjang: d.jenis_satdik }));
+    .map((d) => ({ no: d.no, key: makeKey(d), nilai: d.nilai_2024_num, indikator: d.indikator_short, jenjang: d.jenis_satdik, status: d.status }));
 
   const downloadChart = (
     ref: React.RefObject<HTMLDivElement | null>,
@@ -291,8 +305,13 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
         {entry?.jenjang && (
           <p className="text-xs text-slate-500 mb-1">{entry.jenjang}</p>
         )}
+        {entry?.status && (
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200 mb-1">
+            {entry.status}
+          </span>
+        )}
         {entry?.indikator && (
-          <p className="text-xs text-slate-700 mb-1 leading-snug">{entry.indikator}</p>
+          <p className="text-xs text-slate-700 mb-1 leading-snug mt-1">{entry.indikator}</p>
         )}
         {payload.map((p: any, i: number) => (
           <p key={i} className="text-xs font-semibold text-slate-900">{p.name} : {p.value}</p>
@@ -379,7 +398,7 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
               <BarChart data={top10} layout="vertical" margin={{ right: 16 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                 <XAxis type="number" />
-                <YAxis type="category" dataKey="no" width={90} tick={{ fontSize: 11 }} />
+                <YAxis type="category" dataKey="key" width={90} tick={{ fontSize: 11 }} tickFormatter={(val: string) => val.split(" | ")[0]} />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar dataKey="nilai" name={`Nilai ${tahun}`} radius={[0, 4, 4, 0]}>
                   {top10.map((_, i) => (
@@ -411,7 +430,7 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
               <BarChart data={bottom10} layout="vertical" margin={{ right: 16 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                 <XAxis type="number" />
-                <YAxis type="category" dataKey="no" width={90} tick={{ fontSize: 11 }} />
+                <YAxis type="category" dataKey="key" width={90} tick={{ fontSize: 11 }} tickFormatter={(val: string) => val.split(" | ")[0]} />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar dataKey="nilai" name={`Nilai ${tahun}`} radius={[0, 4, 4, 0]}>
                   {bottom10.map((_, i) => (
@@ -477,6 +496,7 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
                   { label: "Jenjang", col: "jenis_satdik" },
                   { label: "Indikator", col: "indikator_short" },
                   { label: "Label", col: "label_2024" },
+                  { label: "Status", col: "status" },
                   { label: `Nilai ${tahun}`, col: "nilai_2024_num" },
                   { label: `Nilai ${tahunSebelumnya}`, col: "nilai_2023_num" },
                   { label: "Perubahan", col: "perubahan" },
@@ -509,6 +529,15 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
                     </td>
                     <td className="py-3 px-3 whitespace-nowrap">
                       <Badge label={row.label_2024 ?? ""} />
+                    </td>
+                    <td className="py-3 px-3 whitespace-nowrap">
+                      {row.status ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                          {row.status}
+                        </span>
+                      ) : (
+                        <span className="text-slate-300 text-xs">—</span>
+                      )}
                     </td>
                     <td className="py-3 px-3 font-bold text-slate-900 whitespace-nowrap">
                       {row.nilai_2024_num?.toFixed(2) ?? "-"}
