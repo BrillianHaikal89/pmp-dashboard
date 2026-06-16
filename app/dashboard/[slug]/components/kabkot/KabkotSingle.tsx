@@ -106,7 +106,7 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
     .map((d) => ({ no: d.no, nilai: d.nilai_2024_num, indikator: d.indikator_short, jenjang: d.jenis_satdik }));
 
   const downloadChart = (
-    ref: React.RefObject<HTMLDivElement>,
+    ref: React.RefObject<HTMLDivElement | null>,
     filename: string,
     chartData: typeof top10,
     accentColor: string
