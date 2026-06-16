@@ -230,7 +230,9 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
     ctx.textAlign = "left";
 
     const maxVal = Math.max(...chartData.map((d) => Math.abs(d.nilai ?? 0))) || 1;
-    const barScale = (v: number) => (Math.abs(v) / maxVal) * chartW;
+    // Tambahkan padding 10% untuk menghindari bar melebihi batas
+    const paddedMaxVal = maxVal * 1.1;
+    const barScale = (v: number) => (Math.abs(v) / paddedMaxVal) * chartW;
     const x0 = pad.left + yAxisW;
 
     // Grid lines
@@ -247,7 +249,8 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
       ctx.fillStyle = "#94a3b8";
       ctx.font = "9px sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText(((g / gridSteps) * maxVal).toFixed(0), gx, pad.top + chartH + 16);
+      const value = (g / gridSteps) * paddedMaxVal;
+      ctx.fillText(value.toFixed(1), gx, pad.top + chartH + 16);
     }
     ctx.textAlign = "left";
 
@@ -270,16 +273,18 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
       ctx.fillText(d.no ?? "", x0 - 6, barY + barH2 / 2 + 4);
       ctx.textAlign = "left";
 
-      // Bar
+      // Bar - pastikan tidak melewati batas kanan
+      const barWidth = Math.min(Math.max(barW, 3), chartW);
       ctx.fillStyle = accentColor + "dd";
       ctx.beginPath();
-      ctx.roundRect(x0, barY, Math.max(barW, 3), barH2, [0, 4, 4, 0]);
+      ctx.roundRect(x0, barY, barWidth, barH2, [0, 4, 4, 0]);
       ctx.fill();
 
       // Value at end of bar
       ctx.fillStyle = "#0f172a";
       ctx.font = "bold 10px sans-serif";
-      ctx.fillText((d.nilai?.toFixed(2) ?? ""), x0 + barW + 5, barY + barH2 / 2 + 4);
+      const valueText = (d.nilai?.toFixed(2) ?? "");
+      ctx.fillText(valueText, x0 + barWidth + 5, barY + barH2 / 2 + 4);
     });
 
     // Divider between chart and legend
@@ -293,20 +298,23 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
     // Legend header
     // Fixed column layout (x positions):
     //  col1: KODE      x=pad.left+4,   w=48
-    //  col2: JENJANG   x=pad.left+60,  w=140
-    //  col3: INDIKATOR x=pad.left+210, w=fills to col4
-    //  col4: NILAI     right-aligned at W-pad.right-8
+    //  col2: JENJANG   x=pad.left+60,  w=100
+    //  col3: STATUS    x=pad.left+170, w=80
+    //  col4: INDIKATOR x=pad.left+260, w=fills to col5
+    //  col5: NILAI     right-aligned at W-pad.right-8
     ctx.fillStyle = "#64748b";
     ctx.font = "bold 9px sans-serif";
     const col1 = pad.left + 4;
     const col2 = pad.left + 60;
-    const col3 = pad.left + 210;
-    const col4 = W - pad.right - 8;
+    const col3 = pad.left + 170;
+    const col4 = pad.left + 260;
+    const col5 = W - pad.right - 8;
     ctx.fillText("KODE", col1, legendTop - 2);
     ctx.fillText("JENJANG", col2, legendTop - 2);
-    ctx.fillText("NAMA INDIKATOR", col3, legendTop - 2);
+    ctx.fillText("STATUS", col3, legendTop - 2);
+    ctx.fillText("NAMA INDIKATOR", col4, legendTop - 2);
     ctx.textAlign = "right";
-    ctx.fillText("NILAI", col4, legendTop - 2);
+    ctx.fillText("NILAI", col5, legendTop - 2);
     ctx.textAlign = "left";
 
     // Legend rows
@@ -329,20 +337,38 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
       ctx.font = "10px sans-serif";
       ctx.fillText(d.jenjang ?? "", col2, ly);
 
+      // Status - badge style
+      ctx.fillStyle = "#64748b";
+      ctx.font = "9px sans-serif";
+      if (d.status) {
+        // Draw status badge background
+        const statusText = d.status;
+        const badgeX = col3;
+        const badgeY = ly - 10;
+        ctx.fillStyle = "#f1f5f9";
+        ctx.beginPath();
+        ctx.roundRect(badgeX, badgeY, ctx.measureText(statusText).width + 12, 16, 12);
+        ctx.fill();
+        ctx.fillStyle = "#475569";
+        ctx.font = "9px sans-serif";
+        ctx.fillText(statusText, badgeX + 6, ly - 1);
+      }
+
       // Indikator — clip to available width before nilai column
       ctx.fillStyle = "#334155";
+      ctx.font = "10px sans-serif";
       ctx.save();
       ctx.beginPath();
-      ctx.rect(col3, legendTop + i * legendRowH, col4 - col3 - 60, legendRowH);
+      ctx.rect(col4, legendTop + i * legendRowH, col5 - col4 - 60, legendRowH);
       ctx.clip();
-      ctx.fillText(d.indikator ?? "", col3, ly);
+      ctx.fillText(d.indikator ?? "", col4, ly);
       ctx.restore();
 
       // Nilai
       ctx.fillStyle = "#0f172a";
       ctx.font = "bold 10px sans-serif";
       ctx.textAlign = "right";
-      ctx.fillText((d.nilai?.toFixed(2) ?? ""), col4, ly);
+      ctx.fillText((d.nilai?.toFixed(2) ?? ""), col5, ly);
       ctx.textAlign = "left";
     });
 
