@@ -27,7 +27,8 @@ import { KabkotRow } from "../../types";
 
 export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string }) {
   const [search, setSearch] = useState("");
-  const [filterJenis, setFilterJenis] = useState("Semua");
+  const [selectedJenjangUtama, setSelectedJenjangUtama] = useState<string[]>([]);
+  const [selectedJenjangDetail, setSelectedJenjangDetail] = useState<string[]>([]);
   const [filterLabel, setFilterLabel] = useState("Semua");
   const [filterJenisChart, setFilterJenisChart] = useState("Semua");
   const [sortCol, setSortCol] = useState("nilai_2024_num");
@@ -40,16 +41,76 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
 
   const tahunSebelumnya = String(+tahun - 1);
 
-  const JENJANG_ALLOWED = ["SD", "SMP", "SMA", "SMK"];
+  // Definisi jenjang utama dan detail
+  const JENJANG_UTAMA = ["PAUD", "SD", "SMP", "SMA", "SMK"];
   const isJenjangAllowed = (jenis: string | undefined) =>
-    JENJANG_ALLOWED.some((j) => jenis?.toUpperCase().includes(j));
+    JENJANG_UTAMA.some((j) => jenis?.toUpperCase().includes(j));
 
-  const jenisOptions = useMemo(
-    () => ["Semua", ...Array.from(new Set(data.map((d) => d.jenis_satdik))).filter(
-      (j) => Boolean(j) && JENJANG_ALLOWED.some((k) => j?.toUpperCase().includes(k))
-    )],
+  // Get unique jenjang options from data
+  const jenjangOptions = useMemo(
+    () => Array.from(new Set(data.map((d) => d.jenis_satdik))).filter(
+      (j) => Boolean(j) && JENJANG_UTAMA.some((k) => j?.toUpperCase().includes(k))
+    ),
     [data]
   );
+
+  // Group jenjang by utama
+  const getJenjangDetail = (utama: string) => {
+    return jenjangOptions.filter(j => j.toUpperCase().includes(utama));
+  };
+
+  // Handle checkbox change for utama
+  const handleJenjangUtamaChange = (jenjang: string) => {
+    setSelectedJenjangUtama(prev => {
+      if (prev.includes(jenjang)) {
+        // Jika uncheck utama, hapus juga detailnya
+        const detailOptions = getJenjangDetail(jenjang);
+        setSelectedJenjangDetail(prevDetail => 
+          prevDetail.filter(d => !detailOptions.includes(d))
+        );
+        return prev.filter(j => j !== jenjang);
+      } else {
+        // Jika check utama, pilih semua detailnya
+        const detailOptions = getJenjangDetail(jenjang);
+        setSelectedJenjangDetail(prev => [...new Set([...prev, ...detailOptions])]);
+        return [...prev, jenjang];
+      }
+    });
+    setPage(1);
+  };
+
+  // Handle checkbox change for detail
+  const handleJenjangDetailChange = (jenjang: string) => {
+    setSelectedJenjangDetail(prev => {
+      const newDetails = prev.includes(jenjang) 
+        ? prev.filter(j => j !== jenjang)
+        : [...prev, jenjang];
+      
+      // Update utama berdasarkan detail yang dipilih
+      const newUtama = JENJANG_UTAMA.filter(utama => {
+        const details = getJenjangDetail(utama);
+        return details.some(d => newDetails.includes(d));
+      });
+      setSelectedJenjangUtama(newUtama);
+      
+      return newDetails;
+    });
+    setPage(1);
+  };
+
+  // Select all jenjang
+  const selectAllJenjang = () => {
+    setSelectedJenjangUtama([...JENJANG_UTAMA]);
+    setSelectedJenjangDetail([...jenjangOptions]);
+    setPage(1);
+  };
+
+  // Deselect all jenjang
+  const deselectAllJenjang = () => {
+    setSelectedJenjangUtama([]);
+    setSelectedJenjangDetail([]);
+    setPage(1);
+  };
 
   const labelOptions = [
     "Semua",
@@ -64,9 +125,15 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
     "Jauh di bawah",
   ];
 
+  // Filter data untuk table dan KPI
   const filtered = useMemo(() => {
     let rows = data.filter((d) => isJenjangAllowed(d.jenis_satdik));
-    if (filterJenis !== "Semua") rows = rows.filter((d) => d.jenis_satdik === filterJenis);
+    
+    // Filter by selected detail jenjang (if any selected)
+    if (selectedJenjangDetail.length > 0) {
+      rows = rows.filter((d) => selectedJenjangDetail.includes(d.jenis_satdik));
+    }
+    
     if (filterLabel !== "Semua") rows = rows.filter((d) => d.label_2024 === filterLabel);
     if (search) {
       const q = search.toLowerCase();
@@ -81,19 +148,20 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
       const vb = (b as any)[sortCol] ?? -Infinity;
       return sortDir === "asc" ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
     });
-  }, [data, filterJenis, filterLabel, search, sortCol, sortDir]);
+  }, [data, selectedJenjangDetail, filterLabel, search, sortCol, sortDir]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  const withVal = data.filter((d) => d.nilai_2024_num != null && isJenjangAllowed(d.jenis_satdik));
+  // KPI Calculations menggunakan filtered data (sama dengan tabel)
+  const withVal = filtered.filter((d) => d.nilai_2024_num != null);
   const vals = withVal.map((d) => d.nilai_2024_num as number);
   const avg = vals.length ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2) : "-";
   const max = vals.length ? Math.max(...vals).toFixed(2) : "-";
   const min = vals.length ? Math.min(...vals).toFixed(2) : "-";
 
   // Filter chart berdasarkan jenjang (SD/SMP/SMA match substring pada jenis_satdik)
-  const chartJenjangOptions = ["Semua", "SD", "SMP", "SMA", "SMK"];
+  const chartJenjangOptions = ["Semua", "PAUD", "SD", "SMP", "SMA", "SMK"];
   const filterChartRows = (rows: typeof withVal) => {
     if (filterJenisChart === "Semua") return rows;
     return rows.filter((d) =>
@@ -320,6 +388,13 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
     );
   };
 
+  // Get selected jenjang display text
+  const getSelectedJenjangText = () => {
+    if (selectedJenjangDetail.length === 0) return "Semua Jenjang";
+    if (selectedJenjangDetail.length === jenjangOptions.length) return "Semua Jenjang";
+    return `${selectedJenjangDetail.length} jenjang terpilih`;
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -335,123 +410,33 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
         <KpiCard
           title="Rata-rata Nilai"
           value={avg}
-          sub="Semua indikator"
+          sub={selectedJenjangDetail.length === 0 ? "Semua indikator" : `${selectedJenjangDetail.length} jenjang terpilih`}
           icon={Target}
           color={tahun === "2025" ? "bg-violet-500" : "bg-blue-500"}
         />
         <KpiCard
           title="Nilai Tertinggi"
           value={max}
-          sub="Capaian terbaik"
+          sub={selectedJenjangDetail.length === 0 ? "Capaian terbaik" : `${selectedJenjangDetail.length} jenjang terpilih`}
           icon={TrendingUp}
           color="bg-emerald-500"
         />
         <KpiCard
           title="Nilai Terendah"
           value={min}
-          sub="Perlu perhatian"
+          sub={selectedJenjangDetail.length === 0 ? "Perlu perhatian" : `${selectedJenjangDetail.length} jenjang terpilih`}
           icon={TrendingDown}
           color="bg-red-500"
         />
       </div>
 
-      {/* Bar Charts */}
-      <div className="space-y-3">
-        {/* Shared jenjang filter for charts */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Jenjang:</span>
-          <div className="flex gap-1.5">
-            {chartJenjangOptions.map((opt) => (
-              <button
-                key={opt}
-                onClick={() => setFilterJenisChart(opt)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold border transition ${
-                  filterJenisChart === opt
-                    ? "bg-slate-800 text-white border-slate-800"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"
-                }`}
-              >
-                {opt}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-            <h3 className="font-semibold text-slate-900 flex items-center gap-2">
-              <TrendingUp size={16} className="text-emerald-500" />
-              Top 10
-            </h3>
-              <button
-                onClick={() => downloadChart(topChartRef, `top10-${tahun}`, top10, accentBar)}
-                className="flex items-center gap-1 px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition"
-                title="Download PNG"
-              >
-                <Download size={13} />
-                PNG
-              </button>
-          </div>
-          <div ref={topChartRef}>
-            <ResponsiveContainer width="100%" height={290}>
-              <BarChart data={top10} layout="vertical" margin={{ right: 16 }}>
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                <XAxis type="number" />
-                <YAxis type="category" dataKey="key" width={90} tick={{ fontSize: 11 }} tickFormatter={(val: string) => val.split(" | ")[0]} />
-                <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="nilai" name={`Nilai ${tahun}`} radius={[0, 4, 4, 0]}>
-                  {top10.map((_, i) => (
-                    <Cell key={i} fill={accentBar} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-            <h3 className="font-semibold text-slate-900 flex items-center gap-2">
-              <TrendingDown size={16} className="text-red-500" />
-              Bottom 10
-            </h3>
-              <button
-                onClick={() => downloadChart(bottomChartRef, `bottom10-${tahun}`, bottom10, "#ef4444")}
-                className="flex items-center gap-1 px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition"
-                title="Download PNG"
-              >
-                <Download size={13} />
-                PNG
-              </button>
-          </div>
-          <div ref={bottomChartRef}>
-            <ResponsiveContainer width="100%" height={290}>
-              <BarChart data={bottom10} layout="vertical" margin={{ right: 16 }}>
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                <XAxis type="number" />
-                <YAxis type="category" dataKey="key" width={90} tick={{ fontSize: 11 }} tickFormatter={(val: string) => val.split(" | ")[0]} />
-                <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="nilai" name={`Nilai ${tahun}`} radius={[0, 4, 4, 0]}>
-                  {bottom10.map((_, i) => (
-                    <Cell key={i} fill="#ef4444" />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-        </div>
-      </div>
-
-      {/* Table Section */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-        {/* Filters */}
-        <div className="flex flex-wrap gap-2 mb-4">
+      {/* Filter & Search Section - Above Charts */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 space-y-3">
+        <div className="flex flex-wrap gap-2">
           <div className="relative flex-1 min-w-[200px]">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
-              className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm text-black placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-sm text-black placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               placeholder="Cari indikator..."
               value={search}
               onChange={(e) => {
@@ -460,20 +445,85 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
               }}
             />
           </div>
+          
+          {/* Jenjang Filter - Checkbox Group */}
+          <div className="relative">
+            <button
+              onClick={() => {
+                const dropdown = document.getElementById('jenjangDropdown');
+                if (dropdown) {
+                  dropdown.classList.toggle('hidden');
+                }
+              }}
+              className="px-3 py-2 border border-slate-200 rounded-xl text-sm text-black bg-white hover:bg-slate-50 flex items-center gap-2 min-w-[180px]"
+            >
+              <span className="truncate">{getSelectedJenjangText()}</span>
+              <span className="text-slate-400">▼</span>
+            </button>
+            <div 
+              id="jenjangDropdown"
+              className="hidden absolute top-full left-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg p-3 z-50 min-w-[300px] max-h-[400px] overflow-y-auto"
+            >
+              <div className="flex gap-2 mb-2 pb-2 border-b border-slate-100">
+                <button
+                  onClick={selectAllJenjang}
+                  className="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100"
+                >
+                  Pilih Semua
+                </button>
+                <button
+                  onClick={deselectAllJenjang}
+                  className="text-xs px-2 py-1 bg-slate-50 text-slate-600 rounded hover:bg-slate-100"
+                >
+                  Hapus Semua
+                </button>
+              </div>
+              
+              {/* Jenjang Utama */}
+              <div className="mb-2">
+                <p className="text-xs font-semibold text-slate-500 mb-1">Jenjang Utama</p>
+                {JENJANG_UTAMA.map((utama) => {
+                  const detailOptions = getJenjangDetail(utama);
+                  if (detailOptions.length === 0) return null;
+                  const isChecked = selectedJenjangUtama.includes(utama);
+                  return (
+                    <label key={utama} className="flex items-center gap-2 py-1 hover:bg-slate-50 px-1 rounded cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => handleJenjangUtamaChange(utama)}
+                        className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="text-sm font-medium text-slate-700">{utama}</span>
+                      <span className="text-xs text-slate-400 ml-auto">{detailOptions.length}</span>
+                    </label>
+                  );
+                })}
+              </div>
+
+              {/* Jenjang Detail */}
+              <div className="border-t border-slate-100 pt-2">
+                <p className="text-xs font-semibold text-slate-500 mb-1">Jenjang Detail</p>
+                {jenjangOptions.map((jenjang) => (
+                  <label key={jenjang} className="flex items-center gap-2 py-1 hover:bg-slate-50 px-1 rounded cursor-pointer ml-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedJenjangDetail.includes(jenjang)}
+                      onChange={() => handleJenjangDetailChange(jenjang)}
+                      className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-slate-700">{jenjang}</span>
+                  </label>
+                ))}
+                {jenjangOptions.length === 0 && (
+                  <p className="text-sm text-slate-400 py-2">Tidak ada data jenjang</p>
+                )}
+              </div>
+            </div>
+          </div>
+
           <select
-            className="px-3 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white"
-            value={filterJenis}
-            onChange={(e) => {
-              setFilterJenis(e.target.value);
-              setPage(1);
-            }}
-          >
-            {jenisOptions.slice(0, 15).map((j) => (
-              <option key={j}>{j}</option>
-            ))}
-          </select>
-          <select
-            className="px-3 py-2.5 border border-slate-200 rounded-xl text-sm text-black bg-white"
+            className="px-3 py-2 border border-slate-200 rounded-xl text-sm text-black bg-white"
             value={filterLabel}
             onChange={(e) => {
               setFilterLabel(e.target.value);
@@ -486,6 +536,100 @@ export function KabkotSingle({ data, tahun }: { data: KabkotRow[]; tahun: string
           </select>
         </div>
 
+        {/* Active filters display */}
+        {(selectedJenjangDetail.length > 0 || filterLabel !== "Semua") && (
+          <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+            <span className="text-xs text-slate-500 mr-1">Filter aktif:</span>
+            {selectedJenjangDetail.length > 0 && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-200">
+                {selectedJenjangDetail.length} jenjang
+              </span>
+            )}
+            {filterLabel !== "Semua" && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-purple-50 text-purple-700 border border-purple-200">
+                Label: {filterLabel}
+              </span>
+            )}
+            {search && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-slate-50 text-slate-700 border border-slate-200">
+                Pencarian: {search}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Bar Charts */}
+      <div className="space-y-3">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+              <h3 className="font-semibold text-slate-900 flex items-center gap-2">
+                <TrendingUp size={16} className="text-emerald-500" />
+                Top 10
+              </h3>
+              <button
+                onClick={() => downloadChart(topChartRef, `top10-${tahun}`, top10, accentBar)}
+                className="flex items-center gap-1 px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition"
+                title="Download PNG"
+              >
+                <Download size={13} />
+                PNG
+              </button>
+            </div>
+            <div ref={topChartRef}>
+              <ResponsiveContainer width="100%" height={290}>
+                <BarChart data={top10} layout="vertical" margin={{ right: 16 }}>
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                  <XAxis type="number" />
+                  <YAxis type="category" dataKey="key" width={90} tick={{ fontSize: 11 }} tickFormatter={(val: string) => val.split(" | ")[0]} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar dataKey="nilai" name={`Nilai ${tahun}`} radius={[0, 4, 4, 0]}>
+                    {top10.map((_, i) => (
+                      <Cell key={i} fill={accentBar} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+              <h3 className="font-semibold text-slate-900 flex items-center gap-2">
+                <TrendingDown size={16} className="text-red-500" />
+                Bottom 10
+              </h3>
+              <button
+                onClick={() => downloadChart(bottomChartRef, `bottom10-${tahun}`, bottom10, "#ef4444")}
+                className="flex items-center gap-1 px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition"
+                title="Download PNG"
+              >
+                <Download size={13} />
+                PNG
+              </button>
+            </div>
+            <div ref={bottomChartRef}>
+              <ResponsiveContainer width="100%" height={290}>
+                <BarChart data={bottom10} layout="vertical" margin={{ right: 16 }}>
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                  <XAxis type="number" />
+                  <YAxis type="category" dataKey="key" width={90} tick={{ fontSize: 11 }} tickFormatter={(val: string) => val.split(" | ")[0]} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar dataKey="nilai" name={`Nilai ${tahun}`} radius={[0, 4, 4, 0]}>
+                    {bottom10.map((_, i) => (
+                      <Cell key={i} fill="#ef4444" />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Table Section */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-sm">

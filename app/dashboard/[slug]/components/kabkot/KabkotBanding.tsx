@@ -24,6 +24,7 @@ import { KabkotRow } from "../../types";
 
 const JENJANG_OPTIONS = [
   { label: "Semua", value: "Semua" },
+  { label: "PAUD", value: "PAUD" },
   { label: "SD", value: "SD" },
   { label: "SMP", value: "SMP" },
   { label: "SMA", value: "SMA" },
@@ -31,14 +32,46 @@ const JENJANG_OPTIONS = [
 
 /** Mencocokkan jenis_satdik dengan jenjang yang dipilih.
  *  Misal jenis_satdik = "SD/MI" → cocok dengan "SD"
- *  Filter "SMA" juga mencakup "SMK" dan "SMA/SMK Sederajat" */
+ *  Filter "SMA" juga mencakup "SMK" dan "SMA/SMK Sederajat"
+ *  Filter "PAUD" mencakup TK, KB, TPA, SPS, RA, SKB, dan variasinya.
+ *  Menggunakan includes("PAUD") agar "PAUD SKB", "PAUD RA", dll. tertangkap. */
 function matchJenjang(jenisSatdik: string, jenjang: string): boolean {
   if (jenjang === "Semua") return true;
   const upper = jenisSatdik.toUpperCase();
   if (jenjang === "SMA") {
     return upper.startsWith("SMA") || upper.startsWith("SMK");
   }
+  if (jenjang === "PAUD") {
+    return (
+      upper.includes("PAUD") ||
+      upper.startsWith("TK") ||
+      upper.startsWith("KB") ||
+      upper.startsWith("TPA") ||
+      upper.startsWith("SPS") ||
+      upper.startsWith("RA") ||
+      upper.startsWith("SKB")
+    );
+  }
   return upper.startsWith(jenjang);
+}
+
+/** Jenis satdik lintas-jenjang/khusus yang tidak ditampilkan di komponen ini */
+const EXCLUDED_JENIS = [
+  "Angka Partisipasi Sekolah (5-6)",
+  "Angka Partisipasi Sekolah (APS) 7-12",
+  "Angka Partisipasi Sekolah (APS) 7 - 15",
+  "Angka Partisipasi Sekolah (APS) 13-15",
+  "Angka Partisipasi Sekolah (APS) 16-18",
+  "Angka Partisipasi Sekolah (APS) 7 - 18 Kesetaraan",
+  "Angka Partisipasi Sekolah (APS) 4 - 18 Penyandang Disabilitas",
+  "Semua Jenjang Sesuai Kewenangan",
+];
+
+function isExcluded(jenisSatdik: string | undefined): boolean {
+  if (!jenisSatdik) return false;
+  return EXCLUDED_JENIS.some(
+    (ex) => jenisSatdik.trim().toLowerCase() === ex.toLowerCase()
+  );
 }
 
 export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[] }) {
@@ -55,12 +88,16 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
   }, [d25]);
 
   const jenisOptions = useMemo(
-    () => ["Semua", ...Array.from(new Set(d24.map((d) => d.jenis_satdik))).filter(Boolean)],
+    () => ["Semua", ...Array.from(new Set(d24.map((d) => d.jenis_satdik))).filter(
+      (j) => Boolean(j) && !isExcluded(j)
+    )],
     [d24]
   );
 
   const merged = useMemo(() => {
-    let rows = d24.map((row) => ({ ...row, r25: map25[row.no] ?? null }));
+    let rows = d24
+      .filter((row) => !isExcluded(row.jenis_satdik))
+      .map((row) => ({ ...row, r25: map25[row.no] ?? null }));
 
     if (filterJenjang !== "Semua")
       rows = rows.filter((d) => matchJenjang(d.jenis_satdik ?? "", filterJenjang));
@@ -83,8 +120,7 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
   const paged = merged.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const jenjangSet = Array.from(new Set(d24.map((d) => d.jenis_satdik)))
-    .filter(Boolean)
-    .slice(0, 16);
+    .filter((j) => Boolean(j) && !isExcluded(j));
 
   const jenjangChart = jenjangSet
     .filter((j) => matchJenjang(j ?? "", filterJenjang))
@@ -197,7 +233,6 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
           >
             {jenisOptions
               .filter((j) => j === "Semua" || matchJenjang(j, filterJenjang))
-              .slice(0, 15)
               .map((j) => (
                 <option key={j}>{j}</option>
               ))}
