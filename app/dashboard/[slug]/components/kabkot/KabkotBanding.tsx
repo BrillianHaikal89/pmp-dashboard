@@ -22,9 +22,29 @@ import {
 import { Badge } from "../common/Badge";
 import { KabkotRow } from "../../types";
 
+const JENJANG_OPTIONS = [
+  { label: "Semua", value: "Semua" },
+  { label: "SD", value: "SD" },
+  { label: "SMP", value: "SMP" },
+  { label: "SMA", value: "SMA" },
+];
+
+/** Mencocokkan jenis_satdik dengan jenjang yang dipilih.
+ *  Misal jenis_satdik = "SD/MI" → cocok dengan "SD"
+ *  Filter "SMA" juga mencakup "SMK" dan "SMA/SMK Sederajat" */
+function matchJenjang(jenisSatdik: string, jenjang: string): boolean {
+  if (jenjang === "Semua") return true;
+  const upper = jenisSatdik.toUpperCase();
+  if (jenjang === "SMA") {
+    return upper.startsWith("SMA") || upper.startsWith("SMK");
+  }
+  return upper.startsWith(jenjang);
+}
+
 export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[] }) {
   const [search, setSearch] = useState("");
   const [filterJenis, setFilterJenis] = useState("Semua");
+  const [filterJenjang, setFilterJenjang] = useState("Semua");
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 15;
 
@@ -41,7 +61,13 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
 
   const merged = useMemo(() => {
     let rows = d24.map((row) => ({ ...row, r25: map25[row.no] ?? null }));
-    if (filterJenis !== "Semua") rows = rows.filter((d) => d.jenis_satdik === filterJenis);
+
+    if (filterJenjang !== "Semua")
+      rows = rows.filter((d) => matchJenjang(d.jenis_satdik ?? "", filterJenjang));
+
+    if (filterJenis !== "Semua")
+      rows = rows.filter((d) => d.jenis_satdik === filterJenis);
+
     if (search) {
       const q = search.toLowerCase();
       rows = rows.filter(
@@ -51,37 +77,33 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
       );
     }
     return rows;
-  }, [d24, map25, filterJenis, search]);
+  }, [d24, map25, filterJenjang, filterJenis, search]);
 
   const totalPages = Math.ceil(merged.length / PAGE_SIZE);
   const paged = merged.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  // Chart rata-rata per jenjang
-  // d24 memakai nilai_2024_num, d25 memakai nilai_2024_num juga karena
-  // field yang disimpan di setiap dataset selalu bernama nilai_2024_num
-  // (sesuai struktur KabkotRow). Jika tipe punya field berbeda untuk 2025,
-  // ganti nilai_2025_num di baris avg25.
   const jenjangSet = Array.from(new Set(d24.map((d) => d.jenis_satdik)))
     .filter(Boolean)
-    .slice(0, 8);
+    .slice(0, 16);
 
-  const jenjangChart = jenjangSet.map((j) => {
-    const rows24 = d24.filter((d) => d.jenis_satdik === j && d.nilai_2024_num != null);
-    // Untuk dataset 2025, field nilai tetap bernama nilai_2024_num dalam KabkotRow,
-    // karena dataset d25 sudah merupakan data tahun 2025 yang di-load terpisah.
-    const rows25 = d25.filter((d) => d.jenis_satdik === j && d.nilai_2024_num != null);
-    const avg24 = rows24.length
-      ? +(rows24.reduce((a, b) => a + (b.nilai_2024_num ?? 0), 0) / rows24.length).toFixed(2)
-      : 0;
-    const avg25 = rows25.length
-      ? +(rows25.reduce((a, b) => a + (b.nilai_2024_num ?? 0), 0) / rows25.length).toFixed(2)
-      : 0;
-    return {
-      name: j.split("/")[0].trim(),
-      "Nilai 2024": avg24,
-      "Nilai 2025": avg25,
-    };
-  });
+  const jenjangChart = jenjangSet
+    .filter((j) => matchJenjang(j ?? "", filterJenjang))
+    .map((j) => {
+      const rows24 = d24.filter((d) => d.jenis_satdik === j && d.nilai_2024_num != null);
+      const rows25 = d25.filter((d) => d.jenis_satdik === j && d.nilai_2024_num != null);
+      const avg24 = rows24.length
+        ? +(rows24.reduce((a, b) => a + (b.nilai_2024_num ?? 0), 0) / rows24.length).toFixed(2)
+        : 0;
+      const avg25 = rows25.length
+        ? +(rows25.reduce((a, b) => a + (b.nilai_2024_num ?? 0), 0) / rows25.length).toFixed(2)
+        : 0;
+      return {
+        name: j!.split("/")[0].trim(),
+        "Nilai 2024": avg24,
+        "Nilai 2025": avg25,
+      };
+    })
+    .filter((item) => item["Nilai 2024"] > 0 || item["Nilai 2025"] > 0);
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (!active || !payload?.length) return null;
@@ -95,6 +117,8 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
     );
   };
 
+  const resetPage = () => setPage(1);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -103,11 +127,36 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
         <p className="text-slate-500 text-sm mt-1">2024 vs 2025 — Perubahan nilai per indikator</p>
       </div>
 
+      {/* Filter Jenjang (pill buttons) */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="text-xs font-semibold text-slate-500 mr-1">Jenjang:</span>
+        {JENJANG_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => {
+              setFilterJenjang(opt.value);
+              setFilterJenis("Semua"); // reset jenis saat ganti jenjang
+              resetPage();
+            }}
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
+              filterJenjang === opt.value
+                ? "bg-rose-500 border-rose-500 text-white shadow-sm"
+                : "bg-white border-slate-200 text-slate-600 hover:border-rose-300 hover:text-rose-600"
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+
       {/* Bar Chart Perbandingan */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
         <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
           <GitCompare size={16} className="text-rose-500" />
           Rata-rata per Jenjang
+          {filterJenjang !== "Semua" && (
+            <span className="ml-1 text-xs font-normal text-slate-400">· {filterJenjang}</span>
+          )}
         </h3>
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={jenjangChart}>
@@ -134,7 +183,7 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
-                setPage(1);
+                resetPage();
               }}
             />
           </div>
@@ -143,12 +192,15 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
             value={filterJenis}
             onChange={(e) => {
               setFilterJenis(e.target.value);
-              setPage(1);
+              resetPage();
             }}
           >
-            {jenisOptions.slice(0, 15).map((j) => (
-              <option key={j}>{j}</option>
-            ))}
+            {jenisOptions
+              .filter((j) => j === "Semua" || matchJenjang(j, filterJenjang))
+              .slice(0, 15)
+              .map((j) => (
+                <option key={j}>{j}</option>
+              ))}
           </select>
         </div>
 
@@ -231,7 +283,7 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
         {/* Pagination */}
         <div className="flex items-center justify-between mt-4 pt-3">
           <p className="text-xs text-slate-400">
-            Hal. {page}/{totalPages} · {merged.length} data
+            Hal. {page}/{totalPages || 1} · {merged.length} data
           </p>
           <div className="flex gap-1.5">
             <button
@@ -243,7 +295,7 @@ export function KabkotBanding({ d24, d25 }: { d24: KabkotRow[]; d25: KabkotRow[]
             </button>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
+              disabled={page === totalPages || totalPages === 0}
               className="p-2 rounded-lg border border-slate-200 disabled:opacity-30 hover:bg-slate-50"
             >
               <ChevronRight size={15} />
