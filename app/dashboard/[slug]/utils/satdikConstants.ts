@@ -1,49 +1,99 @@
 ﻿export const INDICATOR_CODES = [
   "Semua",
+
   "A.1",
   "A.2",
   "A.3",
+
   "D.1",
+  "D.2",
   "D.3",
   "D.4",
+  "D.6",
   "D.8",
   "D.10",
+
+  "E.1",
+  "E.2",
 ];
 
 export const INDICATOR_NAMES: Record<string, string> = {
   "A.1": "Kemampuan Literasi",
   "A.2": "Kemampuan Numerasi",
   "A.3": "Karakter",
-  "D.1": "Kualitas Pembelajaran",
-  "D.3": "Kepemimpinan Instruksional",
-  "D.4": "Iklim Keamanan Satuan Pendidikan",
-  "D.8": "Iklim Kebinekaan",
-  "D.10": "Iklim Inklusivitas",
-};
 
+  "D.1": "Kualitas Pembelajaran",
+
+  "D.2": "Refleksi dan Perbaikan Pembelajaran oleh Guru",
+
+  "D.3": "Kepemimpinan Instruksional",
+
+  "D.4": "Iklim Keamanan Satuan Pendidikan",
+
+  "D.6": "Iklim Kesetaraan Gender",
+
+  "D.8": "Iklim Kebinekaan",
+
+  "D.10": "Iklim Inklusivitas",
+
+  "E.1": "Partisipasi Warga Satuan Pendidikan",
+
+  "E.2": "Proporsi Pemanfaatan Sumber Daya Sekolah untuk Peningkatan Mutu",
+};
 export const INDICATOR_COLORS: Record<string, string> = {
   "A.1": "bg-blue-500",
   "A.2": "bg-teal-500",
   "A.3": "bg-purple-500",
+
   "D.1": "bg-orange-500",
+
+  "D.2": "bg-sky-500",
+
   "D.3": "bg-cyan-500",
+
   "D.4": "bg-rose-500",
+
+  "D.6": "bg-pink-500",
+
   "D.8": "bg-emerald-500",
+
   "D.10": "bg-indigo-500",
+
+  "E.1": "bg-lime-500",
+
+  "E.2": "bg-amber-500",
 };
 
 export const INDICATOR_ACTIVE_COLORS: Record<string, string> = {
   "A.1": "bg-blue-500 text-white border-blue-500",
   "A.2": "bg-teal-500 text-white border-teal-500",
   "A.3": "bg-purple-500 text-white border-purple-500",
+
   "D.1": "bg-orange-500 text-white border-orange-500",
+
+  "D.2": "bg-sky-500 text-white border-sky-500",
+
   "D.3": "bg-cyan-500 text-white border-cyan-500",
+
   "D.4": "bg-rose-500 text-white border-rose-500",
+
+  "D.6": "bg-pink-500 text-white border-pink-500",
+
   "D.8": "bg-emerald-500 text-white border-emerald-500",
+
   "D.10": "bg-indigo-500 text-white border-indigo-500",
+
+  "E.1": "bg-lime-500 text-white border-lime-500",
+
+  "E.2": "bg-amber-500 text-white border-amber-500",
 };
 
-export const CHANGE_ORDER = ["Naik", "Turun", "Tidak Berubah", "Tidak Tersedia"];
+export const CHANGE_ORDER = [
+  "Naik",
+  "Turun",
+  "Tidak Berubah",
+  "Tidak Tersedia",
+];
 export const CHANGE_LABELS: Record<string, string> = {
   Naik: "📈 Meningkat",
   Turun: "📉 Menurun",

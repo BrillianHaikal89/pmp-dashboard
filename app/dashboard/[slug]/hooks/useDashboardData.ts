@@ -32,11 +32,17 @@ const PRIORITAS_CODES = new Set([
   "A1",
   "A2",
   "A3",
+
   "D1",
+  "D2",
   "D3",
   "D4",
+  "D6",
   "D8",
   "D10",
+
+  "E1",
+  "E2",
 ]);
 
 function normalizeKode(kode?: string): string {
