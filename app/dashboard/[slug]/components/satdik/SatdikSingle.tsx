@@ -785,7 +785,7 @@ export function SatdikSingle({
                   Rekap Perubahan & Capaian Indikator Prioritas
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  A.1, A.2, A.3, D.1, D.3, D.4, D.8, D.10 — Klik angka pada card
+                  A.1, A.2, A.3, D.1, D.2, D.3, D.4, D.6, D.8, D.10, E.1, E.5 — Klik angka pada card
                   untuk melihat daftar sekolah
                 </p>
               </div>
