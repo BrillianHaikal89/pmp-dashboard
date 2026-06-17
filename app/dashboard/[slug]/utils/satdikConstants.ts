@@ -14,7 +14,7 @@
   "D.10",
 
   "E.1",
-  "E.2",
+  "E.5",
 ];
 
 export const INDICATOR_NAMES: Record<string, string> = {
@@ -38,7 +38,7 @@ export const INDICATOR_NAMES: Record<string, string> = {
 
   "E.1": "Partisipasi Warga Satuan Pendidikan",
 
-  "E.2": "Proporsi Pemanfaatan Sumber Daya Sekolah untuk Peningkatan Mutu",
+  "E.5": "Program dan kebijakan satuan pendidikan",
 };
 export const INDICATOR_COLORS: Record<string, string> = {
   "A.1": "bg-blue-500",
@@ -61,7 +61,7 @@ export const INDICATOR_COLORS: Record<string, string> = {
 
   "E.1": "bg-lime-500",
 
-  "E.2": "bg-amber-500",
+  "E.5": "bg-amber-500",
 };
 
 export const INDICATOR_ACTIVE_COLORS: Record<string, string> = {
@@ -85,7 +85,7 @@ export const INDICATOR_ACTIVE_COLORS: Record<string, string> = {
 
   "E.1": "bg-lime-500 text-white border-lime-500",
 
-  "E.2": "bg-amber-500 text-white border-amber-500",
+  "E.5": "bg-amber-500 text-white border-amber-500",
 };
 
 export const CHANGE_ORDER = [

@@ -42,7 +42,7 @@ const PRIORITAS_CODES = new Set([
   "D10",
 
   "E1",
-  "E2",
+  "E5",
 ]);
 
 function normalizeKode(kode?: string): string {
