@@ -124,8 +124,8 @@ function DashboardContent() {
 
       case "paud":
         if (tahun === "banding")
-          return data24 && data25 ? (
-            <PaudBanding d24={data24.paud ?? []} d25={data25.paud ?? []} />
+          return data25 ? (
+            <PaudBanding data={data25.paud ?? []} tahun="2024 vs 2025" />
           ) : (
             <LoadingScreen />
           );
