@@ -5,11 +5,11 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Toolti
 import { KpiCard } from "../common/KpiCard";
 import { PaudRow } from "../../types";
 
-// ── Indikator yang ditampilkan: hanya D2, D3, D6 ───────────────────────────
+// ── Indikator yang ditampilkan: hanya D2, D3, E6 ───────────────────────────
 const INDIKATOR = [
   { key: "label_d2", code: "D2" },
   { key: "label_d3", code: "D3" },
-  { key: "label_d6", code: "D6" },
+  { key: "label_e6", code: "E6" },
 ] as const;
 
 const LABEL_STYLE: Record<string, string> = {
@@ -151,7 +151,7 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  // Chart mengikuti data filtered, hanya untuk indikator D2, D3, D6
+  // Chart mengikuti data filtered, hanya untuk indikator D2, D3, E6
   const chartData = INDIKATOR.map(ind => ({
     name: ind.code,
     baik: filtered.filter(d => (d as any)[ind.key] === "Baik").length,
@@ -159,7 +159,7 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
     kurang: filtered.filter(d => (d as any)[ind.key] === "Kurang").length,
   }));
 
-  // KPI "Capaian Baik" dihitung dari proporsi nilai indikator D2, D3, D6 yang berlabel "Baik"
+  // KPI "Capaian Baik" dihitung dari proporsi nilai indikator D2, D3, E6 yang berlabel "Baik"
   const totalNilai = filtered.length * INDIKATOR.length;
   const totalBaik = filtered.reduce(
     (acc, row) => acc + INDIKATOR.filter(ind => (row as any)[ind.key] === "Baik").length,
@@ -181,7 +181,7 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <KpiCard title="Total PAUD" value={data.length} sub="Satuan terdaftar" icon={Baby} color={tahun === "2025" ? "bg-violet-500" : "bg-pink-500"} />
         <KpiCard title="Jenis PAUD" value={jenisOptions.length} sub="Jenis lembaga" icon={School} color="bg-amber-500" />
-        <KpiCard title="Capaian Baik" value={`${persenBaik}%`} sub={activeFilterCount > 0 ? "Dari indikator D2, D3, D6 (terfilter)" : "Dari indikator D2, D3, D6"} icon={Award} color="bg-emerald-500" />
+        <KpiCard title="Capaian Baik" value={`${persenBaik}%`} sub={activeFilterCount > 0 ? "Dari indikator D2, D3, E6 (terfilter)" : "Dari indikator D2, D3, E6"} icon={Award} color="bg-emerald-500" />
       </div>
 
       {/* Filter bar — diletakkan di atas chart agar chart langsung terlihat berubah */}
@@ -224,11 +224,11 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
         )}
       </div>
 
-      {/* Chart — mengikuti filtered, hanya indikator D2, D3, D6 */}
+      {/* Chart — mengikuti filtered, hanya indikator D2, D3, E6 */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
         <h3 className="font-semibold text-slate-900 mb-1 text-sm">Distribusi Capaian per Indikator PAUD</h3>
         <p className="text-xs text-slate-400 mb-3">
-          Indikator D2, D3, D6
+          Indikator D2, D3, E6
           {activeFilterCount > 0 ? " · Data sesuai filter aktif" : ""}
         </p>
         <ResponsiveContainer width="100%" height={260}>

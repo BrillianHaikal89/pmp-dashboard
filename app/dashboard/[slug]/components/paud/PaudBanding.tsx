@@ -7,11 +7,11 @@ import { TrendBadge } from "../common/TrendBadge";
 import { PaudRow } from "../../types";
 import { getLabelScore } from "../../utils/helpers";
 
-// ── Indikator yang ditampilkan: hanya D2, D3, D6 ───────────────────────────
+// ── Indikator yang ditampilkan: hanya D2, D3, E6 ───────────────────────────
 const INDIKATOR = [
   { key: "label_d2", code: "D2" },
   { key: "label_d3", code: "D3" },
-  { key: "label_d6", code: "D6" },
+  { key: "label_e6", code: "E6" },
 ] as const;
 
 export function PaudBanding({ d24, d25 }: { d24: PaudRow[]; d25: PaudRow[] }) {
@@ -33,7 +33,7 @@ export function PaudBanding({ d24, d25 }: { d24: PaudRow[]; d25: PaudRow[] }) {
   const totalPages = Math.ceil(merged.length / PAGE_SIZE);
   const paged = merged.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  // Ringkasan tren dihitung dari gabungan ketiga indikator (D2, D3, D6)
+  // Ringkasan tren dihitung dari gabungan ketiga indikator (D2, D3, E6)
   const improved = merged.filter(r => r.r25 && INDIKATOR.some(ind => getLabelScore((r.r25 as any)[ind.key] ?? "") > getLabelScore((r as any)[ind.key] ?? ""))).length;
   const declined = merged.filter(r => r.r25 && INDIKATOR.some(ind => getLabelScore((r.r25 as any)[ind.key] ?? "") < getLabelScore((r as any)[ind.key] ?? ""))).length;
   const same = merged.filter(r => r.r25 && INDIKATOR.every(ind => getLabelScore((r.r25 as any)[ind.key] ?? "") === getLabelScore((r as any)[ind.key] ?? ""))).length;
@@ -46,7 +46,7 @@ export function PaudBanding({ d24, d25 }: { d24: PaudRow[]; d25: PaudRow[] }) {
 
   return (
     <div className="space-y-6">
-      <div><h1 className="text-2xl font-bold text-slate-900">Perbandingan PAUD 2024 vs 2025</h1><p className="text-slate-500 text-sm mt-1">Perubahan capaian per satuan PAUD — Indikator D2, D3, D6</p></div>
+      <div><h1 className="text-2xl font-bold text-slate-900">Perbandingan PAUD 2024 vs 2025</h1><p className="text-slate-500 text-sm mt-1">Perubahan capaian per satuan PAUD — Indikator D2, D3, E6</p></div>
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 text-center"><CheckCircle size={24} className="text-emerald-500 mx-auto mb-2" /><p className="text-3xl font-black text-emerald-700">{improved}</p><p className="text-xs font-semibold text-emerald-600 mt-1">Meningkat</p></div>
         <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5 text-center"><Minus size={24} className="text-slate-400 mx-auto mb-2" /><p className="text-3xl font-black text-slate-600">{same}</p><p className="text-xs font-semibold text-slate-500 mt-1">Tidak Berubah</p></div>
