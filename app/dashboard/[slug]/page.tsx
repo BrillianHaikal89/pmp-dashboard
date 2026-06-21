@@ -26,6 +26,9 @@ import { getWilayahInfo } from "./utils/helpers";
 import { MENU } from "./utils/constants";
 import { TahunFilter } from "./types";
 
+// Import the PaudRow type from the paud component to ensure consistency
+import type { PaudRow } from "./components/paud/PaudBanding";
+
 function DashboardContent() {
   const params = useParams();
   const slug = params.slug as string;
@@ -123,14 +126,15 @@ function DashboardContent() {
         );
 
       case "paud":
-        if (tahun === "banding")
+        if (tahun === "banding") {
           return data25 ? (
-            <PaudBanding data={data25.paud ?? []} tahun="2024 vs 2025" />
+            <PaudBanding data={data25.paud as any} tahun="2024 vs 2025" />
           ) : (
             <LoadingScreen />
           );
+        }
         return activeData ? (
-          <PaudSingle data={activeData.paud ?? []} tahun={tahun} />
+          <PaudSingle data={activeData.paud as any} tahun={tahun} />
         ) : (
           <LoadingScreen />
         );
