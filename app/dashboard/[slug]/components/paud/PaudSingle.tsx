@@ -2,9 +2,50 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { Search, ChevronLeft, ChevronRight, Baby, School, Award, ChevronDown, X } from "lucide-react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
-import { Badge } from "../common/Badge";
 import { KpiCard } from "../common/KpiCard";
 import { PaudRow } from "../../types";
+
+// ── Struktur dimensi PAUD (D = Kualitas Proses Pembelajaran, E = Kualitas Pengelolaan Satuan) ──
+// Catatan: kode D1-D5 / E1-E9 dipakai apa adanya karena nama resmi tiap sub-indikator
+// belum dikonfirmasi. Ganti `code` di bawah ini dengan nama indikator resmi kapan saja.
+const DIMENSI_D = [
+  { key: "label_d1", code: "D1" },
+  { key: "label_d2", code: "D2" },
+  { key: "label_d3", code: "D3" },
+  { key: "label_d4", code: "D4" },
+  { key: "label_d5", code: "D5" },
+] as const;
+
+const DIMENSI_E = [
+  { key: "label_e1", code: "E1" },
+  { key: "label_e2", code: "E2" },
+  { key: "label_e3", code: "E3" },
+  { key: "label_e4", code: "E4" },
+  { key: "label_e5", code: "E5" },
+  { key: "label_e6", code: "E6" },
+  { key: "label_e7", code: "E7" },
+  { key: "label_e8", code: "E8" },
+  { key: "label_e9", code: "E9" },
+] as const;
+
+const ALL_INDIKATOR = [...DIMENSI_D, ...DIMENSI_E];
+
+const LABEL_STYLE: Record<string, string> = {
+  Baik: "bg-emerald-100 text-emerald-700",
+  Sedang: "bg-amber-100 text-amber-700",
+  Kurang: "bg-red-100 text-red-700",
+};
+
+function LabelPill({ label }: { label?: string }) {
+  if (!label || !LABEL_STYLE[label]) {
+    return <span className="text-xs text-slate-300" title={label || "Capaian Tidak Tersedia"}>—</span>;
+  }
+  return (
+    <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${LABEL_STYLE[label]}`}>
+      {label}
+    </span>
+  );
+}
 
 // ── Reusable checkbox dropdown ────────────────────────────────────────────────
 function CheckboxDropdown({
@@ -128,19 +169,21 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  // Chart mengikuti data filtered
-  const inds = [
-    { key: "label_perencanaan", name: "Perencanaan" },
-    { key: "label_proses", name: "Proses" },
-    { key: "label_kemampuan_fondasi", name: "Fondasi" },
-    { key: "label_sarana", name: "Sarana" },
-  ];
-  const chartData = inds.map(ind => ({
-    name: ind.name,
+  // Chart mengikuti data filtered, mencakup seluruh sub-indikator Dimensi D & E
+  const chartData = ALL_INDIKATOR.map(ind => ({
+    name: ind.code,
     baik: filtered.filter(d => (d as any)[ind.key] === "Baik").length,
     sedang: filtered.filter(d => (d as any)[ind.key] === "Sedang").length,
     kurang: filtered.filter(d => (d as any)[ind.key] === "Kurang").length,
   }));
+
+  // KPI "Capaian Baik" dihitung dari proporsi seluruh nilai indikator D & E yang berlabel "Baik"
+  const totalNilai = filtered.length * ALL_INDIKATOR.length;
+  const totalBaik = filtered.reduce(
+    (acc, row) => acc + ALL_INDIKATOR.filter(ind => (row as any)[ind.key] === "Baik").length,
+    0
+  );
+  const persenBaik = totalNilai > 0 ? Math.round((totalBaik / totalNilai) * 100) : 0;
 
   const activeFilterCount = selectedJenis.size + selectedKecamatan.size;
 
@@ -156,7 +199,7 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <KpiCard title="Total PAUD" value={data.length} sub="Satuan terdaftar" icon={Baby} color={tahun === "2025" ? "bg-violet-500" : "bg-pink-500"} />
         <KpiCard title="Jenis PAUD" value={jenisOptions.length} sub="Jenis lembaga" icon={School} color="bg-amber-500" />
-        <KpiCard title="Capaian Baik" value={filtered.filter(d => d.label_perencanaan === "Baik").length} sub={activeFilterCount > 0 ? "Perencanaan baik (terfilter)" : "Perencanaan baik"} icon={Award} color="bg-emerald-500" />
+        <KpiCard title="Capaian Baik" value={`${persenBaik}%`} sub={activeFilterCount > 0 ? "Dari indikator D & E (terfilter)" : "Dari seluruh indikator D & E"} icon={Award} color="bg-emerald-500" />
       </div>
 
       {/* Filter bar — diletakkan di atas chart agar chart langsung terlihat berubah */}
@@ -199,16 +242,17 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
         )}
       </div>
 
-      {/* Chart — mengikuti filtered */}
+      {/* Chart — mengikuti filtered, seluruh sub-indikator D1-D5 & E1-E9 */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
         <h3 className="font-semibold text-slate-900 mb-1 text-sm">Distribusi Capaian per Indikator PAUD</h3>
-        {activeFilterCount > 0 && (
-          <p className="text-xs text-slate-400 mb-3">Data sesuai filter aktif</p>
-        )}
-        <ResponsiveContainer width="100%" height={240}>
+        <p className="text-xs text-slate-400 mb-3">
+          D1–D5: Kualitas Proses Pembelajaran · E1–E9: Kualitas Pengelolaan Satuan
+          {activeFilterCount > 0 ? " · Data sesuai filter aktif" : ""}
+        </p>
+        <ResponsiveContainer width="100%" height={260}>
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="name" interval={0} tick={{ fontSize: 11 }} />
             <YAxis />
             <Tooltip />
             <Legend />
@@ -225,14 +269,21 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500">NPSN</th>
-                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500">Nama</th>
-                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500">Jenis</th>
-                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500">Kecamatan</th>
-                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500">Perencanaan</th>
-                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500">Proses</th>
-                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500">Fondasi</th>
-                <th className="text-left py-3 px-3 text-xs font-bold text-slate-500">Sarana</th>
+                <th rowSpan={2} className="text-left py-3 px-3 text-xs font-bold text-slate-500 align-bottom">NPSN</th>
+                <th rowSpan={2} className="text-left py-3 px-3 text-xs font-bold text-slate-500 align-bottom">Nama</th>
+                <th rowSpan={2} className="text-left py-3 px-3 text-xs font-bold text-slate-500 align-bottom">Jenis</th>
+                <th rowSpan={2} className="text-left py-3 px-3 text-xs font-bold text-slate-500 align-bottom">Status</th>
+                <th rowSpan={2} className="text-left py-3 px-3 text-xs font-bold text-slate-500 align-bottom">Kecamatan</th>
+                <th colSpan={DIMENSI_D.length} className="text-center py-1.5 px-3 text-[10px] font-bold text-blue-500 uppercase tracking-wide border-l border-slate-100">Indikator D</th>
+                <th colSpan={DIMENSI_E.length} className="text-center py-1.5 px-3 text-[10px] font-bold text-violet-500 uppercase tracking-wide border-l border-slate-100">Indikator E</th>
+              </tr>
+              <tr className="bg-slate-50 border-b border-slate-100">
+                {DIMENSI_D.map((ind, idx) => (
+                  <th key={ind.code} className={`text-center py-2 px-2 text-[11px] font-bold text-blue-400 ${idx === 0 ? "border-l border-slate-100" : ""}`}>{ind.code}</th>
+                ))}
+                {DIMENSI_E.map((ind, idx) => (
+                  <th key={ind.code} className={`text-center py-2 px-2 text-[11px] font-bold text-violet-400 ${idx === 0 ? "border-l border-slate-100" : ""}`}>{ind.code}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -241,11 +292,18 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
                   <td className="py-3 px-3 font-mono text-xs text-slate-400">{row.npsn}</td>
                   <td className="py-3 px-3 text-xs font-semibold text-slate-800 max-w-[150px] truncate">{row.nama}</td>
                   <td className="py-3 px-3 text-xs text-slate-500">{row.jenis}</td>
+                  <td className="py-3 px-3 text-xs text-slate-500">{(row as any).status ?? "—"}</td>
                   <td className="py-3 px-3 text-xs text-slate-600">{row.kecamatan}</td>
-                  <td className="py-3 px-3"><Badge label={row.label_perencanaan ?? ""} /></td>
-                  <td className="py-3 px-3"><Badge label={row.label_proses ?? ""} /></td>
-                  <td className="py-3 px-3"><Badge label={row.label_kemampuan_fondasi ?? ""} /></td>
-                  <td className="py-3 px-3"><Badge label={row.label_sarana ?? ""} /></td>
+                  {DIMENSI_D.map((ind, idx) => (
+                    <td key={ind.code} className={`py-3 px-2 text-center ${idx === 0 ? "border-l border-slate-100" : ""}`}>
+                      <LabelPill label={(row as any)[ind.key]} />
+                    </td>
+                  ))}
+                  {DIMENSI_E.map((ind, idx) => (
+                    <td key={ind.code} className={`py-3 px-2 text-center ${idx === 0 ? "border-l border-slate-100" : ""}`}>
+                      <LabelPill label={(row as any)[ind.key]} />
+                    </td>
+                  ))}
                 </tr>
               ))}
             </tbody>
