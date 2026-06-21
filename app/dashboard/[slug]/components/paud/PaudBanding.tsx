@@ -257,9 +257,9 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
           <div className="flex flex-wrap gap-3">
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                 <input
-                  className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent"
+                  className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent bg-white"
                   placeholder="Cari NPSN, Nama, atau Kecamatan..."
                   value={search}
                   onChange={e => { setSearch(e.target.value); setPage(1); }}
@@ -267,12 +267,12 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
               </div>
             </div>
             <select
-              className="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"
+              className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent"
               value={filterKec}
               onChange={e => { setFilterKec(e.target.value); setPage(1); }}
             >
               {kecamatanOptions.map(k => (
-                <option key={k}>{k}</option>
+                <option key={k} className="text-gray-800">{k}</option>
               ))}
             </select>
           </div>
