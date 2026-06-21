@@ -228,7 +228,7 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
         <h3 className="font-semibold text-slate-900 mb-1 text-sm">Distribusi Capaian per Indikator PAUD</h3>
         <p className="text-xs text-slate-400 mb-3">
-          Indikator D2, D3, E6
+          Indikator D.2, D.3 dan E.6
           {activeFilterCount > 0 ? " · Data sesuai filter aktif" : ""}
         </p>
         <ResponsiveContainer width="100%" height={260}>
