@@ -296,48 +296,54 @@ function DownloadChartButton({
     setIsDownloading(true);
     try {
       // ── Dimensi canvas ──────────────────────────────────────────────
-      const W = 1100;          // lebih lebar agar chart per indikator besar
-      const PAD = 28;
-      const GAP = 12;
+      // Layout: 4 kartu sejajar (sama seperti UI) — Tren Keseluruhan + D2 + D3 + E6
+      const SCALE   = 2;           // retina/HiDPI
+      const W_CSS   = 1200;
+      const PAD     = 40;
+      const GAP     = 16;
 
-      const HEADER_H   = 64;
-      const STATS_H    = 88;
-      const CHART_H    = 400;  // diperbesar agar ada ruang cukup untuk donut + legend
-      const FOOTER_H   = 28;
-      const H = PAD + HEADER_H + GAP + STATS_H + GAP + CHART_H + GAP + FOOTER_H;
+      const HEADER_H = 72;
+      const STATS_H  = 100;
+      const CARD_H   = 420;        // tinggi setiap kartu chart
+      const FOOTER_H = 36;
+      const H_CSS    = PAD + HEADER_H + GAP + STATS_H + GAP + CARD_H + GAP + FOOTER_H + PAD;
+
+      const W = W_CSS * SCALE;
+      const H = H_CSS * SCALE;
 
       const canvas = document.createElement('canvas');
       canvas.width  = W;
       canvas.height = H;
       const ctx = canvas.getContext('2d')!;
+      ctx.scale(SCALE, SCALE);
 
-      // ── Background putih ─────────────────────────────────────────────
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, W, H);
+      // ── Background ──────────────────────────────────────────────────
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, W_CSS, H_CSS);
 
       // ═══════════════════════════════════════════════════════════════
       // HEADER
       // ═══════════════════════════════════════════════════════════════
       const hY = PAD;
       ctx.fillStyle = '#fff1f2';
-      roundRect(ctx, PAD, hY, W - PAD * 2, HEADER_H, 12);
+      roundRect(ctx, PAD, hY, W_CSS - PAD * 2, HEADER_H, 14);
       ctx.fill();
       ctx.strokeStyle = '#fecdd3';
-      ctx.lineWidth = 1;
-      roundRect(ctx, PAD, hY, W - PAD * 2, HEADER_H, 12);
+      ctx.lineWidth = 1.5;
+      roundRect(ctx, PAD, hY, W_CSS - PAD * 2, HEADER_H, 14);
       ctx.stroke();
 
-      ctx.fillStyle = '#111827';
-      ctx.font = 'bold 20px ui-sans-serif,system-ui,sans-serif';
+      ctx.fillStyle = '#be123c';
+      ctx.font = 'bold 22px ui-sans-serif,system-ui,sans-serif';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
-      ctx.fillText('Distribusi Tren PAUD', PAD + 20, hY + HEADER_H / 2 - 10);
+      ctx.fillText('Distribusi Tren PAUD', PAD + 24, hY + HEADER_H / 2 - 10);
 
       ctx.fillStyle = '#6b7280';
-      ctx.font = '12px ui-sans-serif,system-ui,sans-serif';
+      ctx.font = '13px ui-sans-serif,system-ui,sans-serif';
       ctx.fillText(
         `${tahun} vs 2025  ·  D2, D3, dan E6  ·  ${totalData.toLocaleString('id')} Satuan PAUD`,
-        PAD + 20, hY + HEADER_H / 2 + 13
+        PAD + 24, hY + HEADER_H / 2 + 14
       );
 
       // ═══════════════════════════════════════════════════════════════
@@ -345,185 +351,121 @@ function DownloadChartButton({
       // ═══════════════════════════════════════════════════════════════
       const sY = hY + HEADER_H + GAP;
       const statCards = [
-        { label: 'Meningkat',    value: sekolahMeningkat, color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0' },
-        { label: 'Tidak Berubah', value: sekolahTetap,   color: '#6b7280', bg: '#f9fafb', border: '#e5e7eb' },
-        { label: 'Menurun',      value: sekolahMenurun,  color: '#dc2626', bg: '#fef2f2', border: '#fecaca' },
-        { label: 'Total Data',   value: totalData,       color: '#2563eb', bg: '#eff6ff', border: '#bfdbfe' },
+        { label: 'Meningkat',     value: sekolahMeningkat, color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0' },
+        { label: 'Tidak Berubah', value: sekolahTetap,     color: '#6b7280', bg: '#f9fafb', border: '#e5e7eb' },
+        { label: 'Menurun',       value: sekolahMenurun,   color: '#dc2626', bg: '#fef2f2', border: '#fecaca' },
+        { label: 'Total Data',    value: totalData,         color: '#2563eb', bg: '#eff6ff', border: '#bfdbfe' },
       ];
-      const cardW = (W - PAD * 2 - GAP * 3) / 4;
+      const cardW4 = (W_CSS - PAD * 2 - GAP * 3) / 4;
 
       statCards.forEach((card, i) => {
-        const cx = PAD + i * (cardW + GAP);
+        const cx = PAD + i * (cardW4 + GAP);
         ctx.fillStyle = card.bg;
-        roundRect(ctx, cx, sY, cardW, STATS_H, 10);
+        roundRect(ctx, cx, sY, cardW4, STATS_H, 10);
         ctx.fill();
         ctx.strokeStyle = card.border;
         ctx.lineWidth = 1.5;
-        roundRect(ctx, cx, sY, cardW, STATS_H, 10);
+        roundRect(ctx, cx, sY, cardW4, STATS_H, 10);
         ctx.stroke();
 
-        // Nilai besar
         ctx.fillStyle = card.color;
-        ctx.font = `bold 32px ui-sans-serif,system-ui,sans-serif`;
+        ctx.font = 'bold 36px ui-sans-serif,system-ui,sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(card.value.toLocaleString('id'), cx + cardW / 2, sY + 36);
+        ctx.fillText(card.value.toLocaleString('id'), cx + cardW4 / 2, sY + 40);
 
-        // Label
         ctx.fillStyle = '#374151';
         ctx.font = '12px ui-sans-serif,system-ui,sans-serif';
-        ctx.fillText(card.label, cx + cardW / 2, sY + 62);
+        ctx.fillText(card.label, cx + cardW4 / 2, sY + 70);
 
-        // Persentase
-        const pct = totalData > 0 ? ((card.value / totalData) * 100).toFixed(2) : '0';
-        ctx.fillStyle = card.color + 'bb';
+        const pct = totalData > 0 ? ((card.value / totalData) * 100).toFixed(1) : '0';
+        ctx.fillStyle = card.color + 'aa';
         ctx.font = '11px ui-sans-serif,system-ui,sans-serif';
-        ctx.fillText(`${pct}%`, cx + cardW / 2, sY + 78);
+        ctx.fillText(`${pct}%`, cx + cardW4 / 2, sY + 87);
       });
 
       // ═══════════════════════════════════════════════════════════════
-      // AREA CHART UTAMA — 2 panel (kiri: ringkasan | kanan: per indikator)
+      // 4 KARTU CHART SEJAJAR — layout identik dengan UI
       // ═══════════════════════════════════════════════════════════════
       const cY = sY + STATS_H + GAP;
 
-      // ── Panel kiri: Tren Keseluruhan ──────────────────────────────
-      const LEFT_W = 290;
-      ctx.fillStyle = '#f9fafb';
-      roundRect(ctx, PAD, cY, LEFT_W, CHART_H, 12);
-      ctx.fill();
-      ctx.strokeStyle = '#e5e7eb';
-      ctx.lineWidth = 1;
-      roundRect(ctx, PAD, cY, LEFT_W, CHART_H, 12);
-      ctx.stroke();
+      // Data ke-4 kartu: [ringkasan, D2, D3, E6]
+      const allCards = [
+        {
+          title: 'Tren Keseluruhan',
+          subtitle: 'Per satuan PAUD',
+          data: pieDataSummary,
+          total: totalData,
+          isSummary: true,
+        },
+        ...pieDataPerIndikator.map(ind => ({
+          title: ind.code,
+          subtitle: ind.name,
+          data: ind.data,
+          total: ind.total,
+          isSummary: false,
+        })),
+      ];
 
-      // Judul panel kiri
-      ctx.fillStyle = '#111827';
-      ctx.font = 'bold 13px ui-sans-serif,system-ui,sans-serif';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'top';
-      ctx.fillText('Tren Keseluruhan', PAD + 16, cY + 14);
-      ctx.fillStyle = '#9ca3af';
-      ctx.font = '10px ui-sans-serif,system-ui,sans-serif';
-      ctx.fillText('Per satuan PAUD', PAD + 16, cY + 30);
+      const DONUT_R_OUTER = 90;
+      const DONUT_R_INNER = 38;
+      const LABEL_OFFSET  = 28;
+      const LEG_LINE_H    = 22;
 
-      // Donut ringkasan — radius lebih besar
-      const leftCX = PAD + LEFT_W / 2;
-      const leftCY = cY + 60 + 95;
-      drawDonut(ctx, leftCX, leftCY, 95, 42, pieDataSummary, totalData, 12, 26);
+      allCards.forEach((card, i) => {
+        const cardX  = PAD + i * (cardW4 + GAP);
+        const cardCX = cardX + cardW4 / 2;
 
-      // Legend ringkasan vertikal di bawah
-      const legendY = leftCY + 95 + 36;
-      drawLegendVertical(ctx, pieDataSummary, totalData, PAD + 16, legendY, 11, 20);
-
-      // ── Panel kanan: Tren per Indikator ──────────────────────────
-      const RIGHT_X = PAD + LEFT_W + GAP;
-      const RIGHT_W = W - PAD - RIGHT_X;
-      ctx.fillStyle = '#f9fafb';
-      roundRect(ctx, RIGHT_X, cY, RIGHT_W, CHART_H, 12);
-      ctx.fill();
-      ctx.strokeStyle = '#e5e7eb';
-      ctx.lineWidth = 1;
-      roundRect(ctx, RIGHT_X, cY, RIGHT_W, CHART_H, 12);
-      ctx.stroke();
-
-      // Judul panel kanan
-      ctx.fillStyle = '#111827';
-      ctx.font = 'bold 13px ui-sans-serif,system-ui,sans-serif';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'top';
-      ctx.fillText('Tren per Indikator', RIGHT_X + 16, cY + 14);
-      ctx.fillStyle = '#9ca3af';
-      ctx.font = '10px ui-sans-serif,system-ui,sans-serif';
-      ctx.fillText('D2, D3, dan E6', RIGHT_X + 16, cY + 30);
-
-      // 3 sub-panel per indikator (D2, D3, E6)
-      const INNER_PAD   = 14;        // padding dalam panel kanan
-      const SUB_GAP     = 10;        // gap antar sub-panel
-      const indW        = (RIGHT_W - INNER_PAD * 2 - SUB_GAP * 2) / 3;
-      const IND_R_OUTER = 62;        // diperkecil agar label % tidak bertabrakan legend
-      const IND_R_INNER = 26;
-      const SUB_TOP     = cY + 46;   // Y atas sub-panel
-      const SUB_H       = CHART_H - 54;
-
-      pieDataPerIndikator.forEach((ind, i) => {
-        const subX  = RIGHT_X + INNER_PAD + i * (indW + SUB_GAP);
-        const subCX = subX + indW / 2;
-        const subY2 = SUB_TOP + SUB_H;  // Y bawah sub-panel
-
-        // ── Sub-panel card ──
+        // ── Kartu putih ──
         ctx.fillStyle = '#ffffff';
-        roundRect(ctx, subX, SUB_TOP, indW, SUB_H, 10);
+        roundRect(ctx, cardX, cY, cardW4, CARD_H, 12);
         ctx.fill();
         ctx.strokeStyle = '#e5e7eb';
-        ctx.lineWidth = 1;
-        roundRect(ctx, subX, SUB_TOP, indW, SUB_H, 10);
+        ctx.lineWidth = 1.5;
+        roundRect(ctx, cardX, cY, cardW4, CARD_H, 12);
         ctx.stroke();
 
-        // ── Clip ke dalam sub-panel dengan overflow horizontal cukup untuk label % ──
-        ctx.save();
-        ctx.beginPath();
-        const CLIP_HPAD = 30;  // overflow kiri-kanan agar label % tidak terpotong
-        ctx.rect(subX - CLIP_HPAD, SUB_TOP, indW + CLIP_HPAD * 2, SUB_H);
-        ctx.clip();
-
-        // ── Badge kode (D2 / D3 / E6) ──
-        const BADGE_W = 40; const BADGE_H = 22; const BADGE_Y = SUB_TOP + 12;
-        ctx.fillStyle = '#fef2f2';
-        roundRect(ctx, subCX - BADGE_W / 2, BADGE_Y, BADGE_W, BADGE_H, 6);
-        ctx.fill();
-        ctx.strokeStyle = '#fecaca';
-        ctx.lineWidth = 1;
-        roundRect(ctx, subCX - BADGE_W / 2, BADGE_Y, BADGE_W, BADGE_H, 6);
-        ctx.stroke();
-
-        ctx.fillStyle = '#dc2626';
-        ctx.font = 'bold 12px ui-sans-serif,system-ui,sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(ind.code, subCX, BADGE_Y + BADGE_H / 2);
-
-        // ── Nama indikator (truncate kalau terlalu panjang) ──
-        const NAME_Y = BADGE_Y + BADGE_H + 6;
-        ctx.fillStyle = '#9ca3af';
-        ctx.font = '10px ui-sans-serif,system-ui,sans-serif';
+        // ── Judul ──
+        ctx.fillStyle = '#111827';
+        ctx.font = 'bold 14px ui-sans-serif,system-ui,sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        // Truncate agar tidak overflow
-        let nameTxt = ind.name;
-        const maxNameW = indW - 12;
-        while (ctx.measureText(nameTxt).width > maxNameW && nameTxt.length > 3) {
-          nameTxt = nameTxt.slice(0, -1);
+        ctx.fillText(card.title, cardCX, cY + 16);
+
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '11px ui-sans-serif,system-ui,sans-serif';
+        ctx.fillText(card.subtitle, cardCX, cY + 35);
+
+        if (!card.isSummary) {
+          // tidak ada n= label
         }
-        if (nameTxt !== ind.name) nameTxt += '…';
-        ctx.fillText(nameTxt, subCX, NAME_Y);
 
-        // ── Layout: hitung tinggi legend dulu, sisakan untuk donut ──
-        const LEGEND_LINE_H = 18;
-        const LEGEND_LINES  = ind.data.length;
-        const LEGEND_H_TOTAL = LEGEND_LINES * LEGEND_LINE_H + 8;
-        const DONUT_TOP   = NAME_Y + 14;
-        // Donut center = tengah antara DONUT_TOP dan awal legend
-        const legY        = subY2 - LEGEND_H_TOTAL - 8;
-        const indDonutCY  = DONUT_TOP + (legY - IND_R_OUTER - DONUT_TOP) / 2 + IND_R_OUTER;
+        // ── Donut (posisi tengah vertikal di area atas kartu) ──
+        const donutCY = cY + 80 + DONUT_R_OUTER + LABEL_OFFSET;
 
-        drawDonut(ctx, subCX, indDonutCY, IND_R_OUTER, IND_R_INNER, ind.data, ind.total, 10, 20);
-
-        // ── Legend vertikal ──
-        drawLegendVertical(ctx, ind.data, ind.total, subX + 10, legY, 10, LEGEND_LINE_H);
-
+        ctx.save();
+        // Clip horizontal lebih lebar agar label % tidak terpotong
+        ctx.beginPath();
+        ctx.rect(cardX - 30, cY, cardW4 + 60, CARD_H);
+        ctx.clip();
+        drawDonut(ctx, cardCX, donutCY, DONUT_R_OUTER, DONUT_R_INNER, card.data, card.total, 11, LABEL_OFFSET);
         ctx.restore();
+
+        // ── Legend vertikal di bawah donut ──
+        const legStartY = donutCY + DONUT_R_OUTER + LABEL_OFFSET + 16;
+        drawLegendVertical(ctx, card.data, card.total, cardX + 20, legStartY, 11, LEG_LINE_H);
       });
 
       // ═══════════════════════════════════════════════════════════════
       // FOOTER / WATERMARK
       // ═══════════════════════════════════════════════════════════════
       ctx.fillStyle = '#d1d5db';
-      ctx.font = '10px ui-sans-serif,system-ui,sans-serif';
+      ctx.font = '11px ui-sans-serif,system-ui,sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'bottom';
       ctx.fillText(
         `BBPMP Jawa Barat  ·  ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`,
-        W - PAD, H - 6
+        W_CSS - PAD, H_CSS - 8
       );
 
       // ── Download ──────────────────────────────────────────────────
@@ -865,20 +807,19 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
         </div>
         
         <div className="p-5">
-          {/* Grid 2 kolom: Ringkasan di kiri, Per Indikator di kanan */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* ── KIRI: Ringkasan ── */}
-            <div className="border border-gray-100 rounded-xl p-4 bg-gray-50/30">
-              <h4 className="font-semibold text-gray-700 text-sm text-center mb-1">
+          {/* Grid 4 kolom sejajar: Ringkasan + 3 Indikator — semua ukuran sama */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            {/* ── Tren Keseluruhan ── */}
+            <div className="border border-gray-100 rounded-xl p-4 bg-gray-50/30 flex flex-col">
+              <h4 className="font-semibold text-gray-700 text-sm text-center mb-0.5">
                 Tren Keseluruhan
               </h4>
-              <p className="text-[10px] text-gray-400 text-center mb-3">
-                Per satuan PAUD
-              </p>
-              
+              <p className="text-[10px] text-gray-400 text-center mb-2">Per satuan PAUD</p>
+
               {pieDataSummary.length > 0 ? (
                 <>
-                  <div className="h-[240px]">
+                  <div className="h-[220px]">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -886,105 +827,80 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          label={renderCustomLabel}
+                          label={renderSmallLabel}
                           outerRadius={68}
                           innerRadius={30}
                           dataKey="value"
                           paddingAngle={3}
                         >
                           {pieDataSummary.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} stroke="#fff" strokeWidth={2} />
+                            <Cell key={`cell-summary-${index}`} fill={entry.color} stroke="#fff" strokeWidth={2} />
                           ))}
                         </Pie>
                         <Tooltip content={<CustomTooltip />} />
-                        <Legend content={renderLegend} />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
-                  
-                  <div className="flex flex-wrap justify-center gap-3 mt-2 text-xs text-gray-500">
-                    <span className="flex items-center gap-1">
-                      <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
-                      Meningkat: {sekolahMeningkat} ({totalData > 0 ? ((sekolahMeningkat/totalData)*100).toFixed(2) : 0}%)
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="inline-block w-2 h-2 rounded-full bg-gray-400"></span>
-                      Tidak Berubah: {sekolahTetap} ({totalData > 0 ? ((sekolahTetap/totalData)*100).toFixed(2) : 0}%)
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="inline-block w-2 h-2 rounded-full bg-red-500"></span>
-                      Menurun: {sekolahMenurun} ({totalData > 0 ? ((sekolahMenurun/totalData)*100).toFixed(2) : 0}%)
-                    </span>
-                  </div>
+                  <IndicatorLegend data={pieDataSummary} total={totalData} />
                 </>
               ) : (
-                <div className="h-[200px] flex items-center justify-center text-gray-400">
+                <div className="h-[220px] flex items-center justify-center text-gray-400">
                   <p className="text-sm">Tidak ada data</p>
                 </div>
               )}
             </div>
 
-            {/* ── KANAN: Per Indikator ── */}
-            <div className="border border-gray-100 rounded-xl p-4 bg-gray-50/30">
-              <h4 className="font-semibold text-gray-700 text-sm text-center mb-1">
-                Tren per Indikator
-              </h4>
-              <p className="text-[10px] text-gray-400 text-center mb-3">
-                D2, D3, dan E6
-              </p>
-              
-              <div className="grid grid-cols-3 gap-2">
-                {pieDataPerIndikator.map((indikator, idx) => (
-                  <div key={idx} className="border border-gray-200 rounded-lg p-2 bg-white">
-                    <div className="flex flex-col items-center mb-1.5">
-                      <span className="font-bold text-gray-800 text-sm">{indikator.code}</span>
-                      <span className="text-[9px] text-gray-400 text-center leading-tight">{indikator.name}</span>
-                      <span className="text-[9px] text-gray-400 mt-0.5">n={indikator.total}</span>
-                    </div>
-                    
-                    <div className="h-[110px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={indikator.data}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={renderSmallLabel}
-                            outerRadius={28}
-                            innerRadius={12}
-                            dataKey="value"
-                            paddingAngle={2}
-                          >
-                            {indikator.data.map((entry, index) => (
-                              <Cell key={`cell-${idx}-${index}`} fill={entry.color} stroke="#fff" strokeWidth={1} />
-                            ))}
-                          </Pie>
-                          <Tooltip 
-                            content={({ active, payload }) => {
-                              if (active && payload && payload.length) {
-                                const data = payload[0].payload;
-                                const percentage = indikator.total > 0 ? ((data.value / indikator.total) * 100).toFixed(2) : 0;
-                                return (
-                                  <div className="bg-white px-2 py-1.5 rounded shadow-lg border border-gray-200 text-[10px] min-w-[100px]">
-                                    <p className="font-semibold text-gray-800">{data.name}</p>
-                                    <p className="font-bold text-gray-900">{data.value}</p>
-                                    <p className="text-gray-500">{percentage}%</p>
-                                  </div>
-                                );
-                              }
-                              return null;
-                            }}
-                          />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                    
-                    <IndicatorLegend data={indikator.data} total={indikator.total} />
-                  </div>
-                ))}
+            {/* ── Per Indikator: D2, D3, E6 ── */}
+            {pieDataPerIndikator.map((indikator, idx) => (
+              <div key={idx} className="border border-gray-200 rounded-xl p-4 bg-white flex flex-col">
+                <div className="flex flex-col items-center mb-0.5">
+                  <span className="font-bold text-gray-800 text-sm">{indikator.code}</span>
+                  <span className="text-[10px] text-gray-400 text-center leading-tight">{indikator.name}</span>
+
+                </div>
+
+                <div className="h-[220px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={indikator.data}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={renderSmallLabel}
+                        outerRadius={68}
+                        innerRadius={30}
+                        dataKey="value"
+                        paddingAngle={2}
+                      >
+                        {indikator.data.map((entry, index) => (
+                          <Cell key={`cell-${idx}-${index}`} fill={entry.color} stroke="#fff" strokeWidth={1} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            const d = payload[0].payload;
+                            const percentage = indikator.total > 0 ? ((d.value / indikator.total) * 100).toFixed(2) : 0;
+                            return (
+                              <div className="bg-white px-2 py-1.5 rounded shadow-lg border border-gray-200 text-[10px] min-w-[100px]">
+                                <p className="font-semibold text-gray-800">{d.name}</p>
+                                <p className="font-bold text-gray-900">{d.value}</p>
+                                <p className="text-gray-500">{percentage}%</p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <IndicatorLegend data={indikator.data} total={indikator.total} />
               </div>
-            </div>
+            ))}
+
           </div>
         </div>
       </div>
