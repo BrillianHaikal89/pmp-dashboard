@@ -1185,16 +1185,6 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
           </div>
         </div>
       </div>
-
-      {/* ── FOOTER ── */}
-      <div className="text-xs text-gray-400 text-center space-y-1 border-t border-gray-100 pt-4">
-        <p>
-          <span className="font-medium">D2</span> = Kualitas Pembelajaran · 
-          <span className="font-medium ml-1">D3</span> = Kualitas Guru · 
-          <span className="font-medium ml-1">E6</span> = Partisipasi Orang Tua
-        </p>
-        <p>⬆ Naik · ⬇ Turun · ➡ Tetap</p>
-      </div>
     </div>
   );
 }
