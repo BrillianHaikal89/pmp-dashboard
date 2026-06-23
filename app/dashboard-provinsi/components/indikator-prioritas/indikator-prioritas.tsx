@@ -32,14 +32,46 @@ const JENJANG_OPTIONS = [
   { value: "SD",    label: "SD"    },
   { value: "SMP",   label: "SMP"   },
   { value: "SMA",   label: "SMA"   },
+  { value: "SMK",   label: "SMK"   },
+  { value: "SLB",   label: "SLB"   },
 ];
 
 function normalizeJenjang(jenis: string): string {
-  const j = (jenis ?? "").toUpperCase();
-  if (j.startsWith("TK") || j.startsWith("KB") || j.startsWith("TPA") || j.startsWith("SPS") || j.startsWith("PAUD")) return "PAUD";
-  if (j.startsWith("SD") || j.startsWith("MI"))   return "SD";
-  if (j.startsWith("SMP") || j.startsWith("MTS")) return "SMP";
-  if (j.startsWith("SMA") || j.startsWith("SMK") || j.startsWith("MA")) return "SMA";
+  const j = (jenis ?? "").toUpperCase().trim();
+  
+  // Deteksi SLB - harus di atas deteksi SD/SMP/SMA
+  if (j.includes("SLB") || 
+      j.includes("SEKOLAH LUAR BIASA") || 
+      j.includes("LUAR BIASA") ||
+      j.endsWith("LB")) {
+    return "SLB";
+  }
+  
+  // PAUD
+  if (j.startsWith("TK") || j.startsWith("KB") || j.startsWith("TPA") || 
+      j.startsWith("SPS") || j.startsWith("PAUD")) {
+    return "PAUD";
+  }
+  
+  // SD - tapi tidak boleh mengandung SLB
+  if ((j.startsWith("SD") || j.startsWith("MI")) && !j.includes("SLB")) {
+    return "SD";
+  }
+  
+  // SMP - tapi tidak boleh mengandung SLB
+  if ((j.startsWith("SMP") || j.startsWith("MTS")) && !j.includes("SLB")) {
+    return "SMP";
+  }
+  
+  // SMA - tapi tidak boleh mengandung SLB
+  if ((j.startsWith("SMA") || j.startsWith("MA")) && !j.includes("SLB")) {
+    return "SMA";
+  }
+  
+  if (j.startsWith("SMK") && !j.includes("SLB")) {
+    return "SMK";
+  }
+  
   return jenis;
 }
 
@@ -95,7 +127,6 @@ async function downloadChartAsPng(
     const hasDetail     = groupDataList.length > 0;
     const numGroups     = groupDataList.length;
 
-    // ── Hitung lebar minimal yang dibutuhkan tabel detail ─────────────
     const MIN_COL_W   = 160;
     const TABLE_PAD_H = 20;
     const minTableW   = hasDetail ? numGroups * MIN_COL_W + TABLE_PAD_H * 2 : 0;
@@ -107,7 +138,6 @@ async function downloadChartAsPng(
     const CHART_H  = svgRect.height || 300;
     const HEADER_H = 64;
 
-    // ── Ukuran tabel ──────────────────────────────────────────────────
     const maxRows    = hasDetail ? Math.max(...groupDataList.map(g => g.items.length)) : 0;
     const COL_W      = hasDetail ? Math.floor((W - 24 - TABLE_PAD_H * 2) / numGroups) : 0;
     const ROW_H      = 24;
@@ -124,11 +154,9 @@ async function downloadChartAsPng(
     const ctx = canvas.getContext("2d")!;
     ctx.scale(scale, scale);
 
-    // Background putih
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, W, TOTAL_H);
 
-    // ── Header ────────────────────────────────────────────────────────
     ctx.fillStyle = "#f8fafc";
     ctx.fillRect(0, 0, W, HEADER_H);
     ctx.strokeStyle = "#e2e8f0";
@@ -154,7 +182,6 @@ async function downloadChartAsPng(
       ctx.fillText(subtitleText, 62, 34);
     }
 
-    // ── Render SVG Chart ──────────────────────────────────────────────
     const clone = chartSvg.cloneNode(true) as SVGSVGElement;
     clone.setAttribute("width",   String(W));
     clone.setAttribute("height",  String(CHART_H));
@@ -180,13 +207,11 @@ async function downloadChartAsPng(
       img.src = svgUrl;
     });
 
-    // ── Tabel Detail Persentase ───────────────────────────────────────
     if (hasDetail) {
       const tableY = HEADER_H + CHART_H + GAP_H;
       const CARD_X = 12;
       const CARD_W = W - 24;
 
-      // Card background
       ctx.fillStyle   = "#f8fafc";
       ctx.strokeStyle = "#e2e8f0";
       ctx.lineWidth   = 1;
@@ -196,7 +221,6 @@ async function downloadChartAsPng(
       ctx.fill();
       ctx.stroke();
 
-      // Heading tabel
       ctx.fillStyle    = "#1e293b";
       ctx.font         = "bold 12px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
       ctx.textAlign    = "left";
@@ -216,7 +240,6 @@ async function downloadChartAsPng(
       groupDataList.forEach((group, gIdx) => {
         const colX = startX + gIdx * COL_W;
 
-        // Badge label kolom
         const BADGE_H = 20;
         const BADGE_W = Math.min(COL_W - 16, 80);
         const badgeX  = colX + (COL_W - BADGE_W) / 2;
@@ -237,7 +260,6 @@ async function downloadChartAsPng(
         if (labelTxt !== group.label) labelTxt += "…";
         ctx.fillText(labelTxt, colX + COL_W / 2, dataStartY + BADGE_H / 2);
 
-        // Rows per item
         const ITEM_START_Y = dataStartY + BADGE_H + 6;
         const DOT_R        = 4.5;
         const DOT_OFFSET_X = 10;
@@ -248,13 +270,11 @@ async function downloadChartAsPng(
           const rowY    = ITEM_START_Y + rIdx * ROW_H;
           const centerY = rowY + ROW_H / 2;
 
-          // Dot
           ctx.fillStyle = item.color;
           ctx.beginPath();
           ctx.arc(colX + DOT_OFFSET_X, centerY, DOT_R, 0, Math.PI * 2);
           ctx.fill();
 
-          // Nama kategori
           ctx.fillStyle    = "#475569";
           ctx.font         = "10px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
           ctx.textAlign    = "left";
@@ -266,14 +286,12 @@ async function downloadChartAsPng(
           if (nm !== item.name) nm += "…";
           ctx.fillText(nm, TEXT_X, centerY);
 
-          // Nilai persen
           ctx.fillStyle    = "#0f172a";
           ctx.font         = "bold 11px -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
           ctx.textAlign    = "right";
           ctx.fillText(`${item.pct.toFixed(2)}%`, colX + COL_W - 8, centerY);
         });
 
-        // Pemisah antar kolom
         if (gIdx < groupDataList.length - 1) {
           ctx.strokeStyle = "#e2e8f0";
           ctx.lineWidth   = 1;
@@ -287,7 +305,6 @@ async function downloadChartAsPng(
       });
     }
 
-    // ── Download ──────────────────────────────────────────────────────
     const link = document.createElement("a");
     link.download = `${filename}.png`;
     link.href     = canvas.toDataURL("image/png");
@@ -354,8 +371,6 @@ function ChartCard({ title, subtitle, children, onDownload, id }: ChartCardProps
             </div>
           </div>
 
-          {/* ── Download button ─────────────────────────────────── */}
-          {/* ── Download button ─────────────────────────────────── */}
           <button
             onClick={handleClick}
             disabled={isDownloading}
@@ -374,7 +389,6 @@ function ChartCard({ title, subtitle, children, onDownload, id }: ChartCardProps
               cursor: isDownloading ? "not-allowed" : "pointer",
             }}
           >
-            {/* Shimmer sweep — hanya saat loading */}
             {isDownloading && !isDone && (
               <span
                 className="absolute inset-0 pointer-events-none"
@@ -385,7 +399,6 @@ function ChartCard({ title, subtitle, children, onDownload, id }: ChartCardProps
               />
             )}
 
-            {/* Progress bar di bawah tombol */}
             {isDownloading && !isDone && (
               <span
                 className="absolute bottom-0 left-0 h-[2px] rounded-full bg-indigo-400"
@@ -393,9 +406,7 @@ function ChartCard({ title, subtitle, children, onDownload, id }: ChartCardProps
               />
             )}
 
-            {/* ── Konten tombol ─────────────────────────────────── */}
             {isDone ? (
-              /* State: selesai ✓ */
               <span
                 className="flex items-center gap-1.5"
                 style={{ animation: "chart-done-pop 0.35s ease-out" }}
@@ -407,7 +418,6 @@ function ChartCard({ title, subtitle, children, onDownload, id }: ChartCardProps
                 <span className="relative font-bold">Tersimpan!</span>
               </span>
             ) : isDownloading ? (
-              /* State: sedang proses */
               <span className="flex items-center gap-1.5 relative">
                 <span
                   className="block w-3 h-3 rounded-full border-2 border-indigo-200 border-t-indigo-600 flex-shrink-0"
@@ -416,7 +426,6 @@ function ChartCard({ title, subtitle, children, onDownload, id }: ChartCardProps
                 <span>Menyiapkan…</span>
               </span>
             ) : (
-              /* State: normal */
               <>
                 <Download size={12} />
                 Unduh PNG
@@ -577,6 +586,8 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       SD:   { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
       SMP:  { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
       SMA:  { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
+      SMK:  { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
+      SLB:  { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
     };
     if (!jenjangStats) return result;
     for (const [rawJenis, s] of Object.entries(jenjangStats)) {
@@ -605,12 +616,14 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         SD:    { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
         SMP:   { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
         SMA:   { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
+        SMK:   { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
+        SLB:   { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 },
       };
     }
     for (const row of sourceRows) {
       const rawJenis = row["Jenis Satuan Pendidikan"] || "";
       const norm     = normalizeJenjang(rawJenis);
-      if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) continue;
+      if (!["PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].includes(norm)) continue;
       for (const code of PRIORITY_CODES) {
         if (!result[code]) continue;
         let labelVal = "";
@@ -674,7 +687,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     if (!schoolModal) return [];
     return sourceRows.filter(row => {
       const norm   = normalizeJenjang(row["Jenis Satuan Pendidikan"] || "");
-      if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) return false;
+      if (!["PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].includes(norm)) return false;
       const status = (row["Status Satuan Pendidikan"] || "").trim();
       if (!["Negeri", "Swasta"].includes(status)) return false;
       if (schoolModal.filterJenjang !== "Semua" && norm !== schoolModal.filterJenjang) return false;
@@ -848,8 +861,8 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     [indikatorMenurunMeningkat]
   );
 
-  const MMT_JENJANG_OPTIONS = ["Semua", "PAUD", "SD", "SMP", "SMA"] as const;
-  const MMT_STATUS_OPTIONS  = ["Semua", "Negeri", "Swasta"]          as const;
+  const MMT_JENJANG_OPTIONS = ["Semua", "PAUD", "SD", "SMP", "SMA", "SMK", "SLB"] as const;
+  const MMT_STATUS_OPTIONS  = ["Semua", "Negeri", "Swasta"]                        as const;
 
   function classifyPerubahan(val: string): "Naik" | "Turun" | "Tidak Berubah" | "Tidak Tersedia" {
     const v = (val ?? "").toLowerCase();
@@ -882,7 +895,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
 
   const mmtFiltered = useMemo(() => mmtData.filter(row => {
     const norm   = normalizeJenjang(row["Jenis Satuan Pendidikan"] || "");
-    if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) return false;
+    if (!["PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].includes(norm)) return false;
     const status = (row["Status Satuan Pendidikan"] || "").trim();
     if (!["Negeri", "Swasta"].includes(status)) return false;
     if (filterJenjangMMT !== "Semua" && norm   !== filterJenjangMMT) return false;
@@ -906,6 +919,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     const groups: Record<string, { naik: number; turun: number; tetap: number; total: number }> = {};
     for (const row of mmtFiltered) {
       const norm = normalizeJenjang(row["Jenis Satuan Pendidikan"] || "");
+      if (!["PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].includes(norm)) continue;
       if (!groups[norm]) groups[norm] = { naik: 0, turun: 0, tetap: 0, total: 0 };
       const cls = classifyPerubahan(row[perubahanKey] || "");
       if (cls === "Naik")  groups[norm].naik++;
@@ -935,7 +949,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     return ttData
       .filter(row => {
         const norm   = normalizeJenjang(row["Jenis Satuan Pendidikan"] || "");
-        if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) return false;
+        if (!["PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].includes(norm)) return false;
         const status = (row["Status Satuan Pendidikan"] || "").trim();
         if (!["Negeri", "Swasta"].includes(status)) return false;
         if (filterJenjangTT !== "Semua" && norm   !== filterJenjangTT) return false;
@@ -979,7 +993,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     for (const code of PRIORITY_CODES_TT) result[code] = { meningkat: 0, menurun: 0, tetap: 0, tidakTersedia: 0, total: 0 };
     for (const rawRow of ttData) {
       const norm   = normalizeJenjang(rawRow["Jenis Satuan Pendidikan"] || "");
-      if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) continue;
+      if (!["PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].includes(norm)) continue;
       const status = (rawRow["Status Satuan Pendidikan"] || "").trim();
       if (!["Negeri", "Swasta"].includes(status)) continue;
       if (filterJenjangTT !== "Semua" && norm   !== filterJenjangTT) continue;
@@ -1027,7 +1041,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
     const arahKey = `${code} - Perubahan dari Tahun Lalu`;
     return ttData.filter(row => {
       const norm   = normalizeJenjang(row["Jenis Satuan Pendidikan"] || "");
-      if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) return false;
+      if (!["PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].includes(norm)) return false;
       const status = (row["Status Satuan Pendidikan"] || "").trim();
       if (!["Negeri", "Swasta"].includes(status)) return false;
       if (filterJenjangTT !== "Semua" && norm   !== filterJenjangTT) return false;
@@ -1119,7 +1133,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       };
     }).filter(Boolean) as Record<string, unknown>[];
 
-    const jenjangData = ["PAUD", "SD", "SMP", "SMA"].map(jj => {
+    const jenjangData = ["PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].map(jj => {
       const js = normalizedJenjangStats[jj] || { baikTinggi: 0, sedang: 0, kurangRendah: 0, tidakTersedia: 0, total: 0 };
       const total = js.total || 0;
       return {
@@ -1139,7 +1153,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       const rows = sourceRows
         .filter(row => {
           const norm   = normalizeJenjang(row["Jenis Satuan Pendidikan"] || "");
-          if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) return false;
+          if (!["PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].includes(norm)) return false;
           const status = (row["Status Satuan Pendidikan"] || "").trim();
           if (!["Negeri", "Swasta"].includes(status)) return false;
           if (filterJenjangRekap !== "Semua" && norm !== filterJenjangRekap) return false;
@@ -1195,7 +1209,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
       const rows: Record<string, unknown>[] = [];
       for (const rawRow of ttData) {
         const norm   = normalizeJenjang(rawRow["Jenis Satuan Pendidikan"] || "");
-        if (!["PAUD", "SD", "SMP", "SMA"].includes(norm)) continue;
+        if (!["PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].includes(norm)) continue;
         const status = (rawRow["Status Satuan Pendidikan"] || "").trim();
         if (!["Negeri", "Swasta"].includes(status)) continue;
         if (filterJenjangTT !== "Semua" && norm   !== filterJenjangTT) continue;
@@ -1268,7 +1282,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
               <Filter size={11} /> Jenjang
             </span>
-            <div className="flex items-center bg-slate-100 rounded-xl p-0.5 gap-0.5">
+            <div className="flex items-center bg-slate-100 rounded-xl p-0.5 gap-0.5 flex-wrap">
               {JENJANG_OPTIONS.map(opt => (
                 <button
                   key={opt.value}
@@ -1716,7 +1730,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
         <div className="flex flex-wrap gap-4 items-center mb-5 p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
           {[
             { label: "Indikator",    state: filterIndikatorTT, setter: setFilterIndikatorTT, options: [{ v: "Semua", l: "Semua Indikator" }, ...PRIORITY_CODES_TT.map(c => ({ v: c, l: c }))] },
-            { label: "Jenis Satdik", state: filterJenjangTT,   setter: setFilterJenjangTT,   options: ["Semua", "PAUD", "SD", "SMP", "SMA"].map(o => ({ v: o, l: o })) },
+            { label: "Jenis Satdik", state: filterJenjangTT,   setter: setFilterJenjangTT,   options: ["Semua", "PAUD", "SD", "SMP", "SMA", "SMK", "SLB"].map(o => ({ v: o, l: o })) },
             { label: "Status",       state: filterStatusTT,    setter: setFilterStatusTT,    options: ["Semua", "Negeri", "Swasta"].map(o => ({ v: o, l: o })) },
           ].map(({ label, state, setter, options }) => (
             <div key={label} className="flex items-center gap-2">
