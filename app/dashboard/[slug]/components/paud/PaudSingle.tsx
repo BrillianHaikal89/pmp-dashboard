@@ -1,7 +1,7 @@
 // components/paud/PaudSingle.tsx
 import { Fragment, useState, useMemo, useRef, useEffect } from "react";
 import { Search, ChevronLeft, ChevronRight, Baby, School, Award, ChevronDown, X } from "lucide-react";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LabelList } from "recharts";
 import { KpiCard } from "../common/KpiCard";
 
 // ── Tipe data sesuai field JSON terbaru ──────────────────────────────────────
@@ -197,12 +197,33 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   // Chart hanya untuk D2, D3, E6
-  const chartData = INDIKATOR.map(ind => ({
-    name: ind.code,
-    baik: filtered.filter(d => d[ind.key] === "Baik").length,
-    sedang: filtered.filter(d => d[ind.key] === "Sedang").length,
-    kurang: filtered.filter(d => d[ind.key] === "Kurang").length,
-  }));
+  const chartData = INDIKATOR.map(ind => {
+    const baik   = filtered.filter(d => d[ind.key] === "Baik").length;
+    const sedang = filtered.filter(d => d[ind.key] === "Sedang").length;
+    const kurang = filtered.filter(d => d[ind.key] === "Kurang").length;
+    const total  = baik + sedang + kurang;
+    return { name: ind.code, baik, sedang, kurang, total };
+  });
+
+  // Custom label: tampilkan "N (xx%)" di atas setiap bar
+  const renderBarLabel = (props: any) => {
+    const { x, y, width, value, index } = props;
+    const total = chartData[index]?.total ?? 0;
+    if (!value || total === 0) return null;
+    const pct = ((value / total) * 100).toFixed(1);
+    return (
+      <text
+        x={x + width / 2}
+        y={y - 4}
+        textAnchor="middle"
+        fontSize={10}
+        fontWeight={600}
+        fill="#374151"
+      >
+        {`${pct}%`}
+      </text>
+    );
+  };
 
   // KPI: proporsi "Baik" dari D2, D3, E6
   const totalNilai = filtered.length * INDIKATOR.length;
@@ -294,16 +315,22 @@ export function PaudSingle({ data, tahun }: { data: PaudRow[]; tahun: string }) 
           Indikator D.2, D.3 dan E.6
           {activeFilterCount > 0 ? " · Data sesuai filter aktif" : ""}
         </p>
-        <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={chartData}>
+        <ResponsiveContainer width="100%" height={280}>
+          <BarChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="name" interval={0} tick={{ fontSize: 11 }} />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="baik" name="Baik" fill="#22c55e" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="sedang" name="Sedang" fill="#f59e0b" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="kurang" name="Kurang" fill="#ef4444" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="baik" name="Baik" fill="#22c55e" radius={[4, 4, 0, 0]}>
+              <LabelList dataKey="baik" content={renderBarLabel} />
+            </Bar>
+            <Bar dataKey="sedang" name="Sedang" fill="#f59e0b" radius={[4, 4, 0, 0]}>
+              <LabelList dataKey="sedang" content={renderBarLabel} />
+            </Bar>
+            <Bar dataKey="kurang" name="Kurang" fill="#ef4444" radius={[4, 4, 0, 0]}>
+              <LabelList dataKey="kurang" content={renderBarLabel} />
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
