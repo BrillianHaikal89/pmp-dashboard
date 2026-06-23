@@ -526,6 +526,9 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
 // ── Komponen Utama ────────────────────────────────────────────────────────────
 export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: string }) {
   const [filterKec, setFilterKec] = useState("Semua");
+  const [filterJenis, setFilterJenis] = useState<string[]>([]);
+  const [jenisDropdownOpenGrafik, setJenisDropdownOpenGrafik] = useState(false);
+  const [jenisDropdownOpenTabel, setJenisDropdownOpenTabel] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 10;
@@ -537,10 +540,25 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
     [data]
   );
 
+  const jenisOptions = useMemo(
+    () => Array.from(new Set(data.map(d => d.jenis))).filter(Boolean).sort(),
+    [data]
+  );
+
+  // Inisialisasi filterJenis ke semua jenis saat data pertama kali tersedia
+  React.useEffect(() => {
+    if (jenisOptions.length > 0 && filterJenis.length === 0) {
+      setFilterJenis(jenisOptions);
+    }
+  }, [jenisOptions]);
+
   const filteredData = useMemo(() => {
     let result = data;
     if (filterKec !== "Semua") {
       result = result.filter(d => d.kecamatan === filterKec);
+    }
+    if (filterJenis.length > 0 && filterJenis.length < jenisOptions.length) {
+      result = result.filter(d => filterJenis.includes(d.jenis));
     }
     if (search) {
       const q = search.toLowerCase();
@@ -551,7 +569,19 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
       );
     }
     return result;
-  }, [data, filterKec, search]);
+  }, [data, filterKec, filterJenis, jenisOptions.length, search]);
+
+  const toggleJenis = (jenis: string) => {
+    setFilterJenis(prev =>
+      prev.includes(jenis) ? prev.filter(j => j !== jenis) : [...prev, jenis]
+    );
+    setPage(1);
+  };
+
+  const toggleSemuaJenis = () => {
+    setFilterJenis(prev => prev.length === jenisOptions.length ? [] : [...jenisOptions]);
+    setPage(1);
+  };
 
   const totalPages = Math.max(1, Math.ceil(filteredData.length / PAGE_SIZE));
   const paginatedData = filteredData.slice(
@@ -794,7 +824,59 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
               Tren keseluruhan (kiri) dan per indikator (kanan)
             </p>
           </div>
-          <DownloadChartButton
+
+          <div className="flex items-center gap-2 flex-wrap justify-end">
+            {/* Filter Jenjang (multi-select dropdown) */}
+            <div className="relative">
+              <button
+                onClick={() => setJenisDropdownOpenGrafik(v => !v)}
+                className="inline-flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:bg-gray-50 transition-colors shadow-sm"
+              >
+                <Filter size={14} className="text-rose-400" />
+                <span className="text-gray-700 text-xs font-medium">
+                  Jenjang
+                  {filterJenis.length > 0 && filterJenis.length < jenisOptions.length
+                    ? `: ${filterJenis.length} dipilih`
+                    : filterJenis.length === 0
+                    ? ": Tidak ada"
+                    : ": Semua"}
+                </span>
+                <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${jenisDropdownOpenGrafik ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </button>
+
+              {jenisDropdownOpenGrafik && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setJenisDropdownOpenGrafik(false)} />
+                  <div className="absolute right-0 mt-1.5 z-20 bg-white border border-gray-200 rounded-xl shadow-lg min-w-[200px] py-1.5 overflow-hidden">
+                    {/* Semua / Hapus semua */}
+                    <button
+                      onClick={toggleSemuaJenis}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-gray-50 text-xs font-semibold text-gray-600 border-b border-gray-100"
+                    >
+                      <span className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${filterJenis.length === jenisOptions.length ? 'bg-rose-500 border-rose-500' : 'border-gray-300'}`}>
+                        {filterJenis.length === jenisOptions.length && <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                        {filterJenis.length > 0 && filterJenis.length < jenisOptions.length && <span className="w-2 h-0.5 bg-rose-500 block" />}
+                      </span>
+                      Pilih Semua
+                    </button>
+                    {jenisOptions.map(jenis => (
+                      <button
+                        key={jenis}
+                        onClick={() => toggleJenis(jenis)}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-gray-50 text-xs text-gray-700"
+                      >
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${filterJenis.includes(jenis) ? 'bg-rose-500 border-rose-500' : 'border-gray-300'}`}>
+                          {filterJenis.includes(jenis) && <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                        </span>
+                        {jenis}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <DownloadChartButton
             fileName="tren-paud-lengkap"
             pieDataSummary={pieDataSummary}
             pieDataPerIndikator={pieDataPerIndikator}
@@ -804,6 +886,7 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
             totalData={totalData}
             tahun={tahun}
           />
+          </div>{/* end flex items-center gap-2 */}
         </div>
         
         <div className="p-5">
@@ -919,6 +1002,7 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
                 onChange={e => { setSearch(e.target.value); setPage(1); }}
               />
             </div>
+            {/* Filter Kecamatan */}
             <div className="relative min-w-[180px]">
               <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <select
@@ -931,7 +1015,70 @@ export function PaudBanding({ data = [], tahun }: { data: PaudRow[]; tahun: stri
                 ))}
               </select>
             </div>
+            {/* Filter Jenjang (tabel) */}
+            <div className="relative">
+              <button
+                onClick={() => setJenisDropdownOpenTabel(v => !v)}
+                className="inline-flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:bg-gray-50 transition-colors w-full sm:w-auto"
+              >
+                <School size={14} className="text-rose-400 flex-shrink-0" />
+                <span className="text-gray-700 text-sm">
+                  Jenjang{filterJenis.length > 0 && filterJenis.length < jenisOptions.length
+                    ? ` (${filterJenis.length})`
+                    : filterJenis.length === 0
+                    ? " —"
+                    : ""}
+                </span>
+                <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ml-auto ${jenisDropdownOpenTabel ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </button>
+
+              {jenisDropdownOpenTabel && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setJenisDropdownOpenTabel(false)} />
+                  <div className="absolute right-0 mt-1.5 z-20 bg-white border border-gray-200 rounded-xl shadow-lg min-w-[200px] py-1.5 overflow-hidden">
+                    <button
+                      onClick={toggleSemuaJenis}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-gray-50 text-xs font-semibold text-gray-600 border-b border-gray-100"
+                    >
+                      <span className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${filterJenis.length === jenisOptions.length ? 'bg-rose-500 border-rose-500' : 'border-gray-300'}`}>
+                        {filterJenis.length === jenisOptions.length && <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                        {filterJenis.length > 0 && filterJenis.length < jenisOptions.length && <span className="w-2 h-0.5 bg-rose-500 block" />}
+                      </span>
+                      Pilih Semua
+                    </button>
+                    {jenisOptions.map(jenis => (
+                      <button
+                        key={jenis}
+                        onClick={() => toggleJenis(jenis)}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-gray-50 text-xs text-gray-700"
+                      >
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${filterJenis.includes(jenis) ? 'bg-rose-500 border-rose-500' : 'border-gray-300'}`}>
+                          {filterJenis.includes(jenis) && <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                        </span>
+                        {jenis}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
+          {/* Active jenis filter chips */}
+          {filterJenis.length > 0 && filterJenis.length < jenisOptions.length && (
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {filterJenis.map(j => (
+                <span key={j} className="inline-flex items-center gap-1 px-2 py-0.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-full font-medium">
+                  {j}
+                  <button onClick={() => toggleJenis(j)} className="hover:text-rose-900">
+                    <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </span>
+              ))}
+              <button onClick={() => setFilterJenis([...jenisOptions])} className="text-xs text-gray-400 hover:text-rose-500 underline ml-1">
+                Pilih semua
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Table */}

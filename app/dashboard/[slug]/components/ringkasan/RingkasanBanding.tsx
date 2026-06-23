@@ -33,7 +33,7 @@ export function RingkasanBanding({ d24, d25 }: { d24: DashData; d25: DashData })
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Perbandingan 2024 vs 2025</h1>
-        <p className="text-slate-500 text-sm mt-1">{d24.tahun || "Kab. Bandung"} — Analisis perubahan antar tahun</p>
+        <p className="text-slate-500 text-sm mt-1">Analisis perubahan antar tahun</p>
       </div>
 
       <SpmCompare d24={d24} d25={d25} />
