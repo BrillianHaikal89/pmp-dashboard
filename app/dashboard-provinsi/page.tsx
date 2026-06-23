@@ -99,17 +99,22 @@ interface RekapCapaian {
   [key: string]: string | number | undefined;
 }
 // ─── Constants ────────────────────────────────────────────────────────────────
-const PRIORITY_CODES = ["A.1", "A.2", "A.3", "D.1", "D.3", "D.4", "D.8", "D.10"];
+// ─── Constants ────────────────────────────────────────────────────────────────
+const PRIORITY_CODES = ["A.1", "A.2", "A.3", "D.1", "D.2", "D.3", "D.4", "D.6", "D.8", "D.10", "E.1", "E.5"];
 
 const PRIORITY_INDICATORS = [
-  { code: "A.1",  fullName: "Literasi", description: "Kemampuan memahami dan menggunakan informasi" },
-  { code: "A.2",  fullName: "Numerasi", description: "Kemampuan bernalar menggunakan matematika" },
-  { code: "A.3",  fullName: "Karakter", description: "Penguatan profil pelajar Pancasila" },
-  { code: "D.1",  fullName: "Kualitas Pembelajaran", description: "Partisipasi dalam pembelajaran" },
-  { code: "D.3",  fullName: "Kepemimpinan Instruksional", description: "Partisipasi dalam kegiatan sekolah" },
-  { code: "D.4",  fullName: "Iklim Keamanan", description: "Lingkungan belajar yang aman" },
-  { code: "D.8",  fullName: "Iklim Kebinekaan", description: "Penghargaan terhadap keberagaman" },
+  { code: "A.1", fullName: "Literasi", description: "Kemampuan memahami dan menggunakan informasi" },
+  { code: "A.2", fullName: "Numerasi", description: "Kemampuan bernalar menggunakan matematika" },
+  { code: "A.3", fullName: "Karakter", description: "Penguatan profil pelajar Pancasila" },
+  { code: "D.1", fullName: "Kualitas Pembelajaran", description: "Partisipasi dalam pembelajaran" },
+  { code: "D.2", fullName: "Refleksi dan perbaikan pembelajaran oleh guru", description: "Evaluasi dan peningkatan kualitas pembelajaran" },
+  { code: "D.3", fullName: "Kepemimpinan Instruksional", description: "Partisipasi dalam kegiatan sekolah" },
+  { code: "D.4", fullName: "Iklim Keamanan", description: "Lingkungan belajar yang aman" },
+  { code: "D.6", fullName: "Iklim Kesetaraan Gender", description: "Kesetaraan dan keadilan gender dalam pendidikan" },
+  { code: "D.8", fullName: "Iklim Kebinekaan", description: "Penghargaan terhadap keberagaman" },
   { code: "D.10", fullName: "Iklim Inklusifitas", description: "Keterlibatan semua pihak" },
+  { code: "E.1", fullName: "Partisipasi warga satuan Pendidikan", description: "Keterlibatan masyarakat dalam pendidikan" },
+  { code: "E.5", fullName: "Program dan kebijakan satuan pendidikan", description: "Program dan kebijakan satuan pendidikan" },
 ];
 
 function isPriorityIndicator(no: string, indikator?: string): boolean {
@@ -129,11 +134,11 @@ function isPriorityIndicator(no: string, indikator?: string): boolean {
 }
 
 const LABEL_STYLE: Record<string, { bg: string; text: string; border: string }> = {
-  Tinggi:  { bg: "#dcfce7", text: "#166534", border: "#bbf7d0" },
-  Baik:    { bg: "#dbeafe", text: "#1e40af", border: "#bfdbfe" },
-  Sedang:  { bg: "#fef9c3", text: "#854d0e", border: "#fef08a" },
-  Rendah:  { bg: "#fee2e2", text: "#991b1b", border: "#fecaca" },
-  Kurang:  { bg: "#ffedd5", text: "#9a3412", border: "#fed7aa" },
+  Tinggi: { bg: "#dcfce7", text: "#166534", border: "#bbf7d0" },
+  Baik: { bg: "#dbeafe", text: "#1e40af", border: "#bfdbfe" },
+  Sedang: { bg: "#fef9c3", text: "#854d0e", border: "#fef08a" },
+  Rendah: { bg: "#fee2e2", text: "#991b1b", border: "#fecaca" },
+  Kurang: { bg: "#ffedd5", text: "#9a3412", border: "#fed7aa" },
   "Capaian Tidak Tersedia": { bg: "#f1f5f9", text: "#64748b", border: "#e2e8f0" },
 };
 
@@ -315,7 +320,7 @@ const MOCK_DATA_2024 = {
 function LabelBadge({ label }: { label: string }) {
   const clean = (label ?? "").trim();
   const style = LABEL_STYLE[clean] ?? LABEL_STYLE["Capaian Tidak Tersedia"];
-  
+
   return (
     <span
       className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap"
@@ -447,11 +452,10 @@ function PaginationBar({ page, total, onChange }: { page: number; total: number;
           <button
             key={p}
             onClick={() => onChange(p)}
-            className={`px-3 py-1.5 text-xs rounded-lg border transition font-medium shadow-sm ${
-              p === page
+            className={`px-3 py-1.5 text-xs rounded-lg border transition font-medium shadow-sm ${p === page
                 ? "bg-blue-600 text-white border-blue-600 shadow-blue-200"
                 : "border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-700"
-            }`}
+              }`}
           >
             {p}
           </button>
@@ -507,7 +511,7 @@ function DashboardCard({ title, value, icon, color, trend, trendValue, subtitle 
 }) {
   const trendIcon = trend === "none" ? null : trend === "up" ? <TrendingUp size={12} /> : trend === "down" ? <TrendingDown size={12} /> : <Minus size={12} />;
   const trendColor = trend === "up" ? "text-emerald-600 bg-emerald-50" : trend === "down" ? "text-red-600 bg-red-50" : "text-slate-500 bg-slate-100";
-  
+
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 group">
       <div className="flex items-start justify-between mb-4">
@@ -601,11 +605,10 @@ function StackedBarChart({
         <div className="flex gap-1.5 flex-wrap">
           {jenjangList.map(j => (
             <button key={j} onClick={() => onJenjangChange(j)}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all border ${
-                selectedJenjang === j
+              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all border ${selectedJenjang === j
                   ? "bg-blue-600 text-white border-blue-600"
                   : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
-              }`}>{j}</button>
+                }`}>{j}</button>
           ))}
         </div>
       </div>
@@ -737,11 +740,10 @@ function TrendChart({
         <div className="flex gap-1.5 flex-wrap">
           {jenjangList.map(j => (
             <button key={j} onClick={() => onJenjangChange(j)}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all border ${
-                selectedJenjang === j
+              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all border ${selectedJenjang === j
                   ? "bg-blue-600 text-white border-blue-600"
                   : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
-              }`}>{j}</button>
+                }`}>{j}</button>
           ))}
         </div>
       </div>
@@ -808,7 +810,7 @@ function TrendChart({
 }
 
 export default function DashboardProvinsiPage() {
-  const [tahun, setTahun]         = useState<"2024" | "2025">("2024");
+  const [tahun, setTahun] = useState<"2024" | "2025">("2024");
   const [activeTab, setActiveTab] = useState<TabId>("provinsi");
   const [isTabSwitching, setIsTabSwitching] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -818,19 +820,19 @@ export default function DashboardProvinsiPage() {
   const [filterCapaian, setFilterCapaian] = useState<string>("Semua");
   const [filterStatus, setFilterStatus] = useState<string>("Semua");
 
-  const [ringkasan,    setRingkasan]    = useState<RingkasanCapaian[]>([]);
-  const [capaianProv,  setCapaianProv]  = useState<CapaianProvinsi[]>([]);
+  const [ringkasan, setRingkasan] = useState<RingkasanCapaian[]>([]);
+  const [capaianProv, setCapaianProv] = useState<CapaianProvinsi[]>([]);
   const [kabkotDasmen, setKabkotDasmen] = useState<CapaianKabkot[]>([]);
-  const [kabkotPaud,   setKabkotPaud]   = useState<CapaianKabkot[]>([]);
+  const [kabkotPaud, setKabkotPaud] = useState<CapaianKabkot[]>([]);
   const [satdikDasmen, setSatdikDasmen] = useState<CapaianSatdik[]>([]);
-  const [satdikPaud,   setSatdikPaud]   = useState<CapaianSatdik[]>([]);
+  const [satdikPaud, setSatdikPaud] = useState<CapaianSatdik[]>([]);
   const [rekapCapaian, setRekapCapaian] = useState<RekapCapaian[]>([]);
   const [indikatorMenurunMeningkat, setIndikatorMenurunMeningkat] = useState<Record<string, string>[]>([]);
   const [indikatorTertinggiTerendah, setIndikatorTertinggiTerendah] = useState<IndikatorTertinggiTerendah[]>([]);
   const [ttTahunSumber, setTtTahunSumber] = useState<string | null>(null);
   const [spmValue, setSpmValue] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const [sKD, setSKD] = useState(""); const [fKDJ, setFKDJ] = useState("Semua"); const [fKDS, setFKDS] = useState("Semua");
   const [sKP, setSKP] = useState(""); const [fKPS, setFKPS] = useState("Semua");
@@ -840,8 +842,8 @@ export default function DashboardProvinsiPage() {
   const [pageSP, setPageSP] = useState(1);
 
   // Chart filter states
-  const [chartIndJenjang,  setChartIndJenjang]  = useState("Semua");
-  const [chartApxJenjang,  setChartApxJenjang]  = useState("Semua");
+  const [chartIndJenjang, setChartIndJenjang] = useState("Semua");
+  const [chartApxJenjang, setChartApxJenjang] = useState("Semua");
   const [chartTrendIndJenjang, setChartTrendIndJenjang] = useState("Semua");
   const [chartTrendApxJenjang, setChartTrendApxJenjang] = useState("Semua");
 
@@ -871,7 +873,7 @@ export default function DashboardProvinsiPage() {
     setError(null);
     setIndikatorTertinggiTerendah([]); // reset saat ganti tahun
     setTtTahunSumber(null);
-    
+
     const loadData = async () => {
       try {
         const files = [
@@ -883,9 +885,9 @@ export default function DashboardProvinsiPage() {
           '6_capaian_satdik_paud.json',
           'rekap_capaian.json',
         ];
-        
+
         const results = await Promise.allSettled(
-          files.map(file => 
+          files.map(file =>
             fetch(`/dataProvinsi/${tahun}/${file}`)
               .then(async res => {
                 if (!res.ok) {
@@ -929,7 +931,7 @@ export default function DashboardProvinsiPage() {
           satdikPaudResult,
           rekapCapaianResult,
         ] = results;
-        
+
         const hasRealData = results.some(r => r.status === 'fulfilled' && Array.isArray(r.value) && r.value.length > 0);
 
         // Load 10_indikator_tertinggi_terendah — dilakukan setelah hasRealData check
@@ -975,13 +977,13 @@ export default function DashboardProvinsiPage() {
           }
         }
         setIndikatorTertinggiTerendah(ttData);
-        
+
         if (!hasRealData && !useMockData) {
           setError(`Tidak ada data ditemukan untuk tahun ${tahun}. Silakan periksa file JSON di folder public/dataProvinsi/${tahun}/ atau gunakan data contoh.`);
           setLoading(false);
           return;
         }
-        
+
         if (hasRealData) {
           setRingkasan(ringkasanResult.status === 'fulfilled' ? ringkasanResult.value : []);
           // Ambil nilai SPM dari elemen pertama array (objek dengan key "SPM")
@@ -995,13 +997,13 @@ export default function DashboardProvinsiPage() {
           setKabkotDasmen(kabkotDasmenResult.status === 'fulfilled' ? kabkotDasmenResult.value : []);
           setKabkotPaud(kabkotPaudResult.status === 'fulfilled' ? kabkotPaudResult.value : []);
           setSatdikDasmen(
-            satdikDasmenResult.status === 'fulfilled' 
-              ? filterNonReligiousSatdik(satdikDasmenResult.value) 
+            satdikDasmenResult.status === 'fulfilled'
+              ? filterNonReligiousSatdik(satdikDasmenResult.value)
               : []
           );
           setSatdikPaud(
-            satdikPaudResult.status === 'fulfilled' 
-              ? filterNonReligiousSatdik(satdikPaudResult.value) 
+            satdikPaudResult.status === 'fulfilled'
+              ? filterNonReligiousSatdik(satdikPaudResult.value)
               : []
           );
           setRekapCapaian(rekapCapaianResult?.status === 'fulfilled' ? rekapCapaianResult.value : []);
@@ -1014,11 +1016,11 @@ export default function DashboardProvinsiPage() {
           setSatdikDasmen(MOCK_DATA_2024.satdikDasmen);
           setSatdikPaud(MOCK_DATA_2024.satdikPaud);
         }
-        
+
         setLoading(false);
       } catch (err) {
         console.error('Error loading data:', err);
-        
+
         if (useMockData) {
           // Fallback to mock data
           setRingkasan(MOCK_DATA_2024.ringkasan);
@@ -1034,9 +1036,9 @@ export default function DashboardProvinsiPage() {
         }
       }
     };
-    
+
     loadData();
-    
+
     setPageSD(1);
     setPageSP(1);
   }, [tahun, useMockData]);
@@ -1326,8 +1328,10 @@ export default function DashboardProvinsiPage() {
   // Color palette for indikator keys
   const IND_COLORS: Record<string, string> = {
     "A.1": "#3b82f6", "A.2": "#8b5cf6", "A.3": "#ec4899",
-    "D.1": "#f59e0b", "D.3": "#10b981", "D.4": "#ef4444",
+    "D.1": "#f59e0b", "D.2": "#14b8a6", "D.3": "#10b981",
+    "D.4": "#ef4444", "D.6": "#8b5cf6",
     "D.8": "#06b6d4", "D.10": "#f97316",
+    "E.1": "#6366f1", "E.5": "#f472b6",
   };
   const getIndColor = (key: string) => {
     const matched = PRIORITY_CODES.find(c => key.toUpperCase().startsWith(c.toUpperCase() + "_"));
@@ -1377,9 +1381,9 @@ export default function DashboardProvinsiPage() {
   const pagedSP = fSP.slice((pageSP - 1) * PAGE_SIZE, pageSP * PAGE_SIZE);
 
   const iKD = useMemo(() => kabkotDasmen[0] ? Object.keys(kabkotDasmen[0]).filter(k => k.includes("_Label Capaian")) : [], [kabkotDasmen]);
-  const iKP = useMemo(() => kabkotPaud[0]   ? Object.keys(kabkotPaud[0]).filter(k => k.includes("_Label Capaian"))   : [], [kabkotPaud]);
+  const iKP = useMemo(() => kabkotPaud[0] ? Object.keys(kabkotPaud[0]).filter(k => k.includes("_Label Capaian")) : [], [kabkotPaud]);
   const iSD = useMemo(() => satdikDasmen[0] ? Object.keys(satdikDasmen[0]).filter(k => k.includes("_Label Capaian")) : [], [satdikDasmen]);
-  const iSP = useMemo(() => satdikPaud[0]   ? Object.keys(satdikPaud[0]).filter(k => k.includes("_Label Capaian"))   : [], [satdikPaud]);
+  const iSP = useMemo(() => satdikPaud[0] ? Object.keys(satdikPaud[0]).filter(k => k.includes("_Label Capaian")) : [], [satdikPaud]);
 
   const jenjangList = useMemo(() => [...new Set(ringkasan.map(r => r.Jenjang))], [ringkasan]);
 
@@ -1438,8 +1442,8 @@ export default function DashboardProvinsiPage() {
   function SkorBadge({ skor }: { skor: number | null }) {
     if (skor === null) return <span className="text-slate-400 text-xs">–</span>;
     const color = skor >= 3.5 ? "#166534" : skor >= 2.5 ? "#1e40af" : skor >= 1.5 ? "#854d0e" : "#991b1b";
-    const bg    = skor >= 3.5 ? "#dcfce7" : skor >= 2.5 ? "#dbeafe" : skor >= 1.5 ? "#fef9c3" : "#fee2e2";
-    const border= skor >= 3.5 ? "#bbf7d0" : skor >= 2.5 ? "#bfdbfe" : skor >= 1.5 ? "#fef08a" : "#fecaca";
+    const bg = skor >= 3.5 ? "#dcfce7" : skor >= 2.5 ? "#dbeafe" : skor >= 1.5 ? "#fef9c3" : "#fee2e2";
+    const border = skor >= 3.5 ? "#bbf7d0" : skor >= 2.5 ? "#bfdbfe" : skor >= 1.5 ? "#fef08a" : "#fecaca";
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap"
         style={{ background: bg, color, border: `1px solid ${border}` }}>
@@ -1478,10 +1482,10 @@ export default function DashboardProvinsiPage() {
     const nilaiKeys = indKeys.map(k => k.replace("_Label Capaian", "_Nilai Capaian")).filter(k => row[k] !== undefined);
     const nilaiPrevKeys = indKeys.map(k => k.replace("_Label Capaian", "_Nilai Capaian 2024")).filter(k => row[k] !== undefined);
     if (nilaiPrevKeys.length > 0 && nilaiKeys.length > 0) {
-      const cur  = nilaiKeys.map(k => parseFloat(row[k]) || 0).filter(v => v > 0);
+      const cur = nilaiKeys.map(k => parseFloat(row[k]) || 0).filter(v => v > 0);
       const prev = nilaiPrevKeys.map(k => parseFloat(row[k]) || 0).filter(v => v > 0);
       if (cur.length > 0 && prev.length > 0) {
-        const avgCur  = cur.reduce((a, b) => a + b, 0) / cur.length;
+        const avgCur = cur.reduce((a, b) => a + b, 0) / cur.length;
         const avgPrev = prev.reduce((a, b) => a + b, 0) / prev.length;
         if (avgCur > avgPrev + 0.1) return "naik";
         if (avgCur < avgPrev - 0.1) return "turun";
@@ -1623,13 +1627,13 @@ export default function DashboardProvinsiPage() {
   function SatdikTable({ allRows, paged, indKeys, page, totalPages, onPage,
     search, onSearch, jenisList, jenisSel, onJenis,
     statusList, statusSel, onStatus, kabList, kabSel, onKab }: {
-    allRows: CapaianSatdik[]; paged: CapaianSatdik[]; indKeys: string[];
-    page: number; totalPages: number; onPage: (p: number) => void;
-    search: string; onSearch: (v: string) => void;
-    jenisList: string[]; jenisSel: string; onJenis: (v: string) => void;
-    statusList: string[]; statusSel: string; onStatus: (v: string) => void;
-    kabList: string[]; kabSel: string; onKab: (v: string) => void;
-  }) {
+      allRows: CapaianSatdik[]; paged: CapaianSatdik[]; indKeys: string[];
+      page: number; totalPages: number; onPage: (p: number) => void;
+      search: string; onSearch: (v: string) => void;
+      jenisList: string[]; jenisSel: string; onJenis: (v: string) => void;
+      statusList: string[]; statusSel: string; onStatus: (v: string) => void;
+      kabList: string[]; kabSel: string; onKab: (v: string) => void;
+    }) {
     const codes = indKeys.map(k => k.replace("_Label Capaian", ""));
     return (
       <div className="space-y-4">
@@ -1735,8 +1739,8 @@ export default function DashboardProvinsiPage() {
                   style={{
                     background: schoolModal.labelGroup === "Baik / Tinggi" ? "#22c55e"
                       : schoolModal.labelGroup === "Sedang" ? "#f59e0b"
-                      : schoolModal.labelGroup === "Kurang / Rendah" ? "#ef4444"
-                      : "#94a3b8"
+                        : schoolModal.labelGroup === "Kurang / Rendah" ? "#ef4444"
+                          : "#94a3b8"
                   }}
                 >
                   {schoolModal.indCode}
@@ -1749,12 +1753,12 @@ export default function DashboardProvinsiPage() {
                       style={{
                         background: schoolModal.labelGroup === "Baik / Tinggi" ? "#dcfce7"
                           : schoolModal.labelGroup === "Sedang" ? "#fef9c3"
-                          : schoolModal.labelGroup === "Kurang / Rendah" ? "#fee2e2"
-                          : "#f1f5f9",
+                            : schoolModal.labelGroup === "Kurang / Rendah" ? "#fee2e2"
+                              : "#f1f5f9",
                         color: schoolModal.labelGroup === "Baik / Tinggi" ? "#166534"
                           : schoolModal.labelGroup === "Sedang" ? "#854d0e"
-                          : schoolModal.labelGroup === "Kurang / Rendah" ? "#991b1b"
-                          : "#475569",
+                            : schoolModal.labelGroup === "Kurang / Rendah" ? "#991b1b"
+                              : "#475569",
                       }}
                     >
                       {schoolModal.labelGroup}
@@ -1945,15 +1949,14 @@ export default function DashboardProvinsiPage() {
             </p>
           </div>
           <div className="flex gap-1 bg-slate-100 rounded-xl p-1">
-            {(["2024","2025"] as const).map(t => (
+            {(["2024", "2025"] as const).map(t => (
               <button
                 key={t}
                 onClick={() => setTahun(t)}
-                className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${
-                  tahun === t
+                className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${tahun === t
                     ? "bg-white text-slate-900 shadow-sm"
                     : "text-slate-500 hover:text-slate-700"
-                }`}
+                  }`}
               >
                 {t}
               </button>
@@ -1964,7 +1967,7 @@ export default function DashboardProvinsiPage() {
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div 
+        <div
           className="text-white px-6 py-12 relative z-10"
           style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1e1b4b 100%)" }}
         >
@@ -1974,7 +1977,7 @@ export default function DashboardProvinsiPage() {
             <div className="absolute -bottom-10 -left-10 w-72 h-72 rounded-full opacity-10" style={{ background: "radial-gradient(circle, #a78bfa, transparent)" }} />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-px opacity-5" style={{ background: "linear-gradient(90deg, transparent, white, transparent)" }} />
           </div>
-          
+
           <div className="max-w-6xl mx-auto relative">
             <div className="flex items-center gap-2 mb-4">
               <div className="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur text-xs font-semibold border border-white/20">
@@ -2018,11 +2021,11 @@ export default function DashboardProvinsiPage() {
             )}
           </div>
         </div>
-        
+
         {/* Wave Decoration */}
         <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 40" fill="#f8fafc" className="w-full">
-            <path d="M0,20L60,22C120,24,240,28,360,28C480,28,600,24,720,20C840,16,960,12,1080,14C1200,16,1320,24,1380,26L1440,28L1440,40L0,40Z"/>
+            <path d="M0,20L60,22C120,24,240,28,360,28C480,28,600,24,720,20C840,16,960,12,1080,14C1200,16,1320,24,1380,26L1440,28L1440,40L0,40Z" />
           </svg>
         </div>
       </div>
@@ -2053,7 +2056,7 @@ export default function DashboardProvinsiPage() {
                 </div>
                 <p className="text-base font-bold text-slate-800 mb-1">Gagal Memuat Data</p>
                 <p className="text-sm text-slate-500 mb-6 leading-relaxed">{error}</p>
-                
+
                 <div className="flex gap-3 justify-center">
                   <button
                     onClick={() => setUseMockData(true)}
@@ -2072,7 +2075,7 @@ export default function DashboardProvinsiPage() {
                         '5_capaian_satdik_dasmen_vokasi.json',
                         '6_capaian_satdik_paud.json'
                       ];
-                      
+
                       for (const file of files) {
                         try {
                           const res = await fetch(`/dataProvinsi/${tahun}/${file}`);
@@ -2098,9 +2101,9 @@ export default function DashboardProvinsiPage() {
               <>
                 {/* Tab: Ringkasan */}
                 {activeTab === "ringkasan" && (
-                  tahun === "2024" ? 
-                    <Ringkasan2024 tahun={tahun} jenjangList={jenjangList} ringkasan={ringkasan} getJenjangGradient={getJenjangGradient} SectionHeader={SectionHeader} /> 
-                  : 
+                  tahun === "2024" ?
+                    <Ringkasan2024 tahun={tahun} jenjangList={jenjangList} ringkasan={ringkasan} getJenjangGradient={getJenjangGradient} SectionHeader={SectionHeader} />
+                    :
                     <Ringkasan2025 tahun={tahun} jenjangList={jenjangList} ringkasan={ringkasan} getJenjangGradient={getJenjangGradient} SectionHeader={SectionHeader} />
                 )}
 

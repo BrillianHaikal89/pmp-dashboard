@@ -566,7 +566,7 @@ export default function IndikatorPrioritas(props: Record<string, any>) {
   const [rekapTTPage,      setRekapTTPage]      = useState(1);
   const REKAP_TT_PAGE_SIZE = 50;
 
-  const PRIORITY_CODES_TT = ["A.1", "A.2", "A.3", "D.1", "D.3", "D.4", "D.8", "D.10"];
+  const PRIORITY_CODES_TT = ["A.1", "A.2", "A.3", "D.1", "D.2", "D.3", "D.4", "D.6", "D.8", "D.10", "E.1", "E.5"];
   const MMT_PAGE_SIZE     = 10;
 
   // ─── Source rows ──────────────────────────────────────────────────────
