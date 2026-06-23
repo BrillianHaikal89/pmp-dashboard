@@ -23,7 +23,6 @@ export function RingkasanSingle({ data, tahun }: { data: DashData; tahun: string
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Ringkasan Capaian Jenjang</h1>
-        <p className="text-slate-500 text-sm mt-1">{data.tahun || "Kab. Bandung"} — Tahun {tahun}</p>
       </div>
       
       <div className={`bg-gradient-to-r ${gradColor} rounded-2xl p-6 text-white shadow-lg`}>
